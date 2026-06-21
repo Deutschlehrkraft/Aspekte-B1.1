@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Reisetyp-Test · Endlich Ferien</title>
+<style>
+  :root{--bg:#fafaf7;--ink:#1f2a24;--muted:#6b7268;--line:#d8dcd3;--accent:#3f6b50;--accent-d:#2f5640;--accent-soft:#e6efe8;
+    --sol-b:#7fae8c;--ctrl:#8a4321;--gold:#ca9a4e;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Helvetica Neue",Arial,sans-serif;padding:0 0 30px;line-height:1.5;}
+  .wrap{max-width:620px;margin:0 auto;}
+
+  .banner{background:linear-gradient(135deg,var(--accent) 0%,var(--accent-d) 100%);color:#fff;padding:26px 20px 22px;text-align:center;}
+  .banner .kick{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.85;}
+  .banner h1{font-size:24px;font-weight:700;margin:7px 0 8px;line-height:1.2;}
+  .banner p{font-size:14px;margin:0;opacity:.93;max-width:460px;margin:0 auto;}
+
+  .body{padding:16px 14px 0;}
+  .qblock{border:1px solid var(--line);border-radius:12px;padding:14px 14px 8px;margin:13px 0;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+  .qh{font-weight:700;color:var(--accent-d);margin-bottom:10px;font-size:15px;display:flex;align-items:center;gap:9px;}
+  .qh .bn{background:var(--accent);color:#fff;width:26px;height:26px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex:none;}
+  .opt{display:flex;align-items:center;gap:11px;padding:12px 12px;border-radius:10px;cursor:pointer;font-size:14.5px;border:1.5px solid var(--line);margin-bottom:8px;transition:all .12s;background:#fff;}
+  .opt:active{transform:scale(.99);}
+  .opt.sel{background:var(--accent-soft);border-color:var(--accent);}
+  .opt .dot{flex:none;width:21px;height:21px;border-radius:50%;border:2px solid var(--sol-b);}
+  .opt.sel .dot{background:var(--accent);border-color:var(--accent);box-shadow:inset 0 0 0 3px #fff;}
+  .opt .txt{flex:1;}
+
+  .scorebar{position:sticky;bottom:0;background:rgba(255,255,255,.97);backdrop-filter:blur(4px);border-top:1px solid var(--line);padding:12px 14px;margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -4px 16px rgba(0,0,0,.08);}
+  .scorebar .cnt{font-size:13px;color:var(--muted);font-weight:600;}
+  .btn{font-size:15px;font-weight:700;background:var(--accent);color:#fff;border:0;border-radius:10px;padding:13px 20px;cursor:pointer;flex:none;}
+  .btn:disabled{opacity:.45;}
+  .btn.ghost{background:#fff;color:var(--accent);border:1.5px solid var(--accent);font-size:14px;padding:11px 16px;}
+
+  .result{margin:16px 14px 0;background:#fff;border:2px solid var(--gold);border-radius:16px;padding:20px 18px;display:none;box-shadow:0 6px 22px rgba(202,154,78,.18);}
+  .result.show{display:block;}
+  .result .sc{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+  .result h2{margin:4px 0 10px;color:var(--accent-d);font-size:20px;line-height:1.25;}
+  .result .typ{display:none;font-size:14.5px;line-height:1.65;} .result .typ.on{display:block;}
+  .result .note{margin:14px 0 0;font-size:12.5px;color:var(--muted);}
+  .result .again{margin-top:16px;text-align:center;}
+
+  footer{margin:26px 14px 0;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.6;}
+</style></head><body>
+<div class="wrap">
+
+  <div class="banner">
+    <div class="kick">Aspekte junior B1.1 · Kapitel 9</div>
+    <h1>Was für ein Reisetyp bist du?</h1>
+    <p>Wähle in jedem Block die Aussage, die am besten zu dir passt. Am Ende erfährst du deinen Reisetyp!</p>
+  </div>
+
+  <div class="body">
+    <div class="qblock"><div class="qh"><span class="bn">1</span>Meine Planung</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span class="txt">Wir fahren einfach mit dem Zug oder dem Fahrrad los.</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span class="txt">Mein Sportverein organisiert Ferienreisen mit super Programm.</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span class="txt">Mir ist egal, was wir machen – Hauptsache, mit Freunden.</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span class="txt">Den Urlaub verbringe ich mit der Familie; meine Eltern planen alles.</span></div>
+    </div>
+    <div class="qblock"><div class="qh"><span class="bn">2</span>So muss meine Reise sein</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span class="txt">Ich fahre am liebsten in die Natur.</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span class="txt">Ich will in anderen Ländern die Kultur kennenlernen.</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span class="txt">Bei mir muss im Urlaub immer etwas los sein.</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span class="txt">Im Urlaub möchte ich alles so haben wie zu Hause.</span></div>
+    </div>
+    <div class="qblock"><div class="qh"><span class="bn">3</span>Dort übernachte ich am liebsten</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span class="txt">auf dem Campingplatz</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span class="txt">in der Jugendherberge</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span class="txt">in der Wanderhütte</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span class="txt">im Hotel</span></div>
+    </div>
+    <div class="qblock"><div class="qh"><span class="bn">4</span>Das muss auf jeden Fall mitkommen</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span class="txt">mein Fußball</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span class="txt">mein Lieblingskrimi</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span class="txt">mein Föhn</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span class="txt">mein Kopfkissen</span></div>
+    </div>
+    <div class="qblock"><div class="qh"><span class="bn">5</span>Zusammen oder allein?</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span class="txt">Auf Reisen will ich lustige Leute kennenlernen und Spaß haben.</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span class="txt">Wenn Aktivitäten in Gruppen angeboten werden, mache ich gern mit.</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span class="txt">Ich bin auch gern allein – immer mit anderen zu sein nervt mich.</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span class="txt">Am liebsten mit den Eltern immer an den gleichen Ort.</span></div>
+    </div>
+    <div class="qblock"><div class="qh"><span class="bn">6</span>Aus der Küche</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span class="txt">Exotische Spezialitäten? Ich will alles probieren!</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span class="txt">Am liebsten Spaghetti mit Muscheln – wie in Italien!</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span class="txt">Ich esse fast alles. Hauptsache, ich bin satt!</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span class="txt">Essen im Ausland? Lieber keine Experimente.</span></div>
+    </div>
+    <div class="qblock"><div class="qh"><span class="bn">7</span>So sieht mein Gepäck aus</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span class="txt">der große Rucksack (alles dabei, bereit für die Natur)</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span class="txt">die Reisetasche mit Stickern aus vielen Ländern</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span class="txt">der praktische Seesack</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span class="txt">der ordentliche Koffer</span></div>
+    </div>
+    <div class="qblock"><div class="qh"><span class="bn">8</span>Das bringe ich von der Reise mit</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span class="txt">Die besten Mitbringsel sind meine schönen Erinnerungen.</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span class="txt">ein schickes Andenken für mich</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span class="txt">Ich kaufe nichts von dem Touristen-Kram – viel zu teuer!</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span class="txt">eine Kleinigkeit für meine Eltern</span></div>
+    </div>
+  </div>
+
+  <div class="scorebar">
+    <span class="cnt"><span id="cnt">0</span>/8 beantwortet</span>
+    <button class="btn" id="goBtn" onclick="evalQuiz()" disabled>Mein Reisetyp</button>
+  </div>
+
+  <div class="result" id="res">
+    <div class="sc" id="resTitle"></div>
+    <div id="typewrap">
+      <div class="typ" data-min="8" data-max="12"><h2>Keine Experimente, bitte! 🏡</h2>Ihr möchtet in aller Ruhe eure Ferien genießen. Dazu lasst ihr gerne andere den Urlaub planen: Eure Eltern, euer Verein oder andere Personen organisieren alles für euch. Und wenn ihr wieder an den gleichen Ort fahrt, ist das kein Problem für euch. Auf einer Reise könnt ihr auch schon einmal Heimweh bekommen. Manchmal bleibt ihr auch ganz gerne zu Hause. Ihr müsst nicht immer etwas Neues ausprobieren – ihr findet es einfach schön, wenn ihr alles schon kennt oder mit eurer Familie etwas zusammen macht. Und wenn ihr wegfahrt, kommt ihr auch gerne wieder nach Hause zurück.</div>
+      <div class="typ" data-min="13" data-max="17"><h2>Spaß im Urlaub! ☀️</h2>Ruhige Orte findet ihr ziemlich langweilig. Es darf gerne bunt und temperamentvoll zugehen, und darum liebt ihr die „HotSpots" unter südlicher Sonne. Wenn ihr mit euren Eltern den Urlaub plant, wollt ihr an Orte, wo ihr tagsüber Energie am Strand tankt und andere Jugendliche trefft, mit denen ihr etwas unternehmen könnt. Ihr möchtet schön braun werden und etwas erleben. Ein dickes Kulturprogramm ist euch nicht so wichtig: Eine kurze Rundfahrt mit dem Bus und ein paar Fotos von den wichtigsten Sehenswürdigkeiten reichen. Wenn eure Eltern ein Museum ansehen wollen, geht ihr lieber Eis essen.</div>
+      <div class="typ" data-min="18" data-max="25"><h2>Kultur entdecken 🗺️</h2>Wenn ihr eine Reise macht, wollt ihr auch etwas über die Orte, die Menschen und die Kultur erfahren. Wenn ihr wisst, wohin die Reise geht, lest ihr schon mal ein Buch oder ein Reisemagazin, um euch zu informieren. Wenn eure Eltern einen Plan machen und alles besuchen wollen, seid ihr gerne mit dabei. Und wenn sie euch vorschlagen, mal eine Sprachreise für Jugendliche zu machen, sagt ihr auch nicht „Nein": Da ist alles von der Sprachschule organisiert und ihr freut euch auf die Gasteltern und das Programm, um Land und Leute kennenzulernen. Ihr wollt alles ausprobieren, kennenlernen und erleben.</div>
+      <div class="typ" data-min="26" data-max="32"><h2>Ein echtes Abenteurerherz! 🎒</h2>Ihr seid Individualisten, die das Fremde, Neue und sogar das Überraschende reizt. Das Leben und der Aufenthalt in der Natur sind bei euch besonders beliebt – sei es eine Reise in ein Jugendcamp im Ausland oder eine spontane Fahrradtour mit Zelt. Ihr habt Lust, euch zu bewegen: Ihr fahrt Fahrrad, Kanu oder Ski, ihr wandert, segelt oder schwimmt. Mit Leuten ins Gespräch zu kommen ist euch wichtig, weil ihr gerne neue Erfahrungen und Eindrücke sammelt. Am liebsten würdet ihr mal eine Tour durch eine exotische Region machen. Und wenn ihr aus den Ferien zurück seid, habt ihr viel zu erzählen – und schon wieder ein bisschen Fernweh.</div>
+    </div>
+    <p class="note">An der Grenze zwischen zwei Gruppen? Dann bist du vielleicht ein Mischtyp aus beiden.</p>
+    <div class="again"><button class="btn ghost" onclick="resetQuiz()">Test neu starten</button></div>
+  </div>
+
+  <footer>Reisetyp-Test · Aspekte junior B1.1, Kapitel 9 „Endlich Ferien" (KB S. 136–137, Auswertung S. 225)</footer>
+
+</div>
+
+<script>
+document.querySelectorAll('.qblock').forEach(block=>{
+  block.querySelectorAll('.opt').forEach(opt=>{
+    opt.addEventListener('click',()=>{
+      block.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+      opt.classList.add('sel');
+      update();
+    });
+  });
+});
+function tally(){
+  let pts=0,cnt=0;
+  document.querySelectorAll('.qblock').forEach(b=>{
+    const s=b.querySelector('.opt.sel');
+    if(s){pts+=parseInt(s.dataset.p);cnt++;}
+  });
+  return {pts,cnt};
+}
+function update(){
+  const {cnt}=tally();
+  document.getElementById('cnt').textContent=cnt;
+  document.getElementById('goBtn').disabled = cnt<8;
+}
+function evalQuiz(){
+  const {pts,cnt}=tally();
+  if(cnt<8) return;
+  const res=document.getElementById('res');
+  document.getElementById('resTitle').textContent='Dein Ergebnis ('+pts+' von 32 Punkten):';
+  res.querySelectorAll('.typ').forEach(t=>{
+    t.classList.toggle('on', pts>=+t.dataset.min && pts<=+t.dataset.max);
+  });
+  res.classList.add('show');
+  res.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function resetQuiz(){
+  document.querySelectorAll('.opt.sel').forEach(o=>o.classList.remove('sel'));
+  document.getElementById('res').classList.remove('show');
+  update();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body></html>
