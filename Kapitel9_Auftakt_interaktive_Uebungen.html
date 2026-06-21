@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kapitel 9 · Auftakt · Interaktive Übungen</title>
+<style>
+  :root{--bg:#fafaf7;--ink:#1f2a24;--muted:#6b7268;--line:#d8dcd3;--accent:#3f6b50;--accent-d:#2f5640;--accent-soft:#e6efe8;
+    --oop:#eef4fb;--oop-b:#9bb6d6;--iuch:#fbf2e7;--iuch-b:#d8b483;--sol:#eaf3ec;--sol-b:#7fae8c;--ctrl:#8a4321;--gold:#ca9a4e;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Georgia","Iowan Old Style",serif;padding:30px 18px 80px;line-height:1.5;}
+  .wrap{max-width:880px;margin:0 auto;}
+  .eyebrow{font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+  h1{margin:0 0 6px;font-size:26px;font-weight:600;line-height:1.25;}
+  .sub{font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--muted);margin:0 0 3px;}
+  .ex{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:20px 0;}
+  .ex h2{font-family:"Helvetica Neue",Arial,sans-serif;font-size:16px;color:var(--accent);margin:0 0 4px;display:flex;align-items:center;gap:9px;}
+  .ex h2 .nr{background:var(--accent);color:#fff;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex:none;}
+  .task{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--muted);margin:2px 0 14px;}
+  .hint{font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--accent);background:var(--accent-soft);display:inline-block;padding:3px 9px;border-radius:20px;margin-bottom:12px;}
+
+  /* item with input + click-to-reveal */
+  .item{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13.5px;border:1px solid var(--line);border-radius:8px;margin:10px 0;overflow:hidden;background:#fff;}
+  .q{padding:11px 14px 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+  .q .qt{flex:1;font-weight:600;color:var(--ink);}
+  .chev{flex:none;font-size:12px;color:var(--accent);font-weight:700;border:1px solid var(--sol-b);border-radius:20px;padding:4px 12px;white-space:nowrap;background:var(--sol);cursor:pointer;transition:all .15s;}
+  .chev:hover{background:var(--accent);color:#fff;}
+  .inpwrap{padding:0 14px 12px;}
+  .inp{width:100%;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13.5px;color:var(--ink);border:0;border-bottom:2px dashed var(--oop-b);background:#fbfdff;padding:7px 9px;border-radius:6px 6px 0 0;outline:none;}
+  .inp:focus{border-bottom-color:var(--accent);background:#f3f8f4;}
+  .ta{width:100%;min-height:96px;resize:vertical;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13.5px;color:var(--ink);border:1px solid var(--oop-b);background:#fbfdff;padding:9px 11px;border-radius:8px;outline:none;line-height:1.55;}
+  .ta:focus{border-color:var(--accent);background:#f3f8f4;}
+  .a{max-height:0;opacity:0;padding:0 14px;background:var(--sol);border-top:0 solid var(--sol-b);transition:all .22s ease;overflow:hidden;}
+  .item.open .a{max-height:600px;opacity:1;padding:11px 14px;border-top:1px solid var(--sol-b);}
+  .item.open .chev{background:var(--accent);color:#fff;}
+  .a b{color:var(--accent);}
+
+  /* featured TEST */
+  .feature{background:linear-gradient(180deg,#eef4ee 0%,#ffffff 130px);border:2px solid var(--accent);border-radius:16px;padding:0 0 22px;margin:30px 0;box-shadow:0 8px 26px rgba(63,107,80,.13);overflow:hidden;}
+  .feature .banner{background:linear-gradient(135deg,var(--accent) 0%,var(--accent-d) 100%);color:#fff;padding:20px 24px 18px;}
+  .feature .banner .kick{font-family:"Helvetica Neue",Arial,sans-serif;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.85;}
+  .feature .banner h2{font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;font-weight:700;margin:5px 0 4px;color:#fff;}
+  .feature .banner p{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;margin:0;opacity:.92;}
+  .feature .body{padding:18px 24px 0;}
+  .qz{font-family:"Helvetica Neue",Arial,sans-serif;}
+  .qblock{border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin:11px 0;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.03);}
+  .qblock .qh{font-weight:700;color:var(--accent-d);margin-bottom:8px;font-size:13.5px;display:flex;align-items:center;gap:8px;}
+  .qblock .qh .bn{background:var(--accent-soft);color:var(--accent);width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex:none;}
+  .opt{display:flex;align-items:flex-start;gap:9px;padding:8px 10px;border-radius:7px;cursor:pointer;font-size:13px;transition:background .12s;border:1px solid transparent;}
+  .opt:hover{background:#f4f8f5;}
+  .opt.sel{background:var(--accent-soft);border-color:var(--sol-b);}
+  .opt .dot{flex:none;width:17px;height:17px;border-radius:50%;border:2px solid var(--sol-b);margin-top:1px;}
+  .opt.sel .dot{background:var(--accent);border-color:var(--accent);box-shadow:inset 0 0 0 2px #fff;}
+  .opt .txt{flex:1;}
+  .pp{color:var(--accent);font-weight:700;white-space:nowrap;margin-left:5px;}
+  .scorebar{font-family:"Helvetica Neue",Arial,sans-serif;position:sticky;bottom:0;background:#fff;border:1px solid var(--sol-b);border-radius:10px;padding:12px 16px;margin-top:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;box-shadow:0 -3px 14px rgba(0,0,0,.07);}
+  .scorebar .pts{font-size:22px;font-weight:800;color:var(--accent);}
+  .btn{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:10px 18px;cursor:pointer;}
+  .btn:hover{background:var(--accent-d);}
+  .btn.ghost{background:#fff;color:var(--accent);border:1px solid var(--accent);}
+  .result{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13.5px;background:#fff;border:2px solid var(--gold);border-radius:12px;padding:16px 18px;margin-top:14px;display:none;}
+  .result.show{display:block;}
+  .result h3{margin:0 0 8px;color:var(--accent-d);font-size:16px;}
+  .result .typ{display:none;line-height:1.6;} .result .typ.on{display:block;}
+  .result .typ b{color:var(--ctrl);}
+
+  .tools{font-family:"Helvetica Neue",Arial,sans-serif;font-size:12.5px;color:var(--muted);margin:6px 0 0;}
+  .tools a{color:var(--accent);cursor:pointer;text-decoration:underline;}
+  footer{margin-top:34px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;line-height:1.6;}
+</style></head><body><div class="wrap">
+
+  <div class="eyebrow">Aspekte junior B1.1 · Kapitel 9 · Auftakt</div>
+  <h1>Endlich Ferien – Was für ein Reisetyp bist du?</h1>
+  <p class="sub">Interaktive Übungen zum Wortschatz „Reisen" · KB S. 136–137</p>
+  <p class="sub">Schreib zuerst deine Antwort ins Feld, dann tippe auf <b>„Lösung"</b>, um die Musterlösung zu öffnen.</p>
+  <p class="tools"><a onclick="openAll()">Alle Lösungen öffnen</a> &nbsp;·&nbsp; <a onclick="closeAll()">Alle schließen</a></p>
+
+  <!-- ÜBUNG 1: Unterkünfte -->
+  <div class="ex">
+    <h2><span class="nr">1</span> Unterkünfte – Wo übernachtet man?</h2>
+    <p class="task">Welche Unterkunft passt zur Beschreibung? Schreib das Wort mit Artikel ins Feld und prüfe dann die Lösung.</p>
+    <div class="hint">Wortschatz: Übernachten</div>
+
+    <div class="item">
+      <div class="q"><span class="qt">Man schläft im Zelt, mitten in der Natur.</span><span class="chev" onclick="tog(this)">Lösung</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="Deine Antwort …"></div>
+      <div class="a"><b>der Campingplatz</b> – Man zeltet draußen, oft günstig und naturnah.</div></div>
+    <div class="item">
+      <div class="q"><span class="qt">Eine einfache Hütte in den Bergen, vor allem für Wanderer.</span><span class="chev" onclick="tog(this)">Lösung</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="Deine Antwort …"></div>
+      <div class="a"><b>die Wanderhütte</b> – Schlichte Übernachtung beim Wandern.</div></div>
+    <div class="item">
+      <div class="q"><span class="qt">Günstige Übernachtung, oft für junge Leute und Schulgruppen.</span><span class="chev" onclick="tog(this)">Lösung</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="Deine Antwort …"></div>
+      <div class="a"><b>die Jugendherberge</b> – Preiswert, ideal für Gruppen.</div></div>
+    <div class="item">
+      <div class="q"><span class="qt">Komfortabel, mit Service, Frühstück und eigenem Bad.</span><span class="chev" onclick="tog(this)">Lösung</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="Deine Antwort …"></div>
+      <div class="a"><b>das Hotel</b> – Bequem und komfortabel, aber meist teurer.</div></div>
+  </div>
+
+  <!-- ÜBUNG 2: Reisewortschatz -->
+  <div class="ex">
+    <h2><span class="nr">2</span> Was ist das? – Reisewortschatz</h2>
+    <p class="task">Lies die Definition und schreib das passende Wort (mit Artikel) ins Feld. Tippe für die Lösung.</p>
+    <div class="hint">Gepäck · Essen · Mitbringsel</div>
+
+    <div class="item">
+      <div class="q"><span class="qt">ein Gerät, mit dem man nasse Haare trocknet</span><span class="chev" onclick="tog(this)">Lösung</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="Deine Antwort …"></div>
+      <div class="a"><b>der Föhn</b></div></div>
+    <div class="item">
+      <div class="q"><span class="qt">ein spannendes Buch, in dem ein Verbrechen aufgeklärt wird</span><span class="chev" onclick="tog(this)">Lösung</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="Deine Antwort …"></div>
+      <div class="a"><b>der Krimi</b> (hier: der Lieblingskrimi)</div></div>
+    <div class="item">
+      <div class="q"><span class="qt">ein kleines Geschenk oder Erinnerungsstück, das man von einer Reise mitbringt</span><span class="chev" onclick="tog(this)">Lösung</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="Deine Antwort …"></div>
+      <div class="a"><b>das Mitbringsel</b> / <b>das Andenken</b> (auch: <b>das Souvenir</b>)</div></div>
+    <div class="item">
+      <div class="q"><span class="qt">besondere, typische Gerichte aus einem bestimmten Land</span><span class="chev" onclick="tog(this)">Lösung</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="Deine Antwort …"></div>
+      <div class="a"><b>die Spezialitäten</b> (Sg. die Spezialität)</div></div>
+    <div class="item">
+      <div class="q"><span class="qt">ein weiches Kissen, ohne das manche Leute nicht schlafen können</span><span class="chev" onclick="tog(this)">Lösung</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="Deine Antwort …"></div>
+      <div class="a"><b>das Kopfkissen</b></div></div>
+  </div>
+
+  <!-- ÜBUNG 3: Sätze ergänzen -->
+  <div class="ex">
+    <h2><span class="nr">3</span> Sätze ergänzen (KB 1c)</h2>
+    <p class="task">Schreib die Satzanfänge frei zu Ende. Tippe danach für eine <b>Musterantwort</b> zum Vergleichen.</p>
+    <div class="hint">Sprechen / Schreiben · seine Vorlieben begründen</div>
+
+    <div class="item">
+      <div class="q"><span class="qt">Ich mache am liebsten Reisen in einer Gruppe, weil …</span><span class="chev" onclick="tog(this)">Musterantwort</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="… weiterschreiben"></div>
+      <div class="a">… <b>weil es zusammen mehr Spaß macht und man schnell neue Leute kennenlernt.</b></div></div>
+    <div class="item">
+      <div class="q"><span class="qt">Ich verreise nicht so gern, weil …</span><span class="chev" onclick="tog(this)">Musterantwort</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="… weiterschreiben"></div>
+      <div class="a">… <b>weil ich mich zu Hause am wohlsten fühle und meine Routine mag.</b></div></div>
+    <div class="item">
+      <div class="q"><span class="qt">Am liebsten bin ich …</span><span class="chev" onclick="tog(this)">Musterantwort</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="… weiterschreiben"></div>
+      <div class="a">… <b>in der Natur, weit weg vom Stress der Stadt.</b></div></div>
+    <div class="item">
+      <div class="q"><span class="qt">Auf einer Reise ist mir wichtig, dass …</span><span class="chev" onclick="tog(this)">Musterantwort</span></div>
+      <div class="inpwrap"><input class="inp" type="text" placeholder="… weiterschreiben"></div>
+      <div class="a">… <b>dass ich etwas Neues erlebe und nette Menschen treffe.</b></div></div>
+  </div>
+
+  <!-- TEST (featured) -->
+  <div class="feature qz">
+    <div class="banner">
+      <div class="kick">Der große Reisetyp-Test</div>
+      <h2>Was für ein Reisetyp bist du?</h2>
+      <p>Wähle in jedem der 8 Blöcke die Aussage, die am besten zu dir passt. Die Punkte werden automatisch gezählt – klicke danach auf „Auswertung anzeigen".</p>
+    </div>
+    <div class="body">
+
+    <div class="qblock" data-q><div class="qh"><span class="bn">1</span>Meine Planung</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span>Wir fahren einfach mit dem Zug oder dem Fahrrad los.</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span>Mein Sportverein organisiert Ferienreisen mit super Programm.</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span>Mir ist egal, was wir machen – Hauptsache, mit Freunden.</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span>Den Urlaub verbringe ich mit der Familie; meine Eltern planen alles.</span></div>
+    </div>
+    <div class="qblock" data-q><div class="qh"><span class="bn">2</span>So muss meine Reise sein</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span>Ich fahre am liebsten in die Natur.</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span>Ich will in anderen Ländern die Kultur kennenlernen.</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span>Bei mir muss im Urlaub immer etwas los sein.</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span>Im Urlaub möchte ich alles so haben wie zu Hause.</span></div>
+    </div>
+    <div class="qblock" data-q><div class="qh"><span class="bn">3</span>Dort übernachte ich am liebsten</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span>auf dem Campingplatz</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span>in der Jugendherberge</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span>in der Wanderhütte</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span>im Hotel</span></div>
+    </div>
+    <div class="qblock" data-q><div class="qh"><span class="bn">4</span>Das muss auf jeden Fall mitkommen</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span>mein Fußball</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span>mein Lieblingskrimi</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span>mein Föhn</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span>mein Kopfkissen</span></div>
+    </div>
+    <div class="qblock" data-q><div class="qh"><span class="bn">5</span>Zusammen oder allein?</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span>Auf Reisen will ich lustige Leute kennenlernen und Spaß haben.</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span>Wenn Aktivitäten in Gruppen angeboten werden, mache ich gern mit.</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span>Ich bin auch gern allein – immer mit anderen zu sein nervt mich.</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span>Am liebsten mit den Eltern immer an den gleichen Ort.</span></div>
+    </div>
+    <div class="qblock" data-q><div class="qh"><span class="bn">6</span>Aus der Küche</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span>Exotische Spezialitäten? Ich will alles probieren!</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span>Am liebsten Spaghetti mit Muscheln – wie in Italien!</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span>Ich esse fast alles. Hauptsache, ich bin satt!</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span>Essen im Ausland? Lieber keine Experimente.</span></div>
+    </div>
+    <div class="qblock" data-q><div class="qh"><span class="bn">7</span>So sieht mein Gepäck aus</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span>der große Rucksack (alles dabei, bereit für die Natur)</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span>die Reisetasche mit Stickern aus vielen Ländern</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span>der praktische Seesack</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span>der ordentliche Koffer</span></div>
+    </div>
+    <div class="qblock" data-q><div class="qh"><span class="bn">8</span>Das bringe ich von der Reise mit</div>
+      <div class="opt" data-p="4"><span class="dot"></span><span>Die besten Mitbringsel sind meine schönen Erinnerungen.</span></div>
+      <div class="opt" data-p="3"><span class="dot"></span><span>ein schickes Andenken für mich</span></div>
+      <div class="opt" data-p="2"><span class="dot"></span><span>Ich kaufe nichts von dem Touristen-Kram – viel zu teuer!</span></div>
+      <div class="opt" data-p="1"><span class="dot"></span><span>eine Kleinigkeit für meine Eltern</span></div>
+    </div>
+
+    <div class="scorebar">
+      <span>Deine Punkte: <span class="pts" id="pts">0</span> / 32 &nbsp;(<span id="cnt">0</span>/8 beantwortet)</span>
+      <button class="btn" onclick="evalQuiz()">Auswertung anzeigen</button>
+      <button class="btn ghost" onclick="resetQuiz()">Neu starten</button>
+    </div>
+    <div class="result" id="res">
+      <h3 id="resTitle"></h3>
+      <div class="typ" data-min="8" data-max="12"><b>Bis 12 Punkte – Keine Experimente, bitte!</b> Ihr möchtet in aller Ruhe eure Ferien genießen. Dazu lasst ihr gerne andere den Urlaub planen: Eure Eltern, euer Verein oder andere Personen organisieren alles für euch. Und wenn ihr wieder an den gleichen Ort fahrt, ist das kein Problem für euch. Auf einer Reise könnt ihr auch schon einmal Heimweh bekommen. Manchmal bleibt ihr auch ganz gerne zu Hause. Ihr müsst nicht immer etwas Neues ausprobieren – ihr findet es einfach schön, wenn ihr alles schon kennt oder mit eurer Familie etwas zusammen macht. Und wenn ihr wegfahrt, kommt ihr auch gerne wieder nach Hause zurück.</div>
+      <div class="typ" data-min="13" data-max="17"><b>13–17 Punkte – Spaß im Urlaub!</b> Ruhige Orte findet ihr ziemlich langweilig. Es darf gerne bunt und temperamentvoll zugehen, und darum liebt ihr die „HotSpots" unter südlicher Sonne. Wenn ihr mit euren Eltern den Urlaub plant, wollt ihr an Orte, wo ihr tagsüber Energie am Strand tankt und andere Jugendliche trefft, mit denen ihr etwas unternehmen könnt. Ihr möchtet schön braun werden und etwas erleben. Ein dickes Kulturprogramm ist euch nicht so wichtig: Eine kurze Rundfahrt mit dem Bus und ein paar Fotos von den wichtigsten Sehenswürdigkeiten reichen. Wenn eure Eltern ein Museum ansehen wollen, geht ihr lieber Eis essen.</div>
+      <div class="typ" data-min="18" data-max="25"><b>18–25 Punkte – Kultur entdecken.</b> Wenn ihr eine Reise macht, wollt ihr auch etwas über die Orte, die Menschen und die Kultur erfahren. Wenn ihr wisst, wohin die Reise geht, lest ihr schon mal ein Buch oder ein Reisemagazin, um euch zu informieren. Wenn eure Eltern einen Plan machen und alles besuchen wollen, seid ihr gerne mit dabei. Und wenn sie euch vorschlagen, mal eine Sprachreise für Jugendliche zu machen, sagt ihr auch nicht „Nein": Da ist alles von der Sprachschule organisiert und ihr freut euch auf die Gasteltern und das Programm, um Land und Leute kennenzulernen. Ihr wollt alles ausprobieren, kennenlernen und erleben.</div>
+      <div class="typ" data-min="26" data-max="32"><b>26–32 Punkte – Ein echtes Abenteurerherz!</b> Ihr seid Individualisten, die das Fremde, Neue und sogar das Überraschende reizt. Das Leben und der Aufenthalt in der Natur sind bei euch besonders beliebt – sei es eine Reise in ein Jugendcamp im Ausland oder eine spontane Fahrradtour mit Zelt. Ihr habt Lust, euch zu bewegen: Ihr fahrt Fahrrad, Kanu oder Ski, ihr wandert, segelt oder schwimmt. Mit Leuten ins Gespräch zu kommen ist euch wichtig, weil ihr gerne neue Erfahrungen und Eindrücke sammelt. Am liebsten würdet ihr mal eine Tour durch eine exotische Region machen. Und wenn ihr aus den Ferien zurück seid, habt ihr viel zu erzählen – und schon wieder ein bisschen Fernweh.</div>
+      <p style="margin:8px 0 0;font-size:12px;color:var(--muted)">An der Grenze zwischen zwei Gruppen? Dann seid ihr vielleicht ein Mischtyp aus beiden. (Offizielle Auswertung nach KB S. 225.)</p>
+    </div>
+    </div>
+  </div>
+
+  <!-- ÜBUNG 4: Schreibaufgabe -->
+  <div class="ex">
+    <h2><span class="nr">4</span> Mini-Schreibaufgabe – Mein Reisetyp</h2>
+    <p class="task">Schreib 4–5 Sätze über deinen Reisetyp: Wie reist du am liebsten? Wo übernachtest du? Was nimmst du mit? Tippe danach für eine <b>Musterlösung</b>.</p>
+    <div class="hint">Schreiben · ca. 40 Wörter</div>
+
+    <div class="item">
+      <div class="q"><span class="qt">Dein Text:</span><span class="chev" onclick="tog(this)">Musterlösung</span></div>
+      <div class="inpwrap"><textarea class="ta" placeholder="Hier schreiben …"></textarea></div>
+      <div class="a">Ich bin ein echter Abenteuer-Typ. Am liebsten reise ich spontan in die Natur, oft mit dem Fahrrad oder dem Zug. Ich übernachte gern auf dem Campingplatz oder in einer Jugendherberge, denn ein Hotel ist mir zu teuer. In meinen Rucksack packe ich meinen Fußball und einen guten Krimi. Von der Reise bringe ich keine Souvenirs mit – meine schönsten Mitbringsel sind die Erinnerungen.</div></div>
+  </div>
+
+  <footer>
+    Interaktiver Arbeitsbogen zum Auftakt von Kapitel 9 „Endlich Ferien" (Aspekte junior B1.1, KB S. 136–137).
+    Schreib deine Antworten in die Felder; die Lösungen öffnen sich per Klick/Tipp auf „Lösung". Die Auswertung des Reisetyp-Tests entspricht dem Lehrwerk (KB S. 225).
+    Stand 21.06.2026.
+  </footer>
+
+</div>
+
+<script>
+function tog(el){ el.closest('.item').classList.toggle('open'); }
+function openAll(){ document.querySelectorAll('.item').forEach(i=>i.classList.add('open')); }
+function closeAll(){ document.querySelectorAll('.item').forEach(i=>i.classList.remove('open')); }
+
+// Punkte hinter jeder Option anzeigen (für den Ausdruck)
+document.querySelectorAll('.opt').forEach(o=>{
+  const p=o.dataset.p;
+  const t=o.querySelector('span:last-child');
+  t.classList.add('txt');
+  t.insertAdjacentHTML('beforeend',' <span class="pp">('+p+' P.)</span>');
+});
+
+// Quiz logic
+document.querySelectorAll('.qblock').forEach(block=>{
+  block.querySelectorAll('.opt').forEach(opt=>{
+    opt.addEventListener('click',()=>{
+      block.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+      opt.classList.add('sel');
+      updateScore();
+    });
+  });
+});
+function updateScore(){
+  let pts=0,cnt=0;
+  document.querySelectorAll('.qblock').forEach(b=>{
+    const s=b.querySelector('.opt.sel');
+    if(s){pts+=parseInt(s.dataset.p);cnt++;}
+  });
+  document.getElementById('pts').textContent=pts;
+  document.getElementById('cnt').textContent=cnt;
+  return {pts,cnt};
+}
+function evalQuiz(){
+  const {pts,cnt}=updateScore();
+  const res=document.getElementById('res');
+  if(cnt<8){
+    res.classList.add('show');
+    document.getElementById('resTitle').textContent='Bitte alle 8 Blöcke beantworten ('+cnt+'/8).';
+    res.querySelectorAll('.typ').forEach(t=>t.classList.remove('on'));
+    return;
+  }
+  document.getElementById('resTitle').textContent='Du hast '+pts+' von 32 Punkten. Dein Reisetyp:';
+  res.querySelectorAll('.typ').forEach(t=>{
+    const min=+t.dataset.min,max=+t.dataset.max;
+    t.classList.toggle('on', pts>=min && pts<=max);
+  });
+  res.classList.add('show');
+  res.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function resetQuiz(){
+  document.querySelectorAll('.opt.sel').forEach(o=>o.classList.remove('sel'));
+  document.getElementById('res').classList.remove('show');
+  updateScore();
+}
+</script>
+</body></html>
