@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kapitel 9 · Vor dem Start (Wortschatz) · Interaktive Übungen</title>
+<style>
+  :root{--bg:#fafaf7;--ink:#1f2a24;--muted:#6b7268;--line:#d8dcd3;--accent:#3f6b50;--accent-d:#2f5640;--accent-soft:#e6efe8;
+    --oop:#eef4fb;--oop-b:#9bb6d6;--sol:#eaf3ec;--sol-b:#7fae8c;--ctrl:#8a4321;--gold:#ca9a4e;
+    --teach:#fff7ea;--teach-b:#e0b357;--teach-ink:#7a5616;--box:#eef3f8;--box-b:#b9cbdf;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Georgia","Iowan Old Style",serif;padding:30px 18px 80px;line-height:1.5;}
+  .wrap{max-width:880px;margin:0 auto;}
+  .eyebrow{font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+  h1{margin:0 0 6px;font-size:26px;font-weight:600;line-height:1.25;}
+  .sub{font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--muted);margin:0 0 3px;}
+
+  .ctrlbar{font-family:"Helvetica Neue",Arial,sans-serif;display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:16px 0 4px;}
+  .tbtn{font-size:13px;font-weight:700;background:var(--teach);color:var(--teach-ink);border:1.5px solid var(--teach-b);border-radius:22px;padding:8px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;}
+  body.teacher .tbtn{background:var(--teach-b);color:#fff;}
+  .tools{font-family:"Helvetica Neue",Arial,sans-serif;font-size:12.5px;color:var(--muted);}
+  .tools a{color:var(--accent);cursor:pointer;text-decoration:underline;}
+
+  .ex{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:20px 0;}
+  .ex h2{font-family:"Helvetica Neue",Arial,sans-serif;font-size:16px;color:var(--accent);margin:0 0 4px;display:flex;align-items:center;gap:9px;}
+  .ex h2 .nr{background:var(--accent);color:#fff;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex:none;}
+  .task{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--muted);margin:2px 0 12px;}
+  .wordbox{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--box);border:1px solid var(--box-b);border-radius:8px;padding:11px 14px;margin:0 0 14px;line-height:1.9;color:#26425f;}
+  .wordbox b{color:var(--accent-d);}
+  .textcloze{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13.5px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:13px 15px;margin:0 0 14px;line-height:2.15;}
+  .gp{font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:5px;padding:0 6px;}
+  /* Vokabelhilfe neben dem Text */
+  .cloze-wrap{display:flex;gap:14px;align-items:flex-start;margin:0 0 14px;}
+  .cloze-wrap .textcloze{flex:1;margin:0;}
+  .vbox{flex:none;width:220px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;background:#fffdf7;border:1.5px solid var(--gold);border-radius:10px;padding:12px 14px;line-height:1.5;}
+  .vbox h4{margin:0 0 9px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ctrl);}
+  .vbox dl{margin:0;}
+  .vbox dt{font-weight:800;color:var(--accent-d);}
+  .vbox dd{margin:1px 0 10px;color:#4a5249;}
+  .vbox dd:last-child{margin-bottom:0;}
+  .vbox .bg{color:var(--muted);font-style:italic;}
+  @media(max-width:620px){.cloze-wrap{flex-direction:column;}.vbox{width:100%;}}
+
+  /* drag & drop cloze */
+  .tray{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;}
+  .chip{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:700;color:#26425f;background:var(--box);border:1.5px solid var(--box-b);border-radius:20px;padding:7px 14px;cursor:grab;user-select:none;transition:all .12s;}
+  .chip:active{cursor:grabbing;}
+  .chip.sel{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 2px 8px rgba(63,107,80,.3);}
+  .chip.used{display:none;}
+  .gap{display:inline-block;min-width:96px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:700;color:var(--accent-d);background:#fbfdff;border:1.5px dashed var(--oop-b);border-radius:7px;padding:3px 9px;margin:0 2px;cursor:pointer;vertical-align:middle;transition:all .12s;}
+  .gap.over{background:var(--accent-soft);border-color:var(--accent);}
+  .gap.filled{border-style:solid;background:var(--box);}
+  .gap.correct{background:#e3f3e6;border-color:var(--sol-b);color:var(--accent-d);}
+  .gap.wrong{background:#fbe7e0;border-color:#cf8a6c;color:#9a4a28;}
+  .dnd-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:4px;}
+  .dbtn{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:9px 15px;cursor:pointer;}
+  .dbtn:hover{background:var(--accent-d);}
+  .dbtn.ghost{background:#fff;color:var(--accent);border:1.5px solid var(--accent);}
+  .dnd-fb{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:700;color:var(--muted);}
+
+  /* drag & drop matching (Übung 1) */
+  .dtray{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;}
+  .dchip{font-family:"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:600;color:#26425f;background:var(--box);border:1.5px solid var(--box-b);border-radius:9px;padding:8px 12px;cursor:grab;user-select:none;max-width:340px;line-height:1.35;transition:all .12s;}
+  .dchip:active{cursor:grabbing;}
+  .dchip.sel{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 2px 8px rgba(63,107,80,.3);}
+  .dchip.used{display:none;}
+  .match-row{display:flex;align-items:stretch;gap:10px;margin:8px 0;}
+  .match-row .lbl{flex:none;width:165px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:700;color:var(--ink);display:flex;align-items:center;}
+  .match-row .lbl .n{color:var(--accent);margin-right:6px;}
+  .dz{flex:1;min-height:42px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12.5px;color:var(--accent-d);background:#fbfdff;border:1.5px dashed var(--oop-b);border-radius:8px;padding:8px 11px;cursor:pointer;display:flex;align-items:center;line-height:1.35;transition:all .12s;}
+  .dz.over{background:var(--accent-soft);border-color:var(--accent);}
+  .dz.filled{border-style:solid;background:var(--box);}
+  .dz.correct{background:#e3f3e6;border-color:var(--sol-b);}
+  .dz.wrong{background:#fbe7e0;border-color:#cf8a6c;color:#9a4a28;}
+  .dz .ph{color:#aab2a6;}
+  @media(max-width:620px){.match-row{flex-direction:column;gap:4px;}.match-row .lbl{width:auto;} .dchip{max-width:100%;}}
+
+  /* drag & drop sort in 3 columns (Übung 4) */
+  .tray4{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 14px;padding:10px;background:#f6f7f4;border:1px dashed var(--line);border-radius:10px;min-height:44px;}
+  .tray4.over{background:var(--accent-soft);}
+  .sortcols{display:flex;gap:10px;margin:0 0 12px;align-items:flex-start;}
+  .sortcol{flex:1;background:#fff;border:1.5px solid var(--box-b);border-radius:10px;overflow:hidden;min-width:0;}
+  .sortcol h5{margin:0;background:var(--accent-soft);color:var(--accent-d);font-family:"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:800;padding:9px 8px;text-align:center;}
+  .col-drop{min-height:130px;padding:8px;display:flex;flex-direction:column;gap:6px;}
+  .col-drop.over{background:var(--accent-soft);}
+  .schip{font-family:"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:600;color:#26425f;background:var(--box);border:1.5px solid var(--box-b);border-radius:16px;padding:6px 11px;cursor:grab;user-select:none;text-align:center;transition:all .12s;}
+  .schip:active{cursor:grabbing;}
+  .schip.sel{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 2px 8px rgba(63,107,80,.3);}
+  .schip.correct{background:#e3f3e6;border-color:var(--sol-b);color:var(--accent-d);}
+  .schip.wrong{background:#fbe7e0;border-color:#cf8a6c;color:#9a4a28;}
+  @media(max-width:620px){.sortcols{flex-direction:column;}}
+  #tip{position:fixed;z-index:1000;background:#1f2a24;color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:7px;pointer-events:none;opacity:0;transition:opacity .12s;max-width:240px;box-shadow:0 5px 16px rgba(0,0,0,.28);}
+  #tip.show{opacity:1;}
+  #tip::after{content:"";position:absolute;top:100%;left:16px;border:6px solid transparent;border-top-color:#1f2a24;}
+
+  /* drag & drop matching, Verben (Übung 5) */
+  .m5wrap{display:flex;gap:16px;align-items:flex-start;}
+  .m5list{flex:1;}
+  .m5row{display:flex;align-items:center;gap:10px;margin:8px 0;}
+  .m5row .exla{flex:1;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--ink);}
+  .m5row .exla .n{color:var(--accent);margin-right:5px;font-weight:800;}
+  .m5drop{flex:none;width:155px;min-height:40px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:700;color:var(--accent-d);background:#fbfdff;border:1.5px dashed var(--oop-b);border-radius:8px;padding:7px 10px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;transition:all .12s;}
+  .m5drop.over{background:var(--accent-soft);border-color:var(--accent);}
+  .m5drop.filled{border-style:solid;background:var(--box);}
+  .m5drop.correct{background:#e3f3e6;border-color:var(--sol-b);}
+  .m5drop.wrong{background:#fbe7e0;border-color:#cf8a6c;color:#9a4a28;}
+  .m5drop .ph{color:#aab2a6;font-weight:600;}
+  .vtray{flex:none;width:165px;display:flex;flex-direction:column;gap:7px;background:#f6f7f4;border:1px dashed var(--line);border-radius:10px;padding:10px;}
+  .vchip{font-family:"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:700;color:#26425f;background:var(--box);border:1.5px solid var(--box-b);border-radius:16px;padding:7px 12px;cursor:grab;user-select:none;text-align:center;transition:all .12s;}
+  .vchip:active{cursor:grabbing;}
+  .vchip.sel{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 2px 8px rgba(63,107,80,.3);}
+  .vchip.used{display:none;}
+  @media(max-width:620px){.m5wrap{flex-direction:column;}.vtray{width:100%;flex-direction:row;flex-wrap:wrap;}.m5drop{width:130px;}}
+
+  /* Artikel anklicken + Plural (Übung 2) */
+  .g2row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--line);}
+  .artset{display:flex;gap:5px;flex:none;}
+  .artbtn{font-family:"Helvetica Neue",Arial,sans-serif;font-size:12.5px;font-weight:700;border:1.5px solid var(--box-b);background:#fff;color:#26425f;border-radius:7px;padding:5px 10px;cursor:pointer;transition:all .12s;}
+  .artbtn:hover{background:var(--box);}
+  .artbtn.sel{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .artbtn.correct{background:#e3f3e6;border-color:var(--sol-b);color:var(--accent-d);}
+  .artbtn.wrong{background:#fbe7e0;border-color:#cf8a6c;color:#9a4a28;}
+  .g2num{flex:none;color:var(--accent);font-weight:800;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;width:22px;}
+  .g2word{flex:none;min-width:120px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;font-weight:700;color:var(--ink);}
+  .g2pl{display:flex;align-items:center;gap:6px;flex:1;min-width:170px;}
+  .g2pl .die{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:700;color:var(--accent);}
+  .plinp{flex:1;min-width:110px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--ink);border:0;border-bottom:2px dashed var(--oop-b);background:#fbfdff;padding:6px 8px;border-radius:6px 6px 0 0;outline:none;}
+  .plinp:focus{border-bottom-color:var(--accent);background:#f3f8f4;}
+  .plinp.correct{border-bottom-color:var(--sol-b);background:#e3f3e6;}
+  .plinp.wrong{border-bottom-color:#cf8a6c;background:#fbe7e0;}
+
+  .teach-box{display:none;font-family:"Helvetica Neue",Arial,sans-serif;border:1.5px dashed var(--teach-b);background:var(--teach);border-radius:10px;margin:0 0 14px;overflow:hidden;}
+  body.teacher .teach-box{display:block;}
+  .teach-box .th{padding:11px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--teach-ink);}
+  .teach-box .th .chev2{font-size:11px;border:1px solid var(--teach-b);border-radius:14px;padding:2px 9px;background:#fff;}
+  .teach-box .tc{max-height:0;opacity:0;overflow:hidden;transition:all .22s ease;padding:0 14px;font-size:13px;color:#5f4a1d;line-height:1.6;}
+  .teach-box.open .tc{max-height:900px;opacity:1;padding:0 14px 13px;}
+  .teach-box.open .chev2{background:var(--teach-b);color:#fff;}
+  .teach-box .tc b{color:var(--ctrl);} .teach-box .tc .key{background:#fff;border:1px solid var(--teach-b);border-radius:5px;padding:1px 6px;font-weight:700;color:var(--teach-ink);}
+
+  .item{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13.5px;border:1px solid var(--line);border-radius:8px;margin:9px 0;overflow:hidden;background:#fff;}
+  .q{padding:11px 14px 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+  .q .qt{flex:1;font-weight:600;color:var(--ink);}
+  .chev{flex:none;font-size:12px;color:var(--accent);font-weight:700;border:1px solid var(--sol-b);border-radius:20px;padding:4px 12px;white-space:nowrap;background:var(--sol);cursor:pointer;transition:all .15s;}
+  .chev:hover{background:var(--accent);color:#fff;}
+  .inpwrap{padding:0 14px 12px;}
+  .inp{width:100%;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13.5px;color:var(--ink);border:0;border-bottom:2px dashed var(--oop-b);background:#fbfdff;padding:7px 9px;border-radius:6px 6px 0 0;outline:none;}
+  .inp:focus{border-bottom-color:var(--accent);background:#f3f8f4;}
+  .ta{width:100%;min-height:78px;resize:vertical;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13.5px;color:var(--ink);border:1px solid var(--oop-b);background:#fbfdff;padding:9px 11px;border-radius:8px;outline:none;line-height:1.55;}
+  .ta:focus{border-color:var(--accent);background:#f3f8f4;}
+  .a{max-height:0;opacity:0;padding:0 14px;background:var(--sol);border-top:0 solid var(--sol-b);transition:all .22s ease;overflow:hidden;}
+  .item.open .a{max-height:400px;opacity:1;padding:11px 14px;border-top:1px solid var(--sol-b);}
+  .item.open .chev{background:var(--accent);color:#fff;}
+  .a b{color:var(--accent);} .a .alt{color:var(--muted);font-style:italic;}
+
+  footer{margin-top:34px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;line-height:1.6;}
+</style></head><body><div class="wrap">
+
+  <div class="eyebrow">Aspekte junior B1.1 · Kapitel 9 · Arbeitsbuch</div>
+  <h1>Endlich Ferien – Vor dem Start</h1>
+  <p class="sub">Wortschatz „Reisen" · AB S. 118–119 (Übungen 1–5)</p>
+
+  <div class="ctrlbar">
+    <button class="tbtn" id="tbtn" onclick="toggleTeacher()">👩‍🏫 Lehreransicht: <span class="state" id="tstate">AUS</span></button>
+    <span class="tools"><a onclick="openAll()">Alle Lösungen öffnen</a> · <a onclick="closeAll()">Alle schließen</a></span>
+  </div>
+  <p class="sub" style="font-size:12.5px">Schreib deine Antwort ins Feld, dann tippe auf <b>„Lösung"</b>.</p>
+
+  <!-- Ü1 -->
+  <div class="ex">
+    <div class="teach-box"><div class="th" onclick="togT(this)"><span>Lehrerhinweis · Reisearten</span><span class="chev2">öffnen</span></div>
+      <div class="tc">Aktiviert Vorwissen zum Wortfeld „Reisen". Tipp: Wortbildung bewusst machen (Sprach-, Welt-, Fern-, Bahn-, Flug-, Camping-, Pauschal-, Geschäfts-, Forschungs-<i>reise</i>). Lösungen: 1-d, 2-f, 3-j, 4-g, 5-c, 6-i, 7-b, 8-e, 9-a, 10-h.</div></div>
+
+    <h2><span class="nr">1</span> Welche Arten von Reisen gibt es?</h2>
+    <p class="task">Zieh die richtige Definition zur passenden Reiseart. (Handy: Definition antippen, dann den Reiseart-Kasten antippen. Eine gefüllte Zeile antippen, um die Definition zurückzulegen.)</p>
+
+    <div class="dtray" id="tray1">
+      <div class="dchip" draggable="true" data-letter="g">in ein weit entferntes Land</div>
+      <div class="dchip" draggable="true" data-letter="d">eine Reise in eine Stadt</div>
+      <div class="dchip" draggable="true" data-letter="a">aus beruflichen Gründen</div>
+      <div class="dchip" draggable="true" data-letter="i">mit dem Flugzeug</div>
+      <div class="dchip" draggable="true" data-letter="j">eine Reise um die Erde</div>
+      <div class="dchip" draggable="true" data-letter="b">mit Wohnwagen, Wohnmobil oder Zelt</div>
+      <div class="dchip" draggable="true" data-letter="h">zu wissenschaftlichen Zwecken</div>
+      <div class="dchip" draggable="true" data-letter="c">längere Reise mit Zügen (z. B. Interrail)</div>
+      <div class="dchip" draggable="true" data-letter="f">zum Verbessern einer Fremdsprache</div>
+      <div class="dchip" draggable="true" data-letter="e">An-/Abreise, Übernachtung, Essen inklusive</div>
+    </div>
+
+    <div id="match1">
+      <div class="match-row"><div class="lbl"><span class="n">1.</span> eine Städtereise</div><div class="dz" data-answer="d"><span class="ph">hierher ziehen …</span></div></div>
+      <div class="match-row"><div class="lbl"><span class="n">2.</span> eine Sprachreise</div><div class="dz" data-answer="f"><span class="ph">hierher ziehen …</span></div></div>
+      <div class="match-row"><div class="lbl"><span class="n">3.</span> eine Weltreise</div><div class="dz" data-answer="j"><span class="ph">hierher ziehen …</span></div></div>
+      <div class="match-row"><div class="lbl"><span class="n">4.</span> eine Fernreise</div><div class="dz" data-answer="g"><span class="ph">hierher ziehen …</span></div></div>
+      <div class="match-row"><div class="lbl"><span class="n">5.</span> eine Bahnreise</div><div class="dz" data-answer="c"><span class="ph">hierher ziehen …</span></div></div>
+      <div class="match-row"><div class="lbl"><span class="n">6.</span> eine Flugreise</div><div class="dz" data-answer="i"><span class="ph">hierher ziehen …</span></div></div>
+      <div class="match-row"><div class="lbl"><span class="n">7.</span> eine Campingreise</div><div class="dz" data-answer="b"><span class="ph">hierher ziehen …</span></div></div>
+      <div class="match-row"><div class="lbl"><span class="n">8.</span> eine Pauschalreise</div><div class="dz" data-answer="e"><span class="ph">hierher ziehen …</span></div></div>
+      <div class="match-row"><div class="lbl"><span class="n">9.</span> eine Geschäftsreise</div><div class="dz" data-answer="a"><span class="ph">hierher ziehen …</span></div></div>
+      <div class="match-row"><div class="lbl"><span class="n">10.</span> eine Forschungsreise</div><div class="dz" data-answer="h"><span class="ph">hierher ziehen …</span></div></div>
+    </div>
+    <div class="dnd-actions">
+      <button class="dbtn" onclick="check1()">Prüfen</button>
+      <button class="dbtn ghost" onclick="solve1()">Lösung zeigen</button>
+      <button class="dbtn ghost" onclick="reset1()">Zurücksetzen</button>
+      <span class="dnd-fb" id="fb1"></span>
+    </div>
+  </div>
+
+  <!-- Ü2 -->
+  <div class="ex">
+    <div class="teach-box"><div class="th" onclick="togT(this)"><span>Lehrerhinweis · Reisegepäck (Artikel + Plural)</span><span class="chev2">öffnen</span></div>
+      <div class="tc">Festigung von Artikel und Pluralbildung. Auf unregelmäßige Formen achten: <b>das Visum / die Visa</b>, <b>das Taschenmesser / die Taschenmesser</b> (kein Pluralzeichen), <b>das Shampoo / die Shampoos</b>. Nr. 11–13 = eigene Wörter ergänzen lassen (z. B. das Handtuch, die Zahnbürste, das Ladegerät).</div></div>
+
+    <h2><span class="nr">2</span> Was gehört ins Reisegepäck?</h2>
+    <p class="task">Klicke den richtigen Artikel an und schreib den Plural (mit „die") in das Feld.</p>
+
+    <div class="cloze-wrap">
+    <div id="g2" style="flex:1;min-width:0">
+      <div class="g2row" data-art="der" data-pl="Reisepässe"><span class="g2num">1.</span><span class="artset"><button class="artbtn" data-a="der">der</button><button class="artbtn" data-a="das">das</button><button class="artbtn" data-a="die">die</button></span><span class="g2word">Reisepass</span><span class="g2pl"><span class="die">die</span><input class="plinp" placeholder="Plural …"></span></div>
+      <div class="g2row" data-art="das" data-pl="Taschenmesser"><span class="g2num">2.</span><span class="artset"><button class="artbtn" data-a="der">der</button><button class="artbtn" data-a="das">das</button><button class="artbtn" data-a="die">die</button></span><span class="g2word">Taschenmesser</span><span class="g2pl"><span class="die">die</span><input class="plinp" placeholder="Plural …"></span></div>
+      <div class="g2row" data-art="das" data-pl="Flugtickets"><span class="g2num">3.</span><span class="artset"><button class="artbtn" data-a="der">der</button><button class="artbtn" data-a="das">das</button><button class="artbtn" data-a="die">die</button></span><span class="g2word">Flugticket</span><span class="g2pl"><span class="die">die</span><input class="plinp" placeholder="Plural …"></span></div>
+      <div class="g2row" data-art="das" data-pl="Pflaster"><span class="g2num">4.</span><span class="artset"><button class="artbtn" data-a="der">der</button><button class="artbtn" data-a="das">das</button><button class="artbtn" data-a="die">die</button></span><span class="g2word">Pflaster</span><span class="g2pl"><span class="die">die</span><input class="plinp" placeholder="Plural …"></span></div>
+      <div class="g2row" data-art="die" data-pl="Sonnenbrillen"><span class="g2num">5.</span><span class="artset"><button class="artbtn" data-a="der">der</button><button class="artbtn" data-a="das">das</button><button class="artbtn" data-a="die">die</button></span><span class="g2word">Sonnenbrille</span><span class="g2pl"><span class="die">die</span><input class="plinp" placeholder="Plural …"></span></div>
+      <div class="g2row" data-art="die" data-pl="Kameras"><span class="g2num">6.</span><span class="artset"><button class="artbtn" data-a="der">der</button><button class="artbtn" data-a="das">das</button><button class="artbtn" data-a="die">die</button></span><span class="g2word">Kamera</span><span class="g2pl"><span class="die">die</span><input class="plinp" placeholder="Plural …"></span></div>
+      <div class="g2row" data-art="das" data-pl="Visa"><span class="g2num">7.</span><span class="artset"><button class="artbtn" data-a="der">der</button><button class="artbtn" data-a="das">das</button><button class="artbtn" data-a="die">die</button></span><span class="g2word">Visum</span><span class="g2pl"><span class="die">die</span><input class="plinp" placeholder="Plural …"></span></div>
+      <div class="g2row" data-art="die" data-pl="Badehosen"><span class="g2num">8.</span><span class="artset"><button class="artbtn" data-a="der">der</button><button class="artbtn" data-a="das">das</button><button class="artbtn" data-a="die">die</button></span><span class="g2word">Badehose</span><span class="g2pl"><span class="die">die</span><input class="plinp" placeholder="Plural …"></span></div>
+      <div class="g2row" data-art="das" data-pl="Shampoos"><span class="g2num">9.</span><span class="artset"><button class="artbtn" data-a="der">der</button><button class="artbtn" data-a="das">das</button><button class="artbtn" data-a="die">die</button></span><span class="g2word">Shampoo</span><span class="g2pl"><span class="die">die</span><input class="plinp" placeholder="Plural …"></span></div>
+      <div class="g2row" data-art="der" data-pl="Waschbeutel"><span class="g2num">10.</span><span class="artset"><button class="artbtn" data-a="der">der</button><button class="artbtn" data-a="das">das</button><button class="artbtn" data-a="die">die</button></span><span class="g2word">Waschbeutel</span><span class="g2pl"><span class="die">die</span><input class="plinp" placeholder="Plural …"></span></div>
+    </div>
+    <aside class="vbox">
+      <h4>Wörterbuch</h4>
+      <dl>
+        <dt>das Pflaster, –</dt>
+        <dd>Klebeverband / kleiner Streifen für eine kleine Wunde <span class="bg">(лейкопласт)</span></dd>
+        <dt>der Waschbeutel, –</dt>
+        <dd>kleine Tasche für Zahnbürste, Seife, Shampoo usw. auf Reisen <span class="bg">(несесер за тоалетни принадлежности)</span></dd>
+      </dl>
+    </aside>
+    </div><!-- /cloze-wrap -->
+    <div class="dnd-actions">
+      <button class="dbtn" onclick="check2()">Prüfen</button>
+      <button class="dbtn ghost" onclick="solve2()">Lösung zeigen</button>
+      <button class="dbtn ghost" onclick="reset2()">Zurücksetzen</button>
+      <span class="dnd-fb" id="fb2"></span>
+    </div>
+
+    <div class="item" style="margin-top:14px"><div class="q"><span class="qt">11.–13. Eigene Wörter ergänzen</span><span class="chev" onclick="tog(this)">Beispiele</span></div>
+      <div class="inpwrap"><input class="inp" placeholder="deine eigenen Wörter …"></div><div class="a">z. B. <b>das Handtuch / die Handtücher</b>, <b>die Zahnbürste / die Zahnbürsten</b>, <b>das Ladegerät / die Ladegeräte</b></div></div>
+  </div>
+
+  <!-- Ü3 -->
+  <div class="ex">
+    <div class="teach-box"><div class="th" onclick="togT(this)"><span>Lehrerhinweis · Lückentext</span><span class="chev2">öffnen</span></div>
+      <div class="tc">Wortschatz im Kontext. Lösungen: (1) Kontinent, (2) Klima, (3) Heimweh, (4) Impfungen, (5) Fahrradtour, (6) Wochenende, (7) einen Abstecher … machen, (8) Lust. Vorab klären: <i>Heimweh, Impfungen, Abstecher</i>. Danach den Text als Sprechanlass nutzen (Wie plant ihr Reisen? Gibt es bei euch auch „Theater"?).</div></div>
+
+    <h2><span class="nr">3</span> Ergänze den Text</h2>
+    <p class="task">Zieh die Wörter in die Lücken. (Auf dem Handy: Wort antippen, dann die Lücke antippen. Eine gefüllte Lücke antippen, um das Wort zurückzulegen.)</p>
+    <div class="tray" id="tray3">
+      <div class="chip" draggable="true" data-word="Wochenende">Wochenende</div>
+      <div class="chip" draggable="true" data-word="Kontinent">Kontinent</div>
+      <div class="chip" draggable="true" data-word="Lust">Lust</div>
+      <div class="chip" draggable="true" data-word="einen Abstecher machen">einen Abstecher machen</div>
+      <div class="chip" draggable="true" data-word="Klima">Klima</div>
+      <div class="chip" draggable="true" data-word="Impfungen">Impfungen</div>
+      <div class="chip" draggable="true" data-word="Heimweh">Heimweh</div>
+      <div class="chip" draggable="true" data-word="Fahrradtour">Fahrradtour</div>
+    </div>
+    <div class="cloze-wrap">
+    <div class="textcloze" id="cloze3">
+      Jedes Jahr das gleiche Theater in den Ferien! Ich verreise ja total gern, aber meine Eltern sind da eine Katastrophe. Erst planen wir die Reise: Auf welchen <span class="gap" data-num="1" data-answer="Kontinent">(1)</span> wollen wir fahren? Mein Vater will in Europa bleiben, aber in den Süden. Da ist meiner Mutter das <span class="gap" data-num="2" data-answer="Klima">(2)</span> zu heiß! Ich will nach Australien. Das ist meinen Eltern viel zu weit! Da bekommen sie schon am Flughafen <span class="gap" data-num="3" data-answer="Heimweh">(3)</span>. Und jedes Mal diese Diskussionen zum Thema Gesundheit. „Da gibt's bestimmt tropische Krankheiten. Dann brauchen wir alle <span class="gap" data-num="4" data-answer="Impfungen">(4)</span>. Was das wieder kostet!" Und jetzt kommen die ganz tollen Vorschläge: „Lasst uns doch einfach eine <span class="gap" data-num="5" data-answer="Fahrradtour">(5)</span> machen oder mit dem Auto übers <span class="gap" data-num="6" data-answer="Wochenende">(6)</span> eine tolle Stadt besuchen. Auf dem Weg können wir auch mal <span class="gap" data-num="7" data-answer="einen Abstecher machen">(7)</span> in Orte, die wir nicht kennen. Ganz spontan, wenn wir <span class="gap" data-num="8" data-answer="Lust">(8)</span> haben." Also echt … Nächstes Jahr fahr' ich mit meinem Sportverein weg!
+    </div>
+    <aside class="vbox">
+      <h4>Wörterbuch</h4>
+      <dl>
+        <dt>der Abstecher, –</dt>
+        <dd>kurzer Besuch / kleiner Ausflug an einen Ort, der nicht auf der eigentlichen Route liegt <span class="bg">(отбивка)</span></dd>
+        <dt>das Heimweh (nur Sg.)</dt>
+        <dd>trauriges Gefühl, wenn man weit weg ist und nach Hause möchte <span class="bg">(носталгия по дома)</span></dd>
+        <dt>die Impfung, -en</dt>
+        <dd>Schutz gegen eine Krankheit (z. B. mit einer Spritze) <span class="bg">(ваксинация)</span></dd>
+      </dl>
+    </aside>
+    </div><!-- /cloze-wrap -->
+    <div class="dnd-actions">
+      <button class="dbtn" onclick="check3()">Prüfen</button>
+      <button class="dbtn ghost" onclick="solve3()">Lösung zeigen</button>
+      <button class="dbtn ghost" onclick="reset3()">Zurücksetzen</button>
+      <span class="dnd-fb" id="fb3"></span>
+    </div>
+  </div>
+
+  <!-- Ü4 -->
+  <div class="ex">
+    <div class="teach-box"><div class="th" onclick="togT(this)"><span>Lehrerhinweis · Bahn / Flugzeug / Auto</span><span class="chev2">öffnen</span></div>
+      <div class="tc">Wortschatz nach Verkehrsmitteln ordnen. Gut als Partnerarbeit oder Wettbewerb. Bei Unbekanntem das Wörterbuch nutzen lassen. Manche Wörter sind eindeutig (Gleis → Bahn, Gate → Flugzeug, Stau → Auto).</div></div>
+
+    <h2><span class="nr">4</span> Bahn, Flugzeug oder Auto?</h2>
+    <p class="task">Zieh jeden Begriff in die richtige Spalte. (Handy: Wort antippen, dann die Spalte antippen. Ein Wort in einer Spalte antippen, um es wieder herauszunehmen.)</p>
+
+    <div class="tray4" id="tray4">
+      <div class="schip" draggable="true" data-cat="auto" data-bg="задръстване">der Stau</div>
+      <div class="schip" draggable="true" data-cat="bahn" data-bg="коловоз; релси">das Gleis</div>
+      <div class="schip" draggable="true" data-cat="flug" data-bg="летище">der Flughafen</div>
+      <div class="schip" draggable="true" data-cat="auto" data-bg="бензиностанция">die Tankstelle</div>
+      <div class="schip" draggable="true" data-cat="bahn" data-bg="скоростен влак (ICE)">der ICE</div>
+      <div class="schip" draggable="true" data-cat="flug" data-bg="изход/гейт (на летище)">das Gate</div>
+      <div class="schip" draggable="true" data-cat="auto" data-bg="шофьорска книжка">der Führerschein</div>
+      <div class="schip" draggable="true" data-cat="bahn" data-bg="билет (за влак/транспорт)">die Fahrkarte</div>
+      <div class="schip" draggable="true" data-cat="flug" data-bg="кацане">die Landung</div>
+      <div class="schip" draggable="true" data-cat="auto" data-bg="багажник">der Kofferraum</div>
+      <div class="schip" draggable="true" data-cat="bahn" data-bg="кондуктор">der Schaffner</div>
+      <div class="schip" draggable="true" data-cat="flug" data-bg="проверка за сигурност">die Sicherheitskontrolle</div>
+      <div class="schip" draggable="true" data-cat="auto" data-bg="гараж">die Garage</div>
+      <div class="schip" draggable="true" data-cat="bahn" data-bg="вагон">der Waggon</div>
+      <div class="schip" draggable="true" data-cat="flug" data-bg="ръчен багаж">das Handgepäck</div>
+      <div class="schip" draggable="true" data-cat="auto" data-bg="магистрална такса">die Autobahngebühr</div>
+      <div class="schip" draggable="true" data-cat="bahn" data-bg="локомотив">die Lok</div>
+      <div class="schip" draggable="true" data-cat="flug" data-bg="безмитен магазин">der Duty-Free-Shop</div>
+      <div class="schip" draggable="true" data-cat="auto" data-bg="пътна информация/съобщение за трафика">der Verkehrshinweis</div>
+      <div class="schip" draggable="true" data-cat="bahn" data-bg="вагон-ресторант">der Speisewagen</div>
+      <div class="schip" draggable="true" data-cat="flug" data-bg="стюардеса">die Flugbegleiterin</div>
+    </div>
+
+    <div class="sortcols">
+      <div class="sortcol"><h5>die Bahn 🚆</h5><div class="col-drop" data-cat="bahn"></div></div>
+      <div class="sortcol"><h5>das Flugzeug ✈️</h5><div class="col-drop" data-cat="flug"></div></div>
+      <div class="sortcol"><h5>das Auto 🚗</h5><div class="col-drop" data-cat="auto"></div></div>
+    </div>
+    <div class="dnd-actions">
+      <button class="dbtn" onclick="check4()">Prüfen</button>
+      <button class="dbtn ghost" onclick="solve4()">Lösung zeigen</button>
+      <button class="dbtn ghost" onclick="reset4()">Zurücksetzen</button>
+      <span class="dnd-fb" id="fb4"></span>
+    </div>
+  </div>
+
+  <!-- Ü5 -->
+  <div class="ex">
+    <div class="teach-box"><div class="th" onclick="togT(this)"><span>Lehrerhinweis · Verben ergänzen (Kollokationen)</span><span class="chev2">öffnen</span></div>
+      <div class="tc">Feste Verbindungen Verb + Nomen. Auf das reflexive <b>sich sonnen</b> hinweisen. Lösungen: 2. sich … sonnen, 3. buchen, 4. mieten, 5. probieren, 6. besichtigen, 7. beantragen, 8. übernachten, 9. verbringen, 10. wechseln. Anschluss: S bilden eigene Sätze mit drei Kollokationen.</div></div>
+
+    <h2><span class="nr">5</span> Ergänze die Verben</h2>
+    <p class="task">Zieh das passende Verb zum Ausdruck. (Handy: Verb antippen, dann den Ausdruck antippen. Ein gesetztes Verb antippen, um es zurückzulegen.)</p>
+
+    <div class="m5wrap">
+      <div class="m5list" id="match5">
+        <div class="m5row"><div class="exla"><span class="n">1.</span> am Strand …</div><div class="m5drop" data-answer="faulenzen"><span class="ph">Verb …</span></div></div>
+        <div class="m5row"><div class="exla"><span class="n">2.</span> im Park …</div><div class="m5drop" data-answer="sich sonnen"><span class="ph">Verb …</span></div></div>
+        <div class="m5row"><div class="exla"><span class="n">3.</span> eine Städtereise …</div><div class="m5drop" data-answer="buchen"><span class="ph">Verb …</span></div></div>
+        <div class="m5row"><div class="exla"><span class="n">4.</span> eine Ferienwohnung …</div><div class="m5drop" data-answer="mieten"><span class="ph">Verb …</span></div></div>
+        <div class="m5row"><div class="exla"><span class="n">5.</span> neue Speisen …</div><div class="m5drop" data-answer="probieren"><span class="ph">Verb …</span></div></div>
+        <div class="m5row"><div class="exla"><span class="n">6.</span> Sehenswürdigkeiten …</div><div class="m5drop" data-answer="besichtigen"><span class="ph">Verb …</span></div></div>
+        <div class="m5row"><div class="exla"><span class="n">7.</span> ein Visum …</div><div class="m5drop" data-answer="beantragen"><span class="ph">Verb …</span></div></div>
+        <div class="m5row"><div class="exla"><span class="n">8.</span> in einem Hotel …</div><div class="m5drop" data-answer="übernachten"><span class="ph">Verb …</span></div></div>
+        <div class="m5row"><div class="exla"><span class="n">9.</span> den Urlaub im Ausland …</div><div class="m5drop" data-answer="verbringen"><span class="ph">Verb …</span></div></div>
+        <div class="m5row"><div class="exla"><span class="n">10.</span> Geld …</div><div class="m5drop" data-answer="wechseln"><span class="ph">Verb …</span></div></div>
+      </div>
+      <div class="vtray" id="tray5">
+        <div class="vchip" draggable="true" data-word="mieten">mieten</div>
+        <div class="vchip" draggable="true" data-word="faulenzen">faulenzen</div>
+        <div class="vchip" draggable="true" data-word="wechseln">wechseln</div>
+        <div class="vchip" draggable="true" data-word="besichtigen">besichtigen</div>
+        <div class="vchip" draggable="true" data-word="sich sonnen">sich sonnen</div>
+        <div class="vchip" draggable="true" data-word="übernachten">übernachten</div>
+        <div class="vchip" draggable="true" data-word="buchen">buchen</div>
+        <div class="vchip" draggable="true" data-word="beantragen">beantragen</div>
+        <div class="vchip" draggable="true" data-word="verbringen">verbringen</div>
+        <div class="vchip" draggable="true" data-word="probieren">probieren</div>
+      </div>
+    </div>
+    <div class="dnd-actions">
+      <button class="dbtn" onclick="check5()">Prüfen</button>
+      <button class="dbtn ghost" onclick="solve5()">Lösung zeigen</button>
+      <button class="dbtn ghost" onclick="reset5()">Zurücksetzen</button>
+      <span class="dnd-fb" id="fb5"></span>
+    </div>
+  </div>
+
+  <footer>
+    Interaktive Übungen zu Kapitel 9 „Endlich Ferien", Arbeitsbuch S. 118–119 („Vor dem Start", Wortschatz Ü1–5), Aspekte junior B1.1.
+    Lösungen nach dem Lösungsschlüssel des Übungsbuchs. Lehrerhinweise nur in der Lehreransicht sichtbar. Stand 21.06.2026.
+  </footer>
+
+</div>
+
+<script>
+function tog(el){ el.closest('.item').classList.toggle('open'); }
+function togT(el){ el.closest('.teach-box').classList.toggle('open'); }
+function openAll(){ document.querySelectorAll('.item').forEach(i=>i.classList.add('open')); }
+function closeAll(){ document.querySelectorAll('.item').forEach(i=>i.classList.remove('open')); }
+function toggleTeacher(){
+  const on=document.body.classList.toggle('teacher');
+  document.getElementById('tstate').textContent = on ? 'EIN' : 'AUS';
+  if(!on){ document.querySelectorAll('.teach-box.open').forEach(t=>t.classList.remove('open')); }
+}
+
+/* ===== Drag & Drop Cloze (Übung 3) ===== */
+const tray3=document.getElementById('tray3');
+const cloze3=document.getElementById('cloze3');
+let selChip=null;
+
+function chipByWord(w){ return [...tray3.querySelectorAll('.chip')].find(c=>c.dataset.word===w); }
+
+function placeWord(gap, word){
+  if(gap.classList.contains('filled')) returnGap(gap);   // free current word first
+  const chip=chipByWord(word);
+  if(chip) chip.classList.add('used');
+  gap.textContent=word;
+  gap.dataset.filled=word;
+  gap.classList.add('filled');
+  gap.classList.remove('correct','wrong');
+  clearSel();
+  document.getElementById('fb3').textContent='';
+}
+function returnGap(gap){
+  const w=gap.dataset.filled;
+  if(!w) return;
+  const chip=chipByWord(w);
+  if(chip) chip.classList.remove('used');
+  gap.textContent='('+gap.dataset.num+')';
+  gap.dataset.filled='';
+  gap.classList.remove('filled','correct','wrong');
+}
+function clearSel(){ if(selChip){selChip.classList.remove('sel');selChip=null;} }
+
+/* tap-to-place (Touch & Klick) */
+tray3.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    if(selChip===chip){ clearSel(); return; }
+    clearSel(); selChip=chip; chip.classList.add('sel');
+  });
+  /* native drag */
+  chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain',chip.dataset.word); });
+});
+cloze3.querySelectorAll('.gap').forEach(gap=>{
+  gap.addEventListener('click',()=>{
+    if(gap.classList.contains('filled')){ returnGap(gap); return; }
+    if(selChip){ placeWord(gap, selChip.dataset.word); }
+  });
+  gap.addEventListener('dragover',e=>{ e.preventDefault(); gap.classList.add('over'); });
+  gap.addEventListener('dragleave',()=>gap.classList.remove('over'));
+  gap.addEventListener('drop',e=>{ e.preventDefault(); gap.classList.remove('over'); placeWord(gap, e.dataTransfer.getData('text/plain')); });
+});
+
+function check3(){
+  let ok=0,total=0;
+  cloze3.querySelectorAll('.gap').forEach(g=>{
+    total++;
+    if(g.dataset.filled && g.dataset.filled===g.dataset.answer){ g.classList.add('correct');g.classList.remove('wrong');ok++; }
+    else if(g.dataset.filled){ g.classList.add('wrong');g.classList.remove('correct'); }
+    else { g.classList.remove('correct','wrong'); }
+  });
+  document.getElementById('fb3').textContent = ok+' von '+total+' richtig'+(ok===total?' — super! ✓':'');
+}
+function solve3(){
+  cloze3.querySelectorAll('.gap').forEach(g=>placeWord(g, g.dataset.answer));
+  cloze3.querySelectorAll('.gap').forEach(g=>g.classList.add('correct'));
+  document.getElementById('fb3').textContent='Lösung angezeigt.';
+}
+function reset3(){
+  cloze3.querySelectorAll('.gap').forEach(g=>returnGap(g));
+  clearSel();
+  document.getElementById('fb3').textContent='';
+}
+
+/* ===== Drag & Drop Matching (Übung 1) ===== */
+const tray1=document.getElementById('tray1');
+const match1=document.getElementById('match1');
+let selDef=null;
+
+function chipByLetter(l){ return [...tray1.querySelectorAll('.dchip')].find(c=>c.dataset.letter===l); }
+function clearSel1(){ if(selDef){selDef.classList.remove('sel');selDef=null;} }
+
+function placeDef(dz, letter){
+  if(dz.classList.contains('filled')) returnDef(dz);
+  const chip=chipByLetter(letter);
+  if(chip){ dz.textContent=chip.textContent; chip.classList.add('used'); }
+  dz.dataset.filled=letter;
+  dz.classList.add('filled');
+  dz.classList.remove('correct','wrong');
+  clearSel1();
+  document.getElementById('fb1').textContent='';
+}
+function returnDef(dz){
+  const l=dz.dataset.filled;
+  if(!l) return;
+  const chip=chipByLetter(l);
+  if(chip) chip.classList.remove('used');
+  dz.innerHTML='<span class="ph">hierher ziehen …</span>';
+  dz.dataset.filled='';
+  dz.classList.remove('filled','correct','wrong');
+}
+
+tray1.querySelectorAll('.dchip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    if(selDef===chip){ clearSel1(); return; }
+    clearSel1(); selDef=chip; chip.classList.add('sel');
+  });
+  chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain',chip.dataset.letter); });
+});
+match1.querySelectorAll('.dz').forEach(dz=>{
+  dz.addEventListener('click',()=>{
+    if(dz.classList.contains('filled')){ returnDef(dz); return; }
+    if(selDef){ placeDef(dz, selDef.dataset.letter); }
+  });
+  dz.addEventListener('dragover',e=>{ e.preventDefault(); dz.classList.add('over'); });
+  dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+  dz.addEventListener('drop',e=>{ e.preventDefault(); dz.classList.remove('over'); placeDef(dz, e.dataTransfer.getData('text/plain')); });
+});
+
+function check1(){
+  let ok=0,total=0;
+  match1.querySelectorAll('.dz').forEach(dz=>{
+    total++;
+    if(dz.dataset.filled && dz.dataset.filled===dz.dataset.answer){ dz.classList.add('correct');dz.classList.remove('wrong');ok++; }
+    else if(dz.dataset.filled){ dz.classList.add('wrong');dz.classList.remove('correct'); }
+    else { dz.classList.remove('correct','wrong'); }
+  });
+  document.getElementById('fb1').textContent = ok+' von '+total+' richtig'+(ok===total?' — super! ✓':'');
+}
+function solve1(){
+  match1.querySelectorAll('.dz').forEach(dz=>placeDef(dz, dz.dataset.answer));
+  match1.querySelectorAll('.dz').forEach(dz=>dz.classList.add('correct'));
+  document.getElementById('fb1').textContent='Lösung angezeigt.';
+}
+function reset1(){
+  match1.querySelectorAll('.dz').forEach(dz=>returnDef(dz));
+  clearSel1();
+  document.getElementById('fb1').textContent='';
+}
+
+/* ===== Drag & Drop Sort, 3 Spalten (Übung 4) ===== */
+const tray4=document.getElementById('tray4');
+const cols4=[...document.querySelectorAll('.col-drop')];
+let selS=null, dragS=null;
+
+function clearSelS(){ if(selS){selS.classList.remove('sel');selS=null;} }
+function moveS(chip, container){
+  container.appendChild(chip);
+  chip.classList.remove('correct','wrong');
+  clearSelS();
+  document.getElementById('fb4').textContent='';
+}
+// Tooltip (BG-Übersetzung) bei Hover / langem Tippen
+const tip=document.createElement('div'); tip.id='tip'; document.body.appendChild(tip);
+function showTip(chip,x,y){
+  const t=chip.dataset.bg; if(!t) return;
+  tip.textContent=t; tip.classList.add('show');
+  const tw=tip.offsetWidth;
+  let left=x-16; if(left+tw>window.innerWidth-8) left=window.innerWidth-8-tw; if(left<8) left=8;
+  tip.style.left=left+'px';
+  tip.style.top=(y-tip.offsetHeight-12)+'px';
+}
+function hideTip(){ tip.classList.remove('show'); }
+
+let lpTimer=null, suppressClick=false;
+function bindSchip(chip){
+  chip.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(suppressClick){ suppressClick=false; return; }
+    if(selS===chip){ clearSelS(); return; }
+    clearSelS(); selS=chip; chip.classList.add('sel');
+  });
+  chip.addEventListener('dragstart',()=>{ dragS=chip; hideTip(); });
+  /* Desktop: Hover */
+  chip.addEventListener('mouseenter',e=>showTip(chip,e.clientX,e.clientY));
+  chip.addEventListener('mousemove',e=>{ if(tip.classList.contains('show')) showTip(chip,e.clientX,e.clientY); });
+  chip.addEventListener('mouseleave',hideTip);
+  /* Handy: langes Tippen (halten) */
+  chip.addEventListener('touchstart',e=>{
+    const t=e.touches[0];
+    lpTimer=setTimeout(()=>{ showTip(chip,t.clientX,t.clientY); suppressClick=true; },350);
+  },{passive:true});
+  chip.addEventListener('touchend',()=>{ clearTimeout(lpTimer); setTimeout(hideTip,1200); });
+  chip.addEventListener('touchmove',()=>{ clearTimeout(lpTimer); });
+}
+document.querySelectorAll('.schip').forEach(bindSchip);
+
+[tray4, ...cols4].forEach(zone=>{
+  zone.addEventListener('click',()=>{ if(selS) moveS(selS, zone); });
+  zone.addEventListener('dragover',e=>{ e.preventDefault(); zone.classList.add('over'); });
+  zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+  zone.addEventListener('drop',e=>{ e.preventDefault(); zone.classList.remove('over'); if(dragS) moveS(dragS, zone); });
+});
+
+function check4(){
+  let ok=0,placed=0;const total=21;
+  cols4.forEach(col=>{
+    col.querySelectorAll('.schip').forEach(chip=>{
+      placed++;
+      if(chip.dataset.cat===col.dataset.cat){ chip.classList.add('correct');chip.classList.remove('wrong');ok++; }
+      else { chip.classList.add('wrong');chip.classList.remove('correct'); }
+    });
+  });
+  document.getElementById('fb4').textContent = ok+' von '+total+' richtig'+(ok===total?' — super! ✓':(placed<total?' ('+(total-placed)+' noch im Vorrat)':''));
+}
+function solve4(){
+  document.querySelectorAll('.schip').forEach(chip=>{
+    const col=cols4.find(c=>c.dataset.cat===chip.dataset.cat);
+    col.appendChild(chip); chip.classList.add('correct'); chip.classList.remove('wrong','sel');
+  });
+  clearSelS();
+  document.getElementById('fb4').textContent='Lösung angezeigt.';
+}
+function reset4(){
+  document.querySelectorAll('.schip').forEach(chip=>{ chip.classList.remove('correct','wrong','sel'); tray4.appendChild(chip); });
+  clearSelS();
+  document.getElementById('fb4').textContent='';
+}
+
+/* ===== Drag & Drop Matching, Verben (Übung 5) ===== */
+const tray5=document.getElementById('tray5');
+const match5=document.getElementById('match5');
+let selV=null;
+
+function chipByVerb(w){ return [...tray5.querySelectorAll('.vchip')].find(c=>c.dataset.word===w); }
+function clearSelV(){ if(selV){selV.classList.remove('sel');selV=null;} }
+function placeVerb(dz, word){
+  if(dz.classList.contains('filled')) returnVerb(dz);
+  const chip=chipByVerb(word);
+  if(chip) chip.classList.add('used');
+  dz.textContent=word;
+  dz.dataset.filled=word;
+  dz.classList.add('filled');
+  dz.classList.remove('correct','wrong');
+  clearSelV();
+  document.getElementById('fb5').textContent='';
+}
+function returnVerb(dz){
+  const w=dz.dataset.filled;
+  if(!w) return;
+  const chip=chipByVerb(w);
+  if(chip) chip.classList.remove('used');
+  dz.innerHTML='<span class="ph">Verb …</span>';
+  dz.dataset.filled='';
+  dz.classList.remove('filled','correct','wrong');
+}
+tray5.querySelectorAll('.vchip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    if(selV===chip){ clearSelV(); return; }
+    clearSelV(); selV=chip; chip.classList.add('sel');
+  });
+  chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain',chip.dataset.word); });
+});
+match5.querySelectorAll('.m5drop').forEach(dz=>{
+  dz.addEventListener('click',()=>{
+    if(dz.classList.contains('filled')){ returnVerb(dz); return; }
+    if(selV){ placeVerb(dz, selV.dataset.word); }
+  });
+  dz.addEventListener('dragover',e=>{ e.preventDefault(); dz.classList.add('over'); });
+  dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+  dz.addEventListener('drop',e=>{ e.preventDefault(); dz.classList.remove('over'); placeVerb(dz, e.dataTransfer.getData('text/plain')); });
+});
+function check5(){
+  let ok=0,total=0;
+  match5.querySelectorAll('.m5drop').forEach(dz=>{
+    total++;
+    if(dz.dataset.filled && dz.dataset.filled===dz.dataset.answer){ dz.classList.add('correct');dz.classList.remove('wrong');ok++; }
+    else if(dz.dataset.filled){ dz.classList.add('wrong');dz.classList.remove('correct'); }
+    else { dz.classList.remove('correct','wrong'); }
+  });
+  document.getElementById('fb5').textContent = ok+' von '+total+' richtig'+(ok===total?' — super! ✓':'');
+}
+function solve5(){
+  match5.querySelectorAll('.m5drop').forEach(dz=>placeVerb(dz, dz.dataset.answer));
+  match5.querySelectorAll('.m5drop').forEach(dz=>dz.classList.add('correct'));
+  document.getElementById('fb5').textContent='Lösung angezeigt.';
+}
+function reset5(){
+  match5.querySelectorAll('.m5drop').forEach(dz=>returnVerb(dz));
+  clearSelV();
+  document.getElementById('fb5').textContent='';
+}
+
+/* ===== Artikel anklicken + Plural (Übung 2) ===== */
+const g2=document.getElementById('g2');
+g2.querySelectorAll('.g2row').forEach(row=>{
+  row.querySelectorAll('.artbtn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      row.querySelectorAll('.artbtn').forEach(b=>b.classList.remove('sel','correct','wrong'));
+      btn.classList.add('sel');
+      document.getElementById('fb2').textContent='';
+    });
+  });
+  row.querySelector('.plinp').addEventListener('input',()=>{ document.getElementById('fb2').textContent=''; });
+});
+function normPl(s){ return s.trim().replace(/^die\s+/i,'').toLowerCase(); }
+function check2(){
+  let artOk=0, plOk=0; const total=10;
+  g2.querySelectorAll('.g2row').forEach(row=>{
+    const sel=row.querySelector('.artbtn.sel');
+    row.querySelectorAll('.artbtn').forEach(b=>b.classList.remove('correct','wrong'));
+    if(sel){
+      if(sel.dataset.a===row.dataset.art){ sel.classList.add('correct'); artOk++; }
+      else { sel.classList.add('wrong'); }
+    }
+    const inp=row.querySelector('.plinp');
+    inp.classList.remove('correct','wrong');
+    if(inp.value.trim()!==''){
+      if(normPl(inp.value)===row.dataset.pl.toLowerCase()){ inp.classList.add('correct'); plOk++; }
+      else { inp.classList.add('wrong'); }
+    }
+  });
+  document.getElementById('fb2').textContent='Artikel: '+artOk+'/'+total+' · Plural: '+plOk+'/'+total+((artOk===total&&plOk===total)?' — super! ✓':'');
+}
+function solve2(){
+  g2.querySelectorAll('.g2row').forEach(row=>{
+    row.querySelectorAll('.artbtn').forEach(b=>{
+      b.classList.remove('sel','wrong','correct');
+      if(b.dataset.a===row.dataset.art) b.classList.add('sel','correct');
+    });
+    const inp=row.querySelector('.plinp');
+    inp.value=row.dataset.pl; inp.classList.remove('wrong'); inp.classList.add('correct');
+  });
+  document.getElementById('fb2').textContent='Lösung angezeigt.';
+}
+function reset2(){
+  g2.querySelectorAll('.g2row').forEach(row=>{
+    row.querySelectorAll('.artbtn').forEach(b=>b.classList.remove('sel','correct','wrong'));
+    const inp=row.querySelector('.plinp'); inp.value=''; inp.classList.remove('correct','wrong');
+  });
+  document.getElementById('fb2').textContent='';
+}
+</script>
+</body></html>
