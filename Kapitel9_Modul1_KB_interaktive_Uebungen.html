@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kapitel 9 · Modul 1 (Kursbuch) · Interaktive Übungen</title>
+<style>
+  :root{--bg:#fafaf7;--ink:#1f2a24;--muted:#6b7268;--line:#d8dcd3;--accent:#3f6b50;--accent-d:#2f5640;--accent-soft:#e6efe8;
+    --oop:#eef4fb;--oop-b:#9bb6d6;--sol:#eaf3ec;--sol-b:#7fae8c;--ctrl:#8a4321;--gold:#ca9a4e;--box:#eef3f8;--box-b:#b9cbdf;
+    --teach:#fff7ea;--teach-b:#e0b357;--teach-ink:#7a5616;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Georgia","Iowan Old Style",serif;padding:30px 18px 80px;line-height:1.5;}
+  .wrap{max-width:880px;margin:0 auto;}
+  .eyebrow{font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+  h1{margin:0 0 6px;font-size:26px;font-weight:600;line-height:1.25;}
+  .sub{font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--muted);margin:0 0 3px;}
+  .ctrlbar{font-family:"Helvetica Neue",Arial,sans-serif;display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:16px 0 4px;}
+  .tbtn{font-size:13px;font-weight:700;background:var(--teach);color:var(--teach-ink);border:1.5px solid var(--teach-b);border-radius:22px;padding:8px 16px;cursor:pointer;}
+  body.teacher .tbtn{background:var(--teach-b);color:#fff;}
+  .tools{font-family:"Helvetica Neue",Arial,sans-serif;font-size:12.5px;color:var(--muted);}
+  .tools a{color:var(--accent);cursor:pointer;text-decoration:underline;}
+
+  .ex{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:20px 0;}
+  .ex h2{font-family:"Helvetica Neue",Arial,sans-serif;font-size:16px;color:var(--accent);margin:0 0 4px;display:flex;align-items:center;gap:9px;}
+  .ex h2 .nr{background:var(--accent);color:#fff;min-width:30px;height:26px;padding:0 7px;border-radius:13px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:none;}
+  .task{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--muted);margin:2px 0 12px;}
+
+  /* audio player */
+  .audio{display:flex;align-items:center;gap:11px;background:var(--accent-soft);border:1px solid #c4d8c9;border-radius:10px;padding:10px 13px;margin:0 0 14px;font-family:"Helvetica Neue",Arial,sans-serif;}
+  .audio .tk{flex:none;background:var(--accent);color:#fff;font-size:11.5px;font-weight:800;border-radius:7px;padding:5px 9px;white-space:nowrap;}
+  .audio audio{flex:1;height:38px;min-width:0;}
+  .audio .miss{font-size:12px;color:#9a6a2a;font-style:italic;}
+
+  .gram{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--oop);border:1px solid var(--oop-b);border-left:3px solid #4a78b0;border-radius:8px;padding:11px 14px;margin:0 0 12px;line-height:1.6;color:#22425f;}
+  .gram h4{margin:0 0 6px;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:#2f5680;}
+  .gram b{color:#2f5680;} .gram .gex{color:var(--accent-d);font-style:italic;}
+
+  .teach-box{display:none;font-family:"Helvetica Neue",Arial,sans-serif;border:1.5px dashed var(--teach-b);background:var(--teach);border-radius:10px;margin:0 0 14px;overflow:hidden;}
+  body.teacher .teach-box{display:block;}
+  .teach-box .th{padding:11px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--teach-ink);}
+  .teach-box .th .chev2{font-size:11px;border:1px solid var(--teach-b);border-radius:14px;padding:2px 9px;background:#fff;}
+  .teach-box .tc{max-height:0;opacity:0;overflow:hidden;transition:all .22s ease;padding:0 14px;font-size:13px;color:#5f4a1d;line-height:1.6;}
+  .teach-box.open .tc{max-height:1200px;opacity:1;padding:0 14px 13px;}
+  .teach-box.open .chev2{background:var(--teach-b);color:#fff;}
+  .teach-box .tc b{color:var(--ctrl);}
+
+  .item{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13.5px;border:1px solid var(--line);border-radius:8px;margin:9px 0;overflow:hidden;background:#fff;}
+  .q{padding:11px 14px 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+  .q .qt{flex:1;font-weight:600;color:var(--ink);}
+  .chev{flex:none;font-size:12px;color:var(--accent);font-weight:700;border:1px solid var(--sol-b);border-radius:20px;padding:4px 12px;white-space:nowrap;background:var(--sol);cursor:pointer;transition:all .15s;}
+  .chev:hover{background:var(--accent);color:#fff;}
+  .inpwrap{padding:0 14px 12px;}
+  .ta{width:100%;min-height:64px;resize:vertical;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13.5px;color:var(--ink);border:1px solid var(--oop-b);background:#fbfdff;padding:9px 11px;border-radius:8px;outline:none;line-height:1.5;}
+  .ta:focus{border-color:var(--accent);background:#f3f8f4;}
+  .a{max-height:0;opacity:0;padding:0 14px;background:var(--sol);border-top:0 solid var(--sol-b);transition:all .22s ease;overflow:hidden;}
+  .item.open .a{max-height:600px;opacity:1;padding:11px 14px;border-top:1px solid var(--sol-b);}
+  .item.open .chev{background:var(--accent);color:#fff;}
+  .a b{color:var(--accent);} .a .alt{color:var(--muted);}
+
+  /* choice */
+  .cq{margin:9px 0;padding:11px 13px;border:1px solid var(--line);border-radius:8px;background:#fff;}
+  .cqtext{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13.5px;margin-bottom:8px;}
+  .cqtext .n{font-weight:800;color:var(--accent);margin-right:5px;}
+  .opts{display:flex;gap:7px;flex-wrap:wrap;}
+  .opt{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:700;border:1.5px solid var(--box-b);background:#fff;color:#26425f;border-radius:7px;padding:7px 14px;cursor:pointer;transition:all .12s;}
+  .opt:hover{background:var(--box);}
+  .opt.sel{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .opt.correct{background:#e3f3e6;border-color:var(--sol-b);color:var(--accent-d);}
+  .opt.wrong{background:#fbe7e0;border-color:#cf8a6c;color:#9a4a28;}
+
+  /* sort 2 columns (3b) */
+  .tray{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 12px;padding:10px;background:#f6f7f4;border:1px dashed var(--line);border-radius:10px;}
+  .schip{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:700;color:#26425f;background:var(--box);border:1.5px solid var(--box-b);border-radius:16px;padding:6px 13px;cursor:grab;user-select:none;transition:all .12s;}
+  .schip:active{cursor:grabbing;} .schip.sel{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .schip.correct{background:#e3f3e6;border-color:var(--sol-b);color:var(--accent-d);} .schip.wrong{background:#fbe7e0;border-color:#cf8a6c;color:#9a4a28;}
+  .sortcols{display:flex;gap:10px;margin:0 0 12px;align-items:flex-start;}
+  .sortcol{flex:1;background:#fff;border:1.5px solid var(--box-b);border-radius:10px;overflow:hidden;min-width:0;}
+  .sortcol h5{margin:0;background:var(--accent-soft);color:var(--accent-d);font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:800;padding:9px 8px;text-align:center;line-height:1.3;}
+  .col-drop{min-height:90px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;}
+  .col-drop.over{background:var(--accent-soft);}
+  @media(max-width:620px){.sortcols{flex-direction:column;}}
+
+  .dnd-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:10px;}
+  .dbtn{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:9px 15px;cursor:pointer;}
+  .dbtn:hover{background:var(--accent-d);} .dbtn.ghost{background:#fff;color:var(--accent);border:1.5px solid var(--accent);}
+  .dnd-fb{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:700;color:var(--muted);}
+  footer{margin-top:34px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;line-height:1.6;}
+</style></head><body><div class="wrap">
+
+  <div class="eyebrow">Aspekte junior B1.1 · Kapitel 9 · Modul 1 · Kursbuch</div>
+  <h1>Einmal um die ganze Welt</h1>
+  <p class="sub">Hören & Grammatik (Temporalsätze) · KB S. 138–139</p>
+
+  <div class="ctrlbar">
+    <button class="tbtn" id="tbtn" onclick="toggleTeacher()">👩‍🏫 Lehreransicht: <span id="tstate">AUS</span></button>
+    <span class="tools"><a onclick="openAll()">Alle Lösungen öffnen</a> · <a onclick="closeAll()">Alle schließen</a></span>
+  </div>
+
+  <!-- 1 -->
+  <div class="ex">
+    <h2><span class="nr">1</span> Vor dem Hören</h2>
+    <p class="task">1a · In welche Länder/Regionen seid ihr schon gereist oder möchtet ihr reisen? — 1b · Welche Dinge würdet ihr für eine lange Reise einpacken?</p>
+    <div class="item"><div class="q"><span class="qt">Schreib deine Ideen (1a / 1b) auf.</span><span class="chev" onclick="tog(this)">Redemittel</span></div>
+      <div class="inpwrap"><textarea class="ta" placeholder="Ich war schon in … / Ich möchte gern nach …&#10;Ich würde einpacken: den Reisepass, mein Handy, …"></textarea></div>
+      <div class="a">Ich war schon in … / Ich möchte unbedingt nach … reisen, weil … · Ich würde <b>einpacken</b>: den Reisepass, das Handy + Ladegerät, Kleidung, Sonnencreme, eine Kamera, ein gutes Buch …</div></div>
+  </div>
+
+  <!-- 2a -->
+  <div class="ex">
+    <div class="teach-box"><div class="th" onclick="togT(this)"><span>Lehrerhinweis · 2a (Teil 1)</span><span class="chev2">öffnen</span></div>
+      <div class="tc">Vor dem Hören die vier Fragen lesen lassen. Track 2.23 einmal hören, dann Antworten vergleichen. Offene Antworten – sinngemäß bewerten.</div></div>
+    <h2><span class="nr">2a</span> Radiosendung „Endlich Ferien!" – Teil 1</h2>
+    <p class="task">Lies zuerst die Fragen. Höre dann Teil 1 und beantworte die Fragen. Tippe für die Lösung.</p>
+    <div class="audio"><span class="tk">▶ Track 2.23</span><audio controls preload="none" src="audio_2-23.mp3"></audio></div>
+    <div class="item"><div class="q"><span class="qt">1. Warum waren Marcels Ferien etwas Besonderes?</span><span class="chev" onclick="tog(this)">Lösung</span></div><div class="inpwrap"><textarea class="ta" placeholder="…"></textarea></div><div class="a"><b>Marcel hat eine Weltreise gemacht.</b></div></div>
+    <div class="item"><div class="q"><span class="qt">2. Wie kam es zu dieser Idee?</span><span class="chev" onclick="tog(this)">Lösung</span></div><div class="inpwrap"><textarea class="ta" placeholder="…"></textarea></div><div class="a">Er hat sein <b>Abitur</b> bestanden. Die Vorbereitung war sehr stressig (viel Druck, wenig Freizeit). Er wollte sich danach erholen – so entstand die Idee der Weltreise.</div></div>
+    <div class="item"><div class="q"><span class="qt">3. Wie hat Marcel die Reise finanziert?</span><span class="chev" onclick="tog(this)">Lösung</span></div><div class="inpwrap"><textarea class="ta" placeholder="…"></textarea></div><div class="a">Das Geld kam von der <b>Familie</b>: Sein Vater wollte die Reise finanzieren, wenn er das Abitur besteht; Großeltern, Tanten und Onkel gaben auch Geld dazu.</div></div>
+    <div class="item"><div class="q"><span class="qt">4. Welche Eckdaten nennt er?</span><span class="chev" onclick="tog(this)">Lösung</span></div><div class="inpwrap"><textarea class="ta" placeholder="…"></textarea></div><div class="a"><b>5 Kontinente, 9 Länder, 75 Städte, mehr als 70.000 km.</b></div></div>
+  </div>
+
+  <!-- 2b -->
+  <div class="ex">
+    <h2><span class="nr">2b</span> Teil 2 – Notizen machen</h2>
+    <p class="task">Höre Teil 2 und mach Notizen zu den zwei Themen. Tippe für die Musterlösung.</p>
+    <div class="audio"><span class="tk">▶ Track 2.24</span><audio controls preload="none" src="audio_2-24.mp3"></audio></div>
+    <div class="item"><div class="q"><span class="qt">Thema 1: Planung und Organisation der Reise</span><span class="chev" onclick="tog(this)">Lösung</span></div><div class="inpwrap"><textarea class="ta" placeholder="1. Reisepartner festlegen&#10;2. …"></textarea></div><div class="a">1. <b>Reisepartner festlegen</b> (drei Freunde kommen mit)<br>2. <b>Dauer der Reise festlegen</b><br>3. <b>Reiseroute festlegen</b><br>4. <b>Flüge buchen</b></div></div>
+    <div class="item"><div class="q"><span class="qt">Thema 2: Streitpunkte bei der Planung</span><span class="chev" onclick="tog(this)">Lösung</span></div><div class="inpwrap"><textarea class="ta" placeholder="1. Reisedauer: …&#10;2. …"></textarea></div><div class="a">1. <b>Reisedauer</b>: die einen länger, die anderen kürzer → Kompromiss: drei Monate (zwischen Schulende und Studienbeginn)<br>2. <b>Reiseroute</b>: lange Diskussionen, unterschiedliche Wünsche, Entscheidung teilweise durch Los</div></div>
+    <p class="task" style="margin-top:6px">2c · Vergleicht zu zweit eure Notizen und ergänzt sie.</p>
+  </div>
+
+  <!-- 2d -->
+  <div class="ex" id="ex2d">
+    <div class="teach-box"><div class="th" onclick="togT(this)"><span>Lehrerhinweis · 2d (Teil 3)</span><span class="chev2">öffnen</span></div>
+      <div class="tc">Aussagen vor dem Hören lesen. Track 2.25 einmal. Lösung: 1 f, 2 f, 3 r, 4 r, 5 f, 6 r, 7 r. Stärkere S können falsche Aussagen korrigieren.</div></div>
+    <h2><span class="nr">2d</span> Teil 3 – richtig oder falsch?</h2>
+    <p class="task">Höre Teil 3. Markiere bei jeder Aussage <i>richtig</i> oder <i>falsch</i> und klicke auf „Prüfen".</p>
+    <div class="audio"><span class="tk">▶ Track 2.25</span><audio controls preload="none" src="audio_2-25.mp3"></audio></div>
+    <div class="cq" data-answer="f"><div class="cqtext"><span class="n">1.</span> Marcel würde gern an einem tollen Strand leben.</div><div class="opts"><button class="opt" data-v="r" onclick="pick(this)">richtig</button><button class="opt" data-v="f" onclick="pick(this)">falsch</button></div></div>
+    <div class="cq" data-answer="f"><div class="cqtext"><span class="n">2.</span> Das Schönste auf der Reise waren für Marcel die vielen interessanten Sehenswürdigkeiten.</div><div class="opts"><button class="opt" data-v="r" onclick="pick(this)">richtig</button><button class="opt" data-v="f" onclick="pick(this)">falsch</button></div></div>
+    <div class="cq" data-answer="r"><div class="cqtext"><span class="n">3.</span> Marcel hat viele Freundschaften geschlossen.</div><div class="opts"><button class="opt" data-v="r" onclick="pick(this)">richtig</button><button class="opt" data-v="f" onclick="pick(this)">falsch</button></div></div>
+    <div class="cq" data-answer="r"><div class="cqtext"><span class="n">4.</span> Eine Weltreise ist oft anstrengender als das Leben zu Hause.</div><div class="opts"><button class="opt" data-v="r" onclick="pick(this)">richtig</button><button class="opt" data-v="f" onclick="pick(this)">falsch</button></div></div>
+    <div class="cq" data-answer="f"><div class="cqtext"><span class="n">5.</span> Das Internet bietet immer die Möglichkeit, sich über alles zu informieren.</div><div class="opts"><button class="opt" data-v="r" onclick="pick(this)">richtig</button><button class="opt" data-v="f" onclick="pick(this)">falsch</button></div></div>
+    <div class="cq" data-answer="r"><div class="cqtext"><span class="n">6.</span> Wenn man in einer Gruppe reist, ist es wichtig, Kompromisse zu finden.</div><div class="opts"><button class="opt" data-v="r" onclick="pick(this)">richtig</button><button class="opt" data-v="f" onclick="pick(this)">falsch</button></div></div>
+    <div class="cq" data-answer="r"><div class="cqtext"><span class="n">7.</span> Im Laufe einer Reise möchte man immer mehr Dinge sehen.</div><div class="opts"><button class="opt" data-v="r" onclick="pick(this)">richtig</button><button class="opt" data-v="f" onclick="pick(this)">falsch</button></div></div>
+    <div class="dnd-actions"><button class="dbtn" onclick="checkC('ex2d','fb2d')">Prüfen</button><button class="dbtn ghost" onclick="solveC('ex2d','fb2d')">Lösung zeigen</button><button class="dbtn ghost" onclick="resetC('ex2d','fb2d')">Zurücksetzen</button><span class="dnd-fb" id="fb2d"></span></div>
+    <p class="task" style="margin-top:8px">2e · Würdest du auch so eine lange Reise machen? Welche Länder würdest du besuchen?</p>
+  </div>
+
+  <!-- 3a -->
+  <div class="ex" id="ex3a">
+    <div class="gram"><h4>Grammatik: Temporalsätze</h4>
+      <b>gleichzeitig</b> (Haupt- & Nebensatz zur selben Zeit): <i>wenn, als, während, solange</i>.<br>
+      <b>nicht gleichzeitig</b> (nacheinander): <i>bevor, nachdem</i>.<br>
+      Merke: <b>wenn</b> = wiederholt · <b>als</b> = einmal in der Vergangenheit.</div>
+    <h2><span class="nr">3a</span> Welcher Konnektor ist richtig?</h2>
+    <p class="task">Wähle den passenden Konnektor. (Im Buch zur Kontrolle: Track 2.26)</p>
+    <div class="cq" data-answer="wenn"><div class="cqtext"><span class="n">1.</span> Fast immer ___ es Streit gab, hatte das mit organisatorischen Problemen zu tun.</div><div class="opts"><button class="opt" data-v="bevor" onclick="pick(this)">bevor</button><button class="opt" data-v="wenn" onclick="pick(this)">wenn</button></div></div>
+    <div class="cq" data-answer="während"><div class="cqtext"><span class="n">2.</span> ___ ich für die Prüfungen gelernt habe, gab es für mich wenig Freizeit.</div><div class="opts"><button class="opt" data-v="während" onclick="pick(this)">während</button><button class="opt" data-v="nachdem" onclick="pick(this)">nachdem</button></div></div>
+    <div class="cq" data-answer="als"><div class="cqtext"><span class="n">3.</span> ___ die Reise für mich wirklich feststand, habe ich gleich drei Freunde gefragt.</div><div class="opts"><button class="opt" data-v="solange" onclick="pick(this)">solange</button><button class="opt" data-v="als" onclick="pick(this)">als</button></div></div>
+    <div class="cq" data-answer="nachdem"><div class="cqtext"><span class="n">4.</span> ___ wir alle unsere Vorstellungen geäußert hatten, sah das nach zwei verschiedenen Reisen aus.</div><div class="opts"><button class="opt" data-v="wenn" onclick="pick(this)">wenn</button><button class="opt" data-v="nachdem" onclick="pick(this)">nachdem</button></div></div>
+    <div class="cq" data-answer="solange"><div class="cqtext"><span class="n">5.</span> ___ ich nicht in die Schule musste, war ich einfach glücklich.</div><div class="opts"><button class="opt" data-v="solange" onclick="pick(this)">solange</button><button class="opt" data-v="bevor" onclick="pick(this)">bevor</button></div></div>
+    <div class="cq" data-answer="bevor"><div class="cqtext"><span class="n">6.</span> ___ unsere Reisen losgingen, nervte ich meinen Vater ständig mit Fragen.</div><div class="opts"><button class="opt" data-v="während" onclick="pick(this)">während</button><button class="opt" data-v="bevor" onclick="pick(this)">bevor</button></div></div>
+    <div class="dnd-actions"><button class="dbtn" onclick="checkC('ex3a','fb3a')">Prüfen</button><button class="dbtn ghost" onclick="solveC('ex3a','fb3a')">Lösung zeigen</button><button class="dbtn ghost" onclick="resetC('ex3a','fb3a')">Zurücksetzen</button><span class="dnd-fb" id="fb3a"></span></div>
+  </div>
+
+  <!-- 3b -->
+  <div class="ex">
+    <h2><span class="nr">3b</span> Gleichzeitig oder nicht gleichzeitig?</h2>
+    <p class="task">Zieh die Konnektoren aus 3a in die richtige Spalte. (Handy: Konnektor antippen, dann die Spalte.)</p>
+    <div class="tray" id="tray3b">
+      <div class="schip" draggable="true" data-cat="A">wenn</div>
+      <div class="schip" draggable="true" data-cat="B">nachdem</div>
+      <div class="schip" draggable="true" data-cat="A">solange</div>
+      <div class="schip" draggable="true" data-cat="A">als</div>
+      <div class="schip" draggable="true" data-cat="B">bevor</div>
+      <div class="schip" draggable="true" data-cat="A">während</div>
+    </div>
+    <div class="sortcols">
+      <div class="sortcol"><h5>A · gleichzeitig</h5><div class="col-drop" data-cat="A"></div></div>
+      <div class="sortcol"><h5>B · nicht gleichzeitig</h5><div class="col-drop" data-cat="B"></div></div>
+    </div>
+    <div class="dnd-actions"><button class="dbtn" onclick="check3b()">Prüfen</button><button class="dbtn ghost" onclick="solve3b()">Lösung zeigen</button><button class="dbtn ghost" onclick="reset3b()">Zurücksetzen</button><span class="dnd-fb" id="fb3b"></span></div>
+  </div>
+
+  <!-- 3c -->
+  <div class="ex">
+    <div class="gram"><h4>Grammatik: Sätze mit nachdem</h4>
+      Das Geschehen im Nebensatz mit <b>nachdem</b> passiert <i>vor</i> dem Hauptsatz. Die Zeitformen sind verschieden:<br>
+      Gegenwart: Nebensatz <b>Perfekt</b> → Hauptsatz <b>Präsens</b>.<br>
+      Vergangenheit: Nebensatz <b>Plusquamperfekt</b> → Hauptsatz <b>Präteritum</b>.<br>
+      <span class="gex">Nachdem ich das Abitur geschafft habe, mache ich eine Weltreise.</span></div>
+    <h2><span class="nr">3c</span> Sätze mit nachdem – Gegenwart und Vergangenheit</h2>
+    <p class="task">Schreib jeden Satz in Gegenwart und Vergangenheit. Tippe für die Lösung.</p>
+    <div class="item"><div class="q"><span class="qt">1. Zuerst spare ich Geld. Dann mache ich eine Reise.</span><span class="chev" onclick="tog(this)">Lösung</span></div><div class="inpwrap"><textarea class="ta" placeholder="Gegenwart: …&#10;Vergangenheit: …"></textarea></div><div class="a"><b>Gegenwart:</b> Nachdem ich Geld gespart habe, mache ich eine Reise.<br><b>Vergangenheit:</b> Nachdem ich Geld gespart hatte, machte ich eine Reise.</div></div>
+    <div class="item"><div class="q"><span class="qt">2. Zuerst plane ich den Urlaub. Dann kaufe ich das Flugticket.</span><span class="chev" onclick="tog(this)">Lösung</span></div><div class="inpwrap"><textarea class="ta" placeholder="Gegenwart: …&#10;Vergangenheit: …"></textarea></div><div class="a"><b>Gegenwart:</b> Nachdem ich den Urlaub geplant habe, kaufe ich das Ticket.<br><b>Vergangenheit:</b> Nachdem ich den Urlaub geplant hatte, kaufte ich das Ticket.</div></div>
+    <div class="item"><div class="q"><span class="qt">3. Zuerst gebe ich das Gepäck ab. Dann steige ich in das Flugzeug ein.</span><span class="chev" onclick="tog(this)">Lösung</span></div><div class="inpwrap"><textarea class="ta" placeholder="Gegenwart: …&#10;Vergangenheit: …"></textarea></div><div class="a"><b>Gegenwart:</b> Nachdem ich das Gepäck abgegeben habe, steige ich in das Flugzeug ein.<br><b>Vergangenheit:</b> Nachdem ich das Gepäck abgegeben hatte, stieg ich in das Flugzeug ein.</div></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="ex">
+    <div class="gram"><h4>Grammatik: seitdem/seit und bis (Zeitraum)</h4>
+      <b>seitdem / seit</b> = Zeitraum vom <i>Anfang</i> der Handlung an. <b>bis</b> = Zeitraum bis zum <i>Ende</i> der Handlung.</div>
+    <h2><span class="nr">4</span> Sätze mit seitdem/seit und bis zu Ende schreiben</h2>
+    <p class="task">Schreib die Sätze frei zu Ende. Tippe für eine Musterantwort.</p>
+    <div class="item"><div class="q"><span class="qt">1. Seitdem ich zur Schule gehe, …</span><span class="chev" onclick="tog(this)">Musterantwort</span></div><div class="inpwrap"><textarea class="ta" placeholder="…"></textarea></div><div class="a">… <b>kann ich morgens nicht mehr ausschlafen.</b></div></div>
+    <div class="item"><div class="q"><span class="qt">2. Bis ich meine Traumreise machen kann, …</span><span class="chev" onclick="tog(this)">Musterantwort</span></div><div class="inpwrap"><textarea class="ta" placeholder="…"></textarea></div><div class="a">… <b>muss ich noch lange Geld sparen.</b></div></div>
+    <div class="item"><div class="q"><span class="qt">3. Seit ich einen Sprachkurs besuche, …</span><span class="chev" onclick="tog(this)">Musterantwort</span></div><div class="inpwrap"><textarea class="ta" placeholder="…"></textarea></div><div class="a">… <b>sind meine Sprachkenntnisse besser geworden.</b></div></div>
+    <div class="item"><div class="q"><span class="qt">4. Bis die nächsten Ferien beginnen, …</span><span class="chev" onclick="tog(this)">Musterantwort</span></div><div class="inpwrap"><textarea class="ta" placeholder="…"></textarea></div><div class="a">… <b>vergehen noch zwei Monate.</b></div></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="ex">
+    <h2><span class="nr">5</span> Reisegeschichte (Gruppe)</h2>
+    <p class="task">Erfindet eine Reisegeschichte: Schreibt einen Satzanfang mit einem temporalen Konnektor und gebt ihn weiter. Die nächste Gruppe beendet den Satz und beginnt einen neuen.</p>
+    <div class="item"><div class="q"><span class="qt">Beispiel ansehen</span><span class="chev" onclick="tog(this)">Beispiel</span></div><div class="inpwrap"><textarea class="ta" placeholder="Als ich einmal in der Sahara war, …"></textarea></div><div class="a"><i>Als ich einmal in der Sahara war, ritt ich auf einem Kamel. Nachdem das Kamel plötzlich stehen geblieben war, stieg ich ab. Während ich nach Wasser suchte, …</i></div></div>
+  </div>
+
+  <footer>
+    Interaktive Übungen zu Kapitel 9, Modul 1 „Einmal um die ganze Welt", Kursbuch S. 138–139, Aspekte junior B1.1.
+    Audio: Tracks 2.23–2.25 (eingebettet). Lösungen nach dem Lösungsschlüssel zum Kursbuch. Lehrerhinweise nur in der Lehreransicht. Stand 22.06.2026.
+  </footer>
+
+</div>
+
+<script>
+function tog(el){ el.closest('.item').classList.toggle('open'); }
+function togT(el){ el.closest('.teach-box').classList.toggle('open'); }
+function openAll(){ document.querySelectorAll('.item').forEach(i=>i.classList.add('open')); }
+function closeAll(){ document.querySelectorAll('.item').forEach(i=>i.classList.remove('open')); }
+function toggleTeacher(){ const on=document.body.classList.toggle('teacher'); document.getElementById('tstate').textContent=on?'EIN':'AUS'; if(!on){document.querySelectorAll('.teach-box.open').forEach(t=>t.classList.remove('open'));} }
+
+/* Choice */
+function pick(btn){ const cq=btn.closest('.cq'); cq.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel','correct','wrong')); btn.classList.add('sel'); }
+function checkC(exId,fbId){ const ex=document.getElementById(exId); let ok=0,total=0; ex.querySelectorAll('.cq').forEach(cq=>{ total++; const s=cq.querySelector('.opt.sel'); cq.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong')); if(s){ if(s.dataset.v===cq.dataset.answer){s.classList.add('correct');ok++;} else s.classList.add('wrong'); } }); document.getElementById(fbId).textContent=ok+' von '+total+' richtig'+(ok===total?' — super! ✓':''); }
+function solveC(exId,fbId){ const ex=document.getElementById(exId); ex.querySelectorAll('.cq').forEach(cq=>{ cq.querySelectorAll('.opt').forEach(o=>{o.classList.remove('sel','correct','wrong'); if(o.dataset.v===cq.dataset.answer)o.classList.add('sel','correct');}); }); document.getElementById(fbId).textContent='Lösung angezeigt.'; }
+function resetC(exId,fbId){ document.getElementById(exId).querySelectorAll('.opt').forEach(o=>o.classList.remove('sel','correct','wrong')); document.getElementById(fbId).textContent=''; }
+
+/* Sort 2 columns (3b) */
+const tray3b=document.getElementById('tray3b');
+let selS=null,dragS=null;
+function clearSelS(){ if(selS){selS.classList.remove('sel');selS=null;} }
+function moveS(chip,cont){ cont.appendChild(chip); chip.classList.remove('correct','wrong'); clearSelS(); document.getElementById('fb3b').textContent=''; }
+document.querySelectorAll('#tray3b .schip').forEach(chip=>{
+  chip.addEventListener('click',e=>{ e.stopPropagation(); if(selS===chip){clearSelS();return;} clearSelS(); selS=chip; chip.classList.add('sel'); });
+  chip.addEventListener('dragstart',()=>{ dragS=chip; });
+});
+const zones3b=[tray3b, ...document.querySelectorAll('.col-drop')];
+zones3b.forEach(z=>{
+  z.addEventListener('click',()=>{ if(selS) moveS(selS,z); });
+  z.addEventListener('dragover',e=>{ e.preventDefault(); z.classList.add('over'); });
+  z.addEventListener('dragleave',()=>z.classList.remove('over'));
+  z.addEventListener('drop',e=>{ e.preventDefault(); z.classList.remove('over'); if(dragS) moveS(dragS,z); });
+});
+function check3b(){ let ok=0,placed=0; const total=6; document.querySelectorAll('.col-drop').forEach(col=>{ col.querySelectorAll('.schip').forEach(ch=>{ placed++; if(ch.dataset.cat===col.dataset.cat){ch.classList.add('correct');ch.classList.remove('wrong');ok++;} else {ch.classList.add('wrong');ch.classList.remove('correct');} }); }); document.getElementById('fb3b').textContent=ok+' von '+total+' richtig'+(ok===total?' — super! ✓':(placed<total?' ('+(total-placed)+' noch im Vorrat)':'')); }
+function solve3b(){ document.querySelectorAll('#tray3b .schip, .col-drop .schip').forEach(ch=>{ const col=[...document.querySelectorAll('.col-drop')].find(c=>c.dataset.cat===ch.dataset.cat); col.appendChild(ch); ch.classList.add('correct'); ch.classList.remove('wrong','sel'); }); document.getElementById('fb3b').textContent='Lösung angezeigt.'; }
+function reset3b(){ document.querySelectorAll('.col-drop .schip').forEach(ch=>{ ch.classList.remove('correct','wrong','sel'); tray3b.appendChild(ch); }); clearSelS(); document.getElementById('fb3b').textContent=''; }
+</script>
+</body></html>
