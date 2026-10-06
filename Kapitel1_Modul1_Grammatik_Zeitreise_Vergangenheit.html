@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zeitreise: Perfekt · Präteritum · Plusquamperfekt</title>
+<style>
+
+:root{
+  --blue:#1a86c7; --blue-d:#0f5f91; --blue-l:#e6f3fb;
+  --pink:#c2185b; --yellow:#fff4b8; --yellow-b:#e2c64a;
+  --ok:#2e9d4f; --ok-l:#dff3e5; --bad:#d64040; --bad-l:#fbe2e2;
+  --ink:#1f2a33; --muted:#5b6b78; --line:#d5dde3; --bg:#f4f7f9; --card:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:16px}
+header.top{background:linear-gradient(135deg,#123a5c,#1a86c7);color:#fff;border-radius:16px;padding:18px 20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+header.top h1{margin:0;font-size:1.9rem}
+header.top p{margin:.2rem 0 0;opacity:.9}
+header.top svg{flex:0 0 auto;max-width:100%}
+.tbtn{margin-left:auto;background:#fff;color:var(--blue-d);border:0;border-radius:999px;padding:8px 14px;font-weight:600;cursor:pointer}
+.ex{background:var(--card);border-radius:14px;padding:16px 18px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.ex h2{margin:0 0 6px;font-size:1.15rem;color:var(--blue-d)}
+.ex h2 .nr{display:inline-block;background:var(--blue);color:#fff;border-radius:8px;padding:0 8px;margin-right:6px}
+.task{font-weight:600;margin:.3rem 0 .8rem}
+.gram{background:var(--blue-l);border-left:5px solid var(--blue);border-radius:10px;padding:10px 14px;margin:10px 0 14px}
+.gram b{color:var(--blue-d)}
+.strat{border-left:5px solid var(--pink);background:#fdecf3;border-radius:10px;padding:8px 12px;margin:10px 0;font-size:.93rem}
+.strat b{color:var(--pink);letter-spacing:.05em}
+.teacher{display:none;background:var(--yellow);border:1px solid var(--yellow-b);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:.93rem}
+body.tv .teacher{display:block}
+.teacher::before{content:"Lehrerhinweis";display:block;font-weight:700;font-size:.8rem;text-transform:uppercase;color:#8a6d00;margin-bottom:2px}
+/* chips + gaps */
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:48px;padding:10px;border:2px dashed var(--line);border-radius:12px;background:#fafcfd;margin:10px 0}
+.chip{display:inline-block;background:#fff;border:2px solid var(--blue);color:var(--blue-d);border-radius:999px;padding:4px 12px;font-weight:600;cursor:grab;user-select:none;touch-action:none;line-height:1.35}
+.chip.sel{background:var(--blue);color:#fff;box-shadow:0 0 0 3px #9fd3f2}
+.chip.ghosting{opacity:.35}
+.ghost{position:fixed;pointer-events:none;z-index:999;transform:translate(-50%,-50%) rotate(-2deg);box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.gap{display:inline-flex;align-items:center;justify-content:center;min-width:120px;min-height:36px;border-bottom:3px solid var(--blue);background:#f0f7fc;border-radius:8px 8px 0 0;padding:2px 6px;vertical-align:middle;cursor:pointer;margin:2px 0}
+.gap.filled{background:transparent}
+.gap.ok,.zone .chip.ok{border-color:var(--ok)}
+.gap.ok{background:var(--ok-l)}
+.gap.bad{background:var(--bad-l);border-color:var(--bad)}
+.chip.ok{border-color:var(--ok);color:var(--ok)}
+.chip.bad{border-color:var(--bad);color:var(--bad)}
+.hover{outline:3px solid #9fd3f2}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.btns button{border:0;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:.95rem}
+[data-act=check]{background:var(--blue);color:#fff}
+[data-act=solve]{background:#e9eef2;color:var(--ink)}
+[data-act=reset]{background:#fff;border:1px solid var(--line)!important;color:var(--muted)}
+.score{font-weight:700;margin-left:6px}
+/* reading */
+.readrow{display:flex;gap:16px;align-items:flex-start}
+.article{flex:2;border:3px solid var(--blue);border-radius:6px;padding:14px 18px;background:#fff}
+.article h3{text-align:center;color:var(--blue);font-size:1.7rem;margin:0 0 8px}
+.article .lead{font-weight:700;color:var(--blue-d)}
+.article p{margin:0 0 .8rem;text-align:justify;hyphens:auto}
+.vbox{flex:1;background:#f7fbf2;border:2px solid #9cc56b;border-radius:12px;padding:10px 12px;position:sticky;top:10px;max-height:85vh;overflow:auto}
+.vbox h4{margin:0 0 6px;color:#4d7a1c}
+.vw{padding:5px 4px;border-bottom:1px dotted #cfe0b8;cursor:pointer;font-size:.92rem}
+.vw b{color:#2f5210}
+.vw .de{color:var(--muted)}
+.vw .bg{display:none;color:#8a3a00;font-weight:600}
+.vw.open .bg{display:block}
+.vhint{font-size:.8rem;color:var(--muted);margin-bottom:6px}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{border:2px solid var(--line);border-radius:12px;padding:8px;text-align:center;background:#fff}
+.card svg{width:100%;height:auto;border-radius:8px;display:block}
+.card .lbl{font-weight:700;color:var(--blue-d);margin:4px 0}
+.card .gap{width:100%}
+/* tables */
+table.grid{width:100%;border-collapse:collapse;margin:8px 0}
+table.grid th{background:var(--blue);color:#fff;text-align:left;padding:6px 8px;font-size:.93rem}
+table.grid td{border:1px solid var(--line);padding:6px;vertical-align:top}
+table.grid td .gap{width:100%;min-width:0}
+.given{font-style:italic;color:var(--muted);display:block;margin-bottom:4px}
+.forms input{width:100%;padding:5px 6px;border:1px solid var(--line);border-radius:6px;font-size:.95rem}
+.forms input.ok{border-color:var(--ok);background:var(--ok-l)}
+.forms input.bad{border-color:var(--bad);background:var(--bad-l)}
+.forms td:first-child{font-weight:700}
+.forms tr.ex-row td{background:#f3f6f8;font-style:italic}
+/* categories */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.zone{min-height:120px;border:2px dashed var(--line);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;background:#fafcfd}
+.zonewrap h4{margin:0 0 6px;color:var(--blue-d)}
+/* mc */
+.q{padding:10px 0;border-bottom:1px solid #eef2f5}
+.q .s{margin-bottom:6px}
+.mc{display:flex;gap:6px;flex-wrap:wrap}
+.mc button{border:2px solid var(--line);background:#fff;border-radius:8px;padding:4px 12px;cursor:pointer;font-weight:600;color:var(--ink)}
+.mc button.on{border-color:var(--blue);background:var(--blue-l)}
+.mc button.ok{border-color:var(--ok);background:var(--ok-l);color:var(--ok)}
+.mc button.bad{border-color:var(--bad);background:var(--bad-l);color:var(--bad)}
+.v.hl{background:#ffe27a;border-radius:4px;padding:0 2px}
+/* rule box */
+.rule{background:#fff8c6;border:1px solid var(--yellow-b);border-radius:10px;padding:12px 16px}
+.rule h4{margin:0 0 8px}
+.rule .r{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:4px 0;flex-wrap:wrap}
+textarea{width:100%;min-height:90px;padding:8px;border:1px solid var(--line);border-radius:8px;font:inherit}
+.muster{display:none;background:#f1f8ee;border-left:5px solid #7cb342;border-radius:8px;padding:10px 14px;margin-top:8px}
+.muster.show{display:block}
+.mbtn{background:#7cb342;color:#fff;border:0;border-radius:8px;padding:7px 12px;font-weight:600;cursor:pointer;margin-top:8px}
+.quote{font-family:"Segoe Script","Comic Sans MS",cursive;font-size:1.6rem;text-align:center;color:#223;margin:10px 0}
+ul.qs{margin:.3rem 0 .6rem 1.2rem;padding:0}
+.redem{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.redem span{background:#eef4f8;border-radius:6px;padding:3px 8px;font-style:italic;font-size:.93rem}
+footer{color:var(--muted);font-size:.85rem;text-align:center;margin:24px 0}
+@media (max-width:760px){
+  .readrow{flex-direction:column}
+  .vbox{position:static;max-height:none;width:100%}
+  .cards{grid-template-columns:1fr}
+  .cols{grid-template-columns:1fr}
+  table.grid th,table.grid td{font-size:.85rem;padding:4px}
+  header.top h1{font-size:1.5rem}
+}
+
+:root{--pf:#0e9f9a;--pf-l:#dcf5f4;--pr:#e67e22;--pr-l:#fdeedd;--pq:#7b4fa0;--pq-l:#efe5f6;--ps:#5b6b78;--ps-l:#eef2f5}
+.nav{position:sticky;top:0;z-index:50;background:rgba(244,247,249,.95);backdrop-filter:blur(4px);display:flex;gap:6px;flex-wrap:wrap;padding:8px 0;margin-top:8px}
+.nav a{text-decoration:none;font-weight:600;font-size:.9rem;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--blue-d)}
+.nav a:hover{background:var(--blue-l)}
+.t-pf{color:var(--pf)} .t-pr{color:var(--pr)} .t-pq{color:var(--pq)}
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tcard{border-radius:14px;padding:14px;border:2px solid}
+.tcard h3{margin:0 0 6px}
+.tcard .f{font-size:1.05rem;font-weight:700;background:#fff;border-radius:8px;padding:6px 10px;margin:6px 0;display:inline-block}
+.tcard.pf{border-color:var(--pf);background:var(--pf-l)} .tcard.pf h3{color:var(--pf)}
+.tcard.pr{border-color:var(--pr);background:var(--pr-l)} .tcard.pr h3{color:var(--pr)}
+.tcard.pq{border-color:var(--pq);background:var(--pq-l)} .tcard.pq h3{color:var(--pq)}
+.bgt{font-size:.85rem;margin-top:6px;cursor:pointer;color:var(--muted)}
+.bgt span{display:none;color:#8a3a00;font-weight:600}
+.bgt.open span{display:inline}
+/* timeline */
+.tl svg{width:100%;height:auto}
+.tl .pt{cursor:pointer}
+.tl .pt:hover circle{stroke-width:6}
+.tlinfo{border-radius:12px;padding:12px 14px;margin-top:6px;background:var(--ps-l);min-height:60px;font-size:1.05rem}
+.seg{padding:1px 4px;border-radius:5px;transition:.3s}
+.seg.on1{background:var(--pq-l);outline:2px solid var(--pq)}
+.seg.on2{background:var(--pr-l);outline:2px solid var(--pr)}
+.seg.on3{background:var(--ps-l);outline:2px solid var(--ps)}
+/* Satzklammer */
+.tbtns{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.tbtns button{border:2px solid var(--line);background:#fff;border-radius:999px;padding:5px 14px;font-weight:700;cursor:pointer}
+.tbtns button.on[data-t=ps]{border-color:var(--ps);background:var(--ps-l)}
+.tbtns button.on[data-t=pr]{border-color:var(--pr);background:var(--pr-l)}
+.tbtns button.on[data-t=pf]{border-color:var(--pf);background:var(--pf-l)}
+.tbtns button.on[data-t=pq]{border-color:var(--pq);background:var(--pq-l)}
+.sk{position:relative;display:flex;flex-wrap:wrap;gap:8px;padding:14px 8px 46px;align-items:center}
+.tok{border-radius:10px;padding:8px 12px;background:#fff;border:2px solid var(--line);font-size:1.1rem;transition:all .35s}
+.tok.v{font-weight:800;color:#fff}
+.tok .lab{display:block;font-size:.7rem;font-weight:600;opacity:.85;text-transform:uppercase;letter-spacing:.04em}
+.tok.mid{color:var(--muted)}
+.bracket{position:absolute;height:22px;border:3px solid;border-top:0;border-radius:0 0 12px 12px;bottom:18px;transition:all .35s;pointer-events:none}
+.bracket span{position:absolute;left:50%;transform:translateX(-50%);bottom:-22px;font-size:.78rem;font-weight:700;white-space:nowrap}
+.pos{font-size:.75rem;color:var(--muted)}
+/* Verb-Labor */
+.vlist{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.vlist button{border:2px solid var(--line);background:#fff;border-radius:999px;padding:4px 11px;cursor:pointer;font-weight:600;font-size:.92rem}
+.vlist button.on{border-color:var(--blue);background:var(--blue);color:#fff}
+.vlist button .k{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.machine{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;background:#fbfcfd;border:2px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
+.blocks{display:flex;gap:4px;align-items:flex-end}
+.blk{text-align:center;animation:drop .4s ease both}
+.blk b{display:block;font-size:1.6rem;padding:6px 10px;border-radius:10px;color:#fff;min-width:44px}
+.blk small{display:block;font-size:.7rem;color:var(--muted);margin-top:3px;max-width:110px}
+.b-sep b{background:#c2185b}.b-insep b{background:#8d6e63}.b-ge b{background:#e53935}.b-w b{background:#1a86c7}.b-e b{background:#43a047}.b-none b{background:#fff;color:#bbb;border:2px dashed #ccc}
+@keyframes drop{from{transform:translateY(-14px);opacity:0}to{transform:none;opacity:1}}
+.why{flex:1;min-width:220px}
+.auxb{display:inline-block;font-weight:800;padding:4px 12px;border-radius:999px;color:#fff;margin:4px 0}
+.auxb.h{background:#1a86c7}.auxb.s{background:#c2185b}
+.conj{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.conj table{width:100%;border-collapse:collapse;font-size:.95rem}
+.conj th{padding:6px;color:#fff;text-align:left;border-radius:8px 8px 0 0}
+.conj td{padding:5px 6px;border-bottom:1px solid #eef2f5}
+.conj td:first-child{color:var(--muted);width:68px}
+.c-pr th{background:var(--pr)} .c-pf th{background:var(--pf)} .c-pq th{background:var(--pq)}
+.st{font-weight:700} .te{color:#e67e22;font-weight:800} .en{color:#c2185b;font-weight:800;text-decoration:underline}
+.ax{font-weight:800} .c-pf .ax{color:var(--pf)} .c-pq .ax{color:var(--pq)}
+.pp .g{color:#e53935;font-weight:700}.pp .s2{color:#c2185b;font-weight:700}.pp .ie{color:#8d6e63;font-weight:700}
+/* Entscheidungsbaum */
+.tree{display:flex;flex-direction:column;gap:8px}
+.node{border:2px solid var(--line);border-radius:12px;padding:10px 14px;background:#fff;display:flex;gap:10px;align-items:center;flex-wrap:wrap;opacity:.45;transition:.3s}
+.node.act{opacity:1;border-color:var(--blue);box-shadow:0 0 0 3px #cfe7f7}
+.node.done{opacity:1}
+.node .qn{font-weight:700;flex:1;min-width:200px}
+.node button{border:0;border-radius:8px;padding:6px 14px;font-weight:700;cursor:pointer}
+.node .ja{background:#c2185b;color:#fff}.node .nein{background:#e9eef2}
+.res{font-size:1.2rem;font-weight:800;padding:10px 14px;border-radius:12px;display:none}
+.res.s{display:block;background:#fde3ee;color:#c2185b}.res.h{display:block;background:var(--blue-l);color:var(--blue-d)}
+/* Gebrauch */
+.rules{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.rule2{border-radius:14px;padding:14px;background:#fff;border:2px solid var(--line);display:flex;gap:12px}
+.rule2 .ic{font-size:2rem}
+.rule2 h4{margin:0 0 4px}
+.endt{border-collapse:collapse;width:100%;font-size:.95rem}
+.endt th,.endt td{border:1px solid var(--line);padding:5px 8px;text-align:left}
+.endt th{background:var(--pr);color:#fff}
+.endt td.hl{background:var(--pr-l);font-weight:700}
+@media (max-width:760px){.nav{flex-wrap:nowrap;overflow-x:auto}.nav a{white-space:nowrap}.cards3,.conj,.rules{grid-template-columns:1fr}.tok{font-size:.95rem;padding:6px 8px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <svg width="190" height="110" viewBox="0 0 190 110" aria-hidden="true">
+    <rect width="190" height="110" rx="12" fill="#123a5c"/>
+    <line x1="14" y1="70" x2="176" y2="70" stroke="#fff" stroke-width="3"/>
+    <polygon points="176,64 188,70 176,76" fill="#fff"/>
+    <circle cx="40" cy="70" r="10" fill="#7b4fa0" stroke="#fff" stroke-width="3"/>
+    <circle cx="95" cy="70" r="10" fill="#e67e22" stroke="#fff" stroke-width="3"/>
+    <circle cx="150" cy="70" r="10" fill="#5b6b78" stroke="#fff" stroke-width="3"/>
+    <text x="40" y="96" fill="#fff" font-size="10" text-anchor="middle">vorher</text>
+    <text x="95" y="96" fill="#fff" font-size="10" text-anchor="middle">damals</text>
+    <text x="150" y="96" fill="#fff" font-size="10" text-anchor="middle">jetzt</text>
+    <!-- Uhr -->
+    <circle cx="95" cy="30" r="18" fill="#fff"/><line x1="95" y1="30" x2="95" y2="18" stroke="#123a5c" stroke-width="3"/><line x1="95" y1="30" x2="104" y2="34" stroke="#123a5c" stroke-width="3"/>
+    <path d="M60 30 a35 35 0 0 1 14 -18" stroke="#ffd54f" stroke-width="3" fill="none"/><polygon points="58,24 62,34 68,26" fill="#ffd54f"/>
+  </svg>
+  <div>
+    <h1>Zeitreise in die Vergangenheit</h1>
+    <p>Perfekt · Präteritum · Plusquamperfekt – Bildung, Konjugation, Gebrauch</p>
+  </div>
+  <button class="tbtn" id="tvbtn" type="button">👩‍🏫 Lehreransicht</button>
+</header>
+
+<nav class="nav">
+  <a href="#ueberblick">① Überblick</a><a href="#klammer">② Satzklammer</a><a href="#labor">③ Verb-Labor</a><a href="#hs">④ haben oder sein?</a><a href="#praet">⑤ Präteritum-Endungen</a><a href="#plusq">⑥ Plusquamperfekt</a><a href="#gebrauch">⑦ Gebrauch</a><a href="#ueben">⑧ Üben</a>
+</nav>
+
+<div class="teacher">
+  Für Projektion im Unterricht und Selbstlernen (B1). Farbcode durchgehend: <b class="t-pf">Perfekt = türkis</b>, <b class="t-pr">Präteritum = orange</b>, <b class="t-pq">Plusquamperfekt = lila</b>. Beispiele stammen aus Modul 1 „Gelebte Träume“ (Leonie, Nina, Jonas). Regeln abgeglichen mit mein-deutschbuch.de (Präteritum, Plusquamperfekt) u. a.
+</div>
+
+<!-- ============ 1 Überblick ============ -->
+<section class="ex" id="ueberblick">
+  <h2><span class="nr">1</span>Überblick: drei Zeitformen für die Vergangenheit</h2>
+  <p class="task">Tippe auf die Punkte des Zeitstrahls: Was passierte zuerst, was danach?</p>
+  <div class="tl">
+    <svg viewBox="0 0 900 150" role="img" aria-label="Zeitstrahl">
+      <line x1="30" y1="70" x2="860" y2="70" stroke="#5b6b78" stroke-width="4"/>
+      <polygon points="860,60 885,70 860,80" fill="#5b6b78"/>
+      <path d="M180 40 Q330 0 470 40" stroke="#7b4fa0" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/>
+      <polygon points="470,40 458,30 456,44" fill="#7b4fa0"/>
+      <text x="325" y="20" text-anchor="middle" font-size="14" fill="#7b4fa0" font-weight="700">zuerst … dann</text>
+      <g class="pt" data-p="1"><circle cx="180" cy="70" r="18" fill="#7b4fa0" stroke="#fff" stroke-width="4"/><text x="180" y="76" text-anchor="middle" fill="#fff" font-weight="700" font-size="16">1</text><text x="180" y="112" text-anchor="middle" font-size="15" font-weight="700" fill="#7b4fa0">Vorvergangenheit</text><text x="180" y="132" text-anchor="middle" font-size="13" fill="#7b4fa0">Plusquamperfekt</text></g>
+      <g class="pt" data-p="2"><circle cx="480" cy="70" r="18" fill="#e67e22" stroke="#fff" stroke-width="4"/><text x="480" y="76" text-anchor="middle" fill="#fff" font-weight="700" font-size="16">2</text><text x="480" y="112" text-anchor="middle" font-size="15" font-weight="700" fill="#e67e22">Vergangenheit</text><text x="480" y="132" text-anchor="middle" font-size="13" fill="#e67e22">Präteritum / Perfekt</text></g>
+      <g class="pt" data-p="3"><circle cx="780" cy="70" r="18" fill="#5b6b78" stroke="#fff" stroke-width="4"/><text x="780" y="76" text-anchor="middle" fill="#fff" font-weight="700" font-size="16">3</text><text x="780" y="112" text-anchor="middle" font-size="15" font-weight="700" fill="#5b6b78">Gegenwart</text><text x="780" y="132" text-anchor="middle" font-size="13" fill="#5b6b78">Präsens</text></g>
+    </svg>
+    <div class="tlinfo">
+      <span class="seg" data-s="1">Nachdem sich Jonas am Knie <b>verletzt hatte</b>,</span>
+      <span class="seg" data-s="2"><b>musste</b> er seinen Traum von der Profikarriere <b>aufgeben</b>.</span>
+      <span class="seg" data-s="3">Heute <b>arbeitet</b> er als Physiotherapeut.</span>
+      <div id="tlexp" class="hint" style="margin-top:6px">← Tippe auf 1, 2 oder 3.</div>
+    </div>
+  </div>
+
+  <div class="cards3" style="margin-top:14px">
+    <div class="tcard pf"><h3>Perfekt</h3>
+      <div class="f">haben/sein + Partizip II</div>
+      <div>Ich <b>habe</b> Gesangsunterricht <b>genommen</b>.<br>Nina <b>ist</b> nach Neuseeland <b>gereist</b>.</div>
+      <div class="hint">💬 vor allem <b>mündlich</b>, in E-Mails, Chats</div>
+      <div class="bgt">🇧🇬 BG? <span>минало време (най-често минало свършено) – разликата спрямо Präteritum е стилистична, не смислова</span></div>
+    </div>
+    <div class="tcard pr"><h3>Präteritum</h3>
+      <div class="f">Verbstamm + (-te) + Endung</div>
+      <div>Leonie <b>nahm</b> an einer Castingshow teil.<br>Jonas <b>trainierte</b> jeden Tag.</div>
+      <div class="hint">📰 vor allem <b>schriftlich</b>: Zeitung, Roman, Biografie</div>
+      <div class="bgt">🇧🇬 BG? <span>минало свършено / минало несвършено време – по смисъл = Perfekt</span></div>
+    </div>
+    <div class="tcard pq"><h3>Plusquamperfekt</h3>
+      <div class="f">hatte/war + Partizip II</div>
+      <div>Nachdem er sich <b>verletzt hatte</b>, …<br>Sie <b>war</b> schon oft <b>aufgetreten</b>.</div>
+      <div class="hint">⏪ was <b>vor</b> einem anderen Ereignis in der Vergangenheit passierte</div>
+      <div class="bgt">🇧🇬 BG? <span>минало предварително време („беше се контузил“)</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 Satzklammer ============ -->
+<section class="ex" id="klammer">
+  <h2><span class="nr">2</span>Die Zeitmaschine: Satzklammer</h2>
+  <p class="task">Wähle eine Zeitform und beobachte: Wo stehen die Verbteile?</p>
+  <div class="tbtns" id="skT">
+    <button data-t="ps">Präsens</button><button data-t="pr">Präteritum</button><button data-t="pf" class="on">Perfekt</button><button data-t="pq">Plusquamperfekt</button>
+  </div>
+  <div class="tbtns" id="skS">
+    <button data-s="0" class="on">Jonas trainiert …</button><button data-s="1">Nina reist …</button><button data-s="2">Nebensatz mit „weil“</button>
+  </div>
+  <div class="sk" id="sk"></div>
+  <div class="gram" id="skRule"></div>
+</section>
+
+<!-- ============ 3 Verb-Labor ============ -->
+<section class="ex" id="labor">
+  <h2><span class="nr">3</span>Verb-Labor: Partizip-Maschine + Konjugator</h2>
+  <p class="task">Wähle ein Verb. Du siehst, wie das Partizip II gebaut wird und alle Formen in drei Zeiten.</p>
+  <div class="legend">
+    <span><i style="background:#1a86c7"></i>regelmäßig</span><span><i style="background:#e67e22"></i>unregelmäßig</span><span><i style="background:#7b4fa0"></i>gemischt / Modalverb</span><span><i style="background:#c2185b"></i>trennbar</span><span><i style="background:#8d6e63"></i>untrennbar / -ieren</span>
+  </div>
+  <div class="vlist" id="vlist"></div>
+  <div class="machine">
+    <div>
+      <div class="hint">Partizip II</div>
+      <div class="blocks" id="blocks"></div>
+    </div>
+    <div class="why">
+      <div id="ppRule"></div>
+      <div id="auxRule"></div>
+      <div class="bgt" id="vbg">🇧🇬 BG? <span></span></div>
+    </div>
+  </div>
+  <div class="conj" id="conj"></div>
+  <div class="teacher">Gut für die Projektion: Verb antippen lassen, Klasse sagt die Formen vorher („Wer weiß das Partizip?“), dann aufdecken. Farbiger Rand der Knöpfe = Verbtyp.</div>
+</section>
+
+<!-- ============ 4 haben oder sein ============ -->
+<section class="ex" id="hs">
+  <h2><span class="nr">4</span>haben oder sein? Der Entscheidungsweg</h2>
+  <p class="task">Denk an ein Verb (z. B. <i>aufstehen, kaufen, bleiben, fliegen</i>) und beantworte die Fragen.</p>
+  <div class="tree" id="tree">
+    <div class="node act" data-n="0"><span class="qn">1. Bewegung von A nach B? <span class="hint">(gehen, fahren, fliegen, kommen, reisen, laufen …)</span></span><button class="ja">Ja</button><button class="nein">Nein</button></div>
+    <div class="node" data-n="1"><span class="qn">2. Veränderung eines Zustands? <span class="hint">(aufstehen, einschlafen, aufwachen, wachsen, sterben …)</span></span><button class="ja">Ja</button><button class="nein">Nein</button></div>
+    <div class="node" data-n="2"><span class="qn">3. Ist es <i>sein, bleiben, werden, passieren, geschehen</i>?</span><button class="ja">Ja</button><button class="nein">Nein</button></div>
+  </div>
+  <div class="res" id="treeRes"></div>
+  <button class="mbtn" id="treeReset" type="button" style="background:#5b6b78">Neu starten</button>
+  <div class="strat"><b>MERKE:</b> Hat ein Bewegungsverb ein <b>Akkusativ-Objekt</b>, steht es mit <b>haben</b>:<br>Ich <b>bin</b> nach Varna <b>gefahren</b>. (Bewegung) ↔ Ich <b>habe</b> <u>das Auto</u> in die Garage <b>gefahren</b>. (Akkusativ-Objekt)</div>
+</section>
+
+<!-- ============ 5 Präteritum Endungen ============ -->
+<section class="ex" id="praet">
+  <h2><span class="nr">5</span>Präteritum: Endungen auf einen Blick</h2>
+  <div class="gram"><b>Trick:</b> Im Präteritum sind <b>ich</b> und <b>er/sie/es</b> immer gleich! → ich ging – er ging · ich machte – er machte</div>
+  <div style="overflow-x:auto">
+  <table class="endt">
+    <tr><th></th><th>regelmäßig<br><small>machen</small></th><th>Stamm auf -d/-t<br><small>arbeiten</small></th><th>unregelmäßig<br><small>gehen</small></th><th>gemischt<br><small>bringen</small></th><th>Modalverb<br><small>können</small></th><th>sein / haben</th></tr>
+    <tr><td>ich</td><td>mach<span class="te">te</span></td><td>arbeit<span class="te">ete</span></td><td class="hl">ging –</td><td>brach<span class="te">te</span></td><td>konn<span class="te">te</span></td><td>war / hatte</td></tr>
+    <tr><td>du</td><td>mach<span class="te">te</span><span class="en">st</span></td><td>arbeit<span class="te">ete</span><span class="en">st</span></td><td>ging<span class="en">st</span></td><td>brach<span class="te">te</span><span class="en">st</span></td><td>konn<span class="te">te</span><span class="en">st</span></td><td>warst / hattest</td></tr>
+    <tr><td>er/sie/es</td><td>mach<span class="te">te</span></td><td>arbeit<span class="te">ete</span></td><td class="hl">ging –</td><td>brach<span class="te">te</span></td><td>konn<span class="te">te</span></td><td>war / hatte</td></tr>
+    <tr><td>wir</td><td>mach<span class="te">te</span><span class="en">n</span></td><td>arbeit<span class="te">ete</span><span class="en">n</span></td><td>ging<span class="en">en</span></td><td>brach<span class="te">te</span><span class="en">n</span></td><td>konn<span class="te">te</span><span class="en">n</span></td><td>waren / hatten</td></tr>
+    <tr><td>ihr</td><td>mach<span class="te">te</span><span class="en">t</span></td><td>arbeit<span class="te">ete</span><span class="en">t</span></td><td>ging<span class="en">t</span></td><td>brach<span class="te">te</span><span class="en">t</span></td><td>konn<span class="te">te</span><span class="en">t</span></td><td>wart / hattet</td></tr>
+    <tr><td>sie/Sie</td><td>mach<span class="te">te</span><span class="en">n</span></td><td>arbeit<span class="te">ete</span><span class="en">n</span></td><td>ging<span class="en">en</span></td><td>brach<span class="te">te</span><span class="en">n</span></td><td>konn<span class="te">te</span><span class="en">n</span></td><td>waren / hatten</td></tr>
+  </table>
+  </div>
+  <div class="cards3" style="margin-top:12px">
+    <div class="tcard pr"><h3>unregelmäßig</h3>Vokalwechsel im Stamm, <b>kein -te</b>:<br>fahren → f<b>u</b>hr · finden → f<b>a</b>nd · bleiben → bl<b>ie</b>b</div>
+    <div class="tcard pq"><h3>gemischt</h3>Vokalwechsel <b>und</b> -te:<br>bringen → br<b>a</b>ch<span class="te">te</span> · denken → d<b>a</b>ch<span class="te">te</span> · wissen → w<b>u</b>ss<span class="te">te</span> · kennen → k<b>a</b>nn<span class="te">te</span></div>
+    <div class="tcard pf"><h3>Modalverben</h3><b>ohne Umlaut</b> + -te:<br>können → konnte · müssen → musste · dürfen → durfte · mögen → mochte · wollen → wollte · sollen → sollte</div>
+  </div>
+</section>
+
+<!-- ============ 6 Plusquamperfekt ============ -->
+<section class="ex" id="plusq">
+  <h2><span class="nr">6</span>Plusquamperfekt: die Vergangenheit der Vergangenheit</h2>
+  <div class="gram"><b>Bildung:</b> Präteritum von <i>haben/sein</i> + Partizip II · haben oder sein? → <b>wie im Perfekt</b><br>
+  ich <b>hatte</b> … gemacht / <b>war</b> … gegangen · du <b>hattest</b> / <b>warst</b> · er <b>hatte</b> / <b>war</b> · wir <b>hatten</b> / <b>waren</b> · ihr <b>hattet</b> / <b>wart</b> · sie <b>hatten</b> / <b>waren</b></div>
+  <p class="task">So einfach wird aus dem Perfekt ein Plusquamperfekt – tippe auf die Karten:</p>
+  <div class="cards3" id="flip">
+    <div class="tcard pf flipc" data-a="Sie <b>hatte</b> das Lied selbst <b>geschrieben</b>." data-b="Sie <b>hat</b> das Lied selbst <b>geschrieben</b>."><h3>Perfekt → ?</h3><div class="ftxt">Sie <b>hat</b> das Lied selbst <b>geschrieben</b>.</div></div>
+    <div class="tcard pf flipc" data-a="Er <b>war</b> zu einem großen Verein <b>gewechselt</b>." data-b="Er <b>ist</b> zu einem großen Verein <b>gewechselt</b>."><h3>Perfekt → ?</h3><div class="ftxt">Er <b>ist</b> zu einem großen Verein <b>gewechselt</b>.</div></div>
+    <div class="tcard pf flipc" data-a="Wir <b>hatten</b> uns lange <b>vorbereitet</b>." data-b="Wir <b>haben</b> uns lange <b>vorbereitet</b>."><h3>Perfekt → ?</h3><div class="ftxt">Wir <b>haben</b> uns lange <b>vorbereitet</b>.</div></div>
+  </div>
+  <div class="strat"><b>NACHDEM-REGEL:</b> Nebensatz mit <i>nachdem</i> = Plusquamperfekt → Hauptsatz = Präteritum (oder Perfekt).<br>
+  Nachdem Leonie die Castingshow <b class="t-pq">gewonnen hatte</b>, <b class="t-pr">wurde</b> sie berühmt.<br>
+  <span class="hint">Auch typisch: <i>bevor, als, schon, vorher</i> → Sie <b class="t-pr">war</b> nervös, denn sie <b class="t-pq">hatte</b> noch nie im Fernsehen <b class="t-pq">gesungen</b>.</span></div>
+</section>
+
+<!-- ============ 7 Gebrauch ============ -->
+<section class="ex" id="gebrauch">
+  <h2><span class="nr">7</span>Gebrauch: Wann nehme ich was?</h2>
+  <div class="rules">
+    <div class="rule2"><div class="ic">💬</div><div><h4 class="t-pf">mündlich berichten → Perfekt</h4>„Am Wochenende <b>bin</b> ich ins Kino <b>gegangen</b>.“</div></div>
+    <div class="rule2"><div class="ic">✉️</div><div><h4 class="t-pf">E-Mails, Briefe, Chats → meistens Perfekt</h4>„Liebe Sara, in den Ferien <b>habe</b> ich viel <b>erlebt</b>.“</div></div>
+    <div class="rule2"><div class="ic">📰</div><div><h4 class="t-pr">Zeitung, Roman, Biografie → Präteritum</h4>„Julian Draxler <b>kam</b> 1993 in Gladbeck zur Welt.“</div></div>
+    <div class="rule2"><div class="ic">⭐</div><div><h4 class="t-pr"><i>haben, sein</i>, Modalverben → Präteritum (auch mündlich!)</h4>„Ich <b>hatte</b> keine Zeit.“ · „Das <b>war</b> super!“ · „Ich <b>konnte</b> nicht kommen.“</div></div>
+    <div class="rule2" style="grid-column:1/-1"><div class="ic">⏪</div><div><h4 class="t-pq">Ein Ereignis passierte vor einem anderen Ereignis in der Vergangenheit → Plusquamperfekt</h4>„Als ich am Bahnhof ankam, <b>war</b> der Zug schon <b>abgefahren</b>.“</div></div>
+  </div>
+  <div class="gram" style="margin-top:12px"><b>Gut zu wissen:</b> Perfekt und Präteritum bedeuten dasselbe – der Unterschied ist der <b>Stil</b> (gesprochen ↔ geschrieben). In Süddeutschland, Österreich und der Schweiz benutzt man beim Sprechen fast nur das Perfekt.</div>
+</section>
+
+<!-- ============ 8 Üben ============ -->
+<h2 id="ueben" style="color:var(--blue-d);margin:26px 0 0">⑧ Jetzt du!</h2>
+
+<section class="ex" id="ue1">
+  <h2><span class="nr">Ü1</span>haben oder sein?</h2>
+  <p class="task">Wähle das richtige Hilfsverb im Perfekt.</p>
+  <div class="q" data-ans="ist"><div class="s">1. Nina ___ nach Neuseeland geflogen.</div><div class="mc"><button>hat</button><button>ist</button></div></div>
+  <div class="q" data-ans="hat"><div class="s">2. Jonas ___ jeden Tag trainiert.</div><div class="mc"><button>hat</button><button>ist</button></div></div>
+  <div class="q" data-ans="ist"><div class="s">3. Leonie ___ heute früh aufgestanden.</div><div class="mc"><button>hat</button><button>ist</button></div></div>
+  <div class="q" data-ans="ist"><div class="s">4. Nina ___ ein Jahr in Neuseeland geblieben.</div><div class="mc"><button>hat</button><button>ist</button></div></div>
+  <div class="q" data-ans="hat"><div class="s">5. Die Band ___ ein Album herausgebracht.</div><div class="mc"><button>hat</button><button>ist</button></div></div>
+  <div class="q" data-ans="ist"><div class="s">6. Was ___ passiert?</div><div class="mc"><button>hat</button><button>ist</button></div></div>
+  <div class="q" data-ans="hat"><div class="s">7. Der Physiotherapeut ___ lange geschlafen.</div><div class="mc"><button>hat</button><button>ist</button></div></div>
+  <div class="q" data-ans="ist"><div class="s">8. Leonie ___ in einer Band berühmt geworden.</div><div class="mc"><button>hat</button><button>ist</button></div></div>
+  <div class="btns"><button data-act="check">Prüfen</button><button data-act="solve">Lösung</button><button data-act="reset">Zurücksetzen</button><span class="score"></span></div>
+</section>
+
+<section class="ex" id="ue2">
+  <h2><span class="nr">Ü2</span>Partizip II: mit oder ohne <i>ge-</i>?</h2>
+  <div class="gram"><b>Ohne ge-:</b> untrennbare Präfixe (be-, ver-, er-, ent-, emp-, ge-, zer-, miss-) und Verben auf <b>-ieren</b> → besucht, verstanden, studiert<br><b>Trennbar:</b> <i>ge</i> steht in der Mitte → an<b>ge</b>rufen, ein<b>ge</b>kauft</div>
+  <p class="task">Zieh die Verben in die richtige Spalte.</p>
+  <div class="cols">
+    <div class="zonewrap"><h4>mit <span style="color:#e53935">ge-</span></h4><div class="zone" data-cat="m"></div></div>
+    <div class="zonewrap"><h4>ohne ge-</h4><div class="zone" data-cat="o"></div></div>
+  </div>
+  <div class="pool">
+    <span class="chip" data-cat="o">besuchen</span><span class="chip" data-cat="o">verstehen</span><span class="chip" data-cat="o">studieren</span><span class="chip" data-cat="o">erzählen</span><span class="chip" data-cat="o">telefonieren</span><span class="chip" data-cat="o">bekommen</span>
+    <span class="chip" data-cat="m">machen</span><span class="chip" data-cat="m">anrufen</span><span class="chip" data-cat="m">einkaufen</span><span class="chip" data-cat="m">schlafen</span><span class="chip" data-cat="m">fahren</span><span class="chip" data-cat="m">aufwachsen</span>
+  </div>
+  <div class="btns"><button data-act="check">Prüfen</button><button data-act="solve">Lösung</button><button data-act="reset">Zurücksetzen</button><span class="score"></span></div>
+</section>
+
+<section class="ex" id="ue3">
+  <h2><span class="nr">Ü3</span>Ein Lebenstraum im Präteritum</h2>
+  <p class="task">Ergänze die Verben im Präteritum.</p>
+  <div class="mail"><div class="txt">
+    Als Kind (1) <input class="inl" data-ans="wohnte"> <span class="hint">(wohnen)</span> Lea in einem kleinen Dorf. Sie (2) <input class="inl" data-ans="hatte"> <span class="hint">(haben)</span> einen großen Traum: Sie (3) <input class="inl" data-ans="wollte"> <span class="hint">(wollen)</span> Tierärztin werden.
+    Jeden Tag (4) <input class="inl" data-ans="ging"> <span class="hint">(gehen)</span> sie nach der Schule zum Bauernhof ihres Onkels und (5) <input class="inl" data-ans="half"> <span class="hint">(helfen)</span> bei den Tieren.
+    Mit 18 (6) <input class="inl" data-ans="zog"> <span class="hint">(ziehen)</span> sie nach München und (7) <input class="inl" data-ans="studierte"> <span class="hint">(studieren)</span> Tiermedizin. Nach dem Studium (8) <input class="inl" data-ans="fand"> <span class="hint">(finden)</span> sie sofort eine Stelle.
+  </div></div>
+  <div class="btns"><button data-act="check">Prüfen</button><button data-act="solve">Lösung</button><button data-act="reset">Zurücksetzen</button><span class="score"></span></div>
+</section>
+
+<section class="ex" id="ue4">
+  <h2><span class="nr">Ü4</span>Welche Version passt besser?</h2>
+  <p class="task">Achte auf die Situation (Symbol) und wähle die passende Version.</p>
+  <div class="q" data-ans="B"><div class="s">💬 Im Gespräch mit einer Freundin:</div><div class="mc"><button data-v="A">A: Gestern ging ich ins Kino.</button><button data-v="B">B: Gestern bin ich ins Kino gegangen.</button></div></div>
+  <div class="q" data-ans="A"><div class="s">📰 In einem Zeitungsartikel:</div><div class="mc"><button data-v="A">A: Die Band trennte sich im Jahr 2020.</button><button data-v="B">B: Die Band hat sich im Jahr 2020 getrennt.</button></div></div>
+  <div class="q" data-ans="A"><div class="s">💬 Am Telefon:</div><div class="mc"><button data-v="A">A: Ich hatte leider keine Zeit.</button><button data-v="B">B: Ich habe leider keine Zeit gehabt.</button></div></div>
+  <div class="q" data-ans="B"><div class="s">💬 In der Pause:</div><div class="mc"><button data-v="A">A: Ich habe gestern nicht kommen können.</button><button data-v="B">B: Ich konnte gestern nicht kommen.</button></div></div>
+  <div class="q" data-ans="A"><div class="s">⏪ Zuerst essen, dann schlafen:</div><div class="mc"><button data-v="A">A: Nachdem er gegessen hatte, ging er schlafen.</button><button data-v="B">B: Nachdem er gegessen hat, ging er schlafen.</button></div></div>
+  <div class="q" data-ans="B"><div class="s">✉️ In einer E-Mail an deinen Cousin:</div><div class="mc"><button data-v="A">A: Am Samstag fuhren wir nach Varna.</button><button data-v="B">B: Am Samstag sind wir nach Varna gefahren.</button></div></div>
+  <div class="q" data-ans="A"><div class="s">📖 Am Anfang eines Märchens:</div><div class="mc"><button data-v="A">A: Es war einmal ein König. Er hatte drei Töchter.</button><button data-v="B">B: Es ist einmal ein König gewesen. Er hat drei Töchter gehabt.</button></div></div>
+  <div class="btns"><button data-act="check">Prüfen</button><button data-act="solve">Lösung</button><button data-act="reset">Zurücksetzen</button><span class="score"></span></div>
+</section>
+
+<section class="ex" id="ue5">
+  <h2><span class="nr">Ü5</span>Nachdem … : zuerst – dann</h2>
+  <p class="task">Zieh die Verbformen in die Lücken. Nebensatz = Plusquamperfekt, Hauptsatz = Präteritum.</p>
+  <div class="pool">
+    <span class="chip">verletzt</span><span class="chip">hatte</span><span class="chip">musste</span><span class="chip">angekommen</span><span class="chip">war</span><span class="chip">suchte</span><span class="chip">gewonnen</span><span class="chip">hatte</span><span class="chip">wurde</span><span class="chip">hat</span><span class="chip">ist</span>
+  </div>
+  <ol class="items stack">
+    <li>Nachdem sich Jonas am Knie <span class="gap" data-ans="verletzt"></span> <span class="gap" data-ans="hatte"></span>, <span class="gap" data-ans="musste"></span> er mit dem Profifußball aufhören.</li>
+    <li>Nachdem Nina in Neuseeland <span class="gap" data-ans="angekommen"></span> <span class="gap" data-ans="war"></span>, <span class="gap" data-ans="suchte"></span> sie sich einen Job.</li>
+    <li>Nachdem Leonie die Castingshow <span class="gap" data-ans="gewonnen"></span> <span class="gap" data-ans="hatte"></span>, <span class="gap" data-ans="wurde"></span> sie berühmt.</li>
+  </ol>
+  <div class="btns"><button data-act="check">Prüfen</button><button data-act="solve">Lösung</button><button data-act="reset">Zurücksetzen</button><span class="score"></span></div>
+  <div class="teacher">„hat“ und „ist“ sind Ablenker (Perfekt statt Plusquamperfekt).</div>
+</section>
+
+<footer>Zeitreise in die Vergangenheit · Grammatik-Material zu Aspekte junior B1+, Modul 1</footer>
+</div>
+
+<script>
+
+
+(function(){
+  // Lehreransicht
+  const tvb=document.getElementById('tvbtn');
+  tvb.onclick=()=>{document.body.classList.toggle('tv');tvb.textContent=document.body.classList.contains('tv')?'👩‍🎓 Schüleransicht':'👩‍🏫 Lehreransicht';};
+
+  // Wörterbuch
+  document.querySelectorAll('.vw').forEach(v=>v.addEventListener('click',()=>v.classList.toggle('open')));
+
+  // Musterlösung
+  document.querySelectorAll('.mbtn').forEach(b=>b.addEventListener('click',()=>{
+    const m=b.nextElementSibling; m.classList.toggle('show');
+    b.textContent=m.classList.contains('show')?'Musterlösung verbergen':'Musterlösung zeigen';
+  }));
+
+  const norm=s=>s.toLowerCase().replace(/…|\.\.\./g,' ').replace(/[„“".,!?;:]/g,'').replace(/\s*\/\s*/g,'/').replace(/\s+/g,' ').trim();
+  const shuffle=el=>{const a=[...el.children];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}a.forEach(c=>el.appendChild(c));};
+
+  // ---------- drag & drop ----------
+  let sel=null;
+  const exOf=el=>el.closest('.ex');
+  const poolOf=ex=>ex.querySelector('.pool');
+  function clearMarks(el){el.classList.remove('ok','bad');}
+  function returnChip(chip){
+    const g=chip.parentElement; poolOf(exOf(chip)).appendChild(chip); clearMarks(chip);
+    if(g.classList.contains('gap')){g.classList.remove('filled','ok','bad');}
+    syncPair(g);
+  }
+  let quiet=false;
+  function syncPair(el){
+    const pair=el&&el.closest&&el.closest('.pair'); if(!pair) return;
+    const gap=pair.querySelector('.gap'), part=pair.querySelector('.part'); if(!gap||!part) return;
+    const c=gap.querySelector('.chip');
+    const good=!!c&&gap.dataset.ans.split('|').map(norm).includes(norm(c.textContent));
+    gap.classList.remove('wrong');
+    if(good){part.textContent=part.dataset.part;part.classList.add('show');}
+    else{part.textContent='';part.classList.remove('show');if(c){void gap.offsetWidth;gap.classList.add('wrong');}}
+  }
+  function place(chip,t){
+    if(exOf(chip)!==exOf(t)) return;
+    clearMarks(chip);
+    if(t.classList.contains('pool')){returnChip(chip);return;}
+    const from=chip.parentElement;
+    if(t.classList.contains('gap')){
+      const old=t.querySelector('.chip'); if(old&&old!==chip) returnChip(old);
+      t.appendChild(chip); t.classList.add('filled'); t.classList.remove('ok','bad');
+    } else if(t.classList.contains('zone')){ t.appendChild(chip); }
+    if(from.classList.contains('gap')&&from!==t) from.classList.remove('filled','ok','bad');
+    syncPair(t); if(from!==t) syncPair(from);
+  }
+  function unselect(){ if(sel){sel.classList.remove('sel');sel=null;} }
+
+  document.querySelectorAll('.chip').forEach(chip=>{
+    let sx,sy,drag=false,ghost=null,down=false,over=null;
+    chip.addEventListener('pointerdown',e=>{down=true;drag=false;sx=e.clientX;sy=e.clientY;chip.setPointerCapture(e.pointerId);});
+    chip.addEventListener('pointermove',e=>{
+      if(!down)return;
+      if(!drag&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){
+        drag=true;unselect();ghost=chip.cloneNode(true);ghost.classList.add('ghost');document.body.appendChild(ghost);chip.classList.add('ghosting');
+      }
+      if(drag){
+        ghost.style.left=e.clientX+'px';ghost.style.top=e.clientY+'px';
+        const t=document.elementFromPoint(e.clientX,e.clientY);const z=t&&t.closest('.gap,.zone,.pool');
+        if(over&&over!==z)over.classList.remove('hover'); if(z){z.classList.add('hover');} over=z;
+      }
+    });
+    const end=e=>{
+      if(!down)return; down=false;
+      if(drag){
+        ghost.remove();chip.classList.remove('ghosting');if(over)over.classList.remove('hover');
+        const t=document.elementFromPoint(e.clientX,e.clientY);const z=t&&t.closest('.gap,.zone,.pool');
+        if(z)place(chip,z); over=null;
+      } else {
+        if(!chip.parentElement.classList.contains('pool')){returnChip(chip);unselect();}
+        else if(sel===chip){unselect();}
+        else {unselect();sel=chip;chip.classList.add('sel');}
+      }
+    };
+    chip.addEventListener('pointerup',end);
+    chip.addEventListener('pointercancel',e=>{down=false;if(ghost)ghost.remove();chip.classList.remove('ghosting');});
+  });
+  document.querySelectorAll('.gap,.zone').forEach(z=>z.addEventListener('click',e=>{
+    if(e.target.closest('.chip'))return;
+    if(sel){place(sel,z);unselect();}
+  }));
+  document.querySelectorAll('.pool').forEach(shuffle);
+
+  // ---------- multiple choice ----------
+  document.querySelectorAll('.mc').forEach(mc=>mc.addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;
+    mc.querySelectorAll('button').forEach(x=>x.classList.remove('on','ok','bad'));b.classList.add('on');
+  }));
+
+  // ---------- check / solve / reset ----------
+  const ppList=i=>{const [a,p]=i.dataset.pp.split('|');const b=a==='ist'?'war':'hatte';return [a+' '+p,b+' '+p,a+'/'+b+' '+p];};
+  const normC=x=>x.replace(/…|\.\.\./g,' ').replace(/[„“".,!?;:]/g,'').replace(/\s+/g,' ').trim();
+  const nf=g=>g.dataset&&g.dataset.case?normC:norm;
+  const answers=g=>(g.dataset.pp?ppList(g):g.dataset.ans.split('|')).map(nf(g));
+  const stripPron=s=>s.replace(/^(er|sie|es)\s+/,'');
+
+  function check(ex){
+    let ok=0,tot=0;
+    ex.querySelectorAll('.gap').forEach(g=>{tot++;const c=g.querySelector('.chip');g.classList.remove('ok','bad');
+      if(!c){g.classList.add('bad');return;}
+      if(answers(g).includes(norm(c.textContent))){g.classList.add('ok');ok++;} else g.classList.add('bad');});
+    ex.querySelectorAll('.zone .chip').forEach(c=>{const good=c.dataset.cat===c.closest('.zone').dataset.cat;c.classList.toggle('ok',good);c.classList.toggle('bad',!good);if(good)ok++;});
+    ex.querySelectorAll('.pool .chip[data-cat]:not([data-cat=x])').forEach(()=>tot++);
+    ex.querySelectorAll('.zone .chip').forEach(()=>tot++);
+    ex.querySelectorAll('.q').forEach(q=>{tot++;const on=q.querySelector('button.on');
+      q.querySelectorAll('.v').forEach(v=>v.classList.add('hl'));
+      if(on){if((on.dataset.v||on.textContent)===q.dataset.ans){on.classList.add('ok');ok++;}else on.classList.add('bad');}});
+    ex.querySelectorAll('input[data-ans],input[data-pp]').forEach(i=>{tot++;const v=i.dataset.case?normC(i.value):stripPron(norm(i.value));
+      const good=answers(i).includes(v);i.classList.toggle('ok',good);i.classList.toggle('bad',!good);if(good)ok++;});
+    const s=ex.querySelector('.score');if(s)s.textContent=ok+' / '+tot+(ok===tot?' 🎉':'');
+    if(ex.dataset.hints){
+      ex.querySelectorAll('.bulb,.tip').forEach(b=>b.remove());
+      ex.querySelectorAll('input.bad').forEach(inp=>{
+        const b=document.createElement('button');b.type='button';b.className='bulb';b.textContent='💡';b.title='Lösung für diese Lücke';
+        b.onclick=()=>{const t=document.createElement('span');t.className='tip';t.textContent=inp.dataset.ans.split('|')[0];b.replaceWith(t);};
+        inp.after(b);
+      });
+    }
+  }
+  function reset(ex){
+    ex.querySelectorAll('.gap .chip,.zone .chip').forEach(returnChip);
+    ex.querySelectorAll('.gap').forEach(g=>g.classList.remove('filled','ok','bad'));
+    ex.querySelectorAll('.chip').forEach(clearMarks);
+    ex.querySelectorAll('.mc button').forEach(b=>b.classList.remove('on','ok','bad'));
+    ex.querySelectorAll('.v').forEach(v=>v.classList.remove('hl'));
+    ex.querySelectorAll('input[data-ans],input[data-pp]').forEach(i=>{i.value='';i.classList.remove('ok','bad');});
+    ex.querySelectorAll('.bulb,.tip').forEach(b=>b.remove());
+    const p=poolOf(ex);if(p)shuffle(p);
+    const s=ex.querySelector('.score');if(s)s.textContent='';
+  }
+  function solve(ex){
+    quiet=true;
+    reset(ex);
+    const pool=poolOf(ex);
+    ex.querySelectorAll('.gap').forEach(g=>{const a=answers(g);
+      const c=[...pool.querySelectorAll('.chip')].find(c=>a.includes(norm(c.textContent)));if(c)place(c,g);});
+    ex.querySelectorAll('.zone').forEach(z=>{pool&&[...pool.querySelectorAll('.chip[data-cat="'+z.dataset.cat+'"]')].forEach(c=>place(c,z));});
+    ex.querySelectorAll('.q').forEach(q=>{q.querySelectorAll('button').forEach(b=>{if((b.dataset.v||b.textContent)===q.dataset.ans)b.classList.add('on');});});
+    ex.querySelectorAll('input[data-ans],input[data-pp]').forEach(i=>i.value=i.dataset.ans?i.dataset.ans.split('|')[0]:ppList(i)[2]);
+    check(ex);
+    quiet=false;
+  }
+  document.querySelectorAll('.btns button').forEach(b=>b.addEventListener('click',()=>{
+    const ex=exOf(b);unselect();
+    ({check,solve,reset})[b.dataset.act](ex);
+  }));
+})();
+
+
+</script>
+<script>
+(function(){
+  // ---------- BG toggles ----------
+  document.querySelectorAll('.bgt').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('open')));
+
+  // ---------- Zeitstrahl ----------
+  const tlTexts={
+    1:'<b class="t-pq">① Plusquamperfekt</b> – das passierte <b>zuerst</b>: die Verletzung (<i>hatte … verletzt</i>).',
+    2:'<b class="t-pr">② Präteritum</b> – das passierte <b>danach</b>, auch in der Vergangenheit (<i>musste … aufgeben</i>).',
+    3:'<b>③ Präsens</b> – die Situation <b>heute</b> (<i>arbeitet</i>).'
+  };
+  document.querySelectorAll('.tl .pt').forEach(g=>g.addEventListener('click',()=>{
+    const p=g.dataset.p;
+    document.querySelectorAll('.tlinfo .seg').forEach(s=>{s.className='seg'+(s.dataset.s===p?' on'+p:'');});
+    document.getElementById('tlexp').innerHTML=tlTexts[p];
+  }));
+
+  // ---------- Satzklammer ----------
+  const S=[
+    {ps:[['Jonas','s'],['trainiert','v1'],['jeden Tag auf dem Fußballplatz','m'],['.','p']],
+     pr:[['Jonas','s'],['trainierte','v1'],['jeden Tag auf dem Fußballplatz','m'],['.','p']],
+     pf:[['Jonas','s'],['hat','v1'],['jeden Tag auf dem Fußballplatz','m'],['trainiert','v2'],['.','p']],
+     pq:[['Jonas','s'],['hatte','v1'],['jeden Tag auf dem Fußballplatz','m'],['trainiert','v2'],['.','p']]},
+    {ps:[['Nina','s'],['reist','v1'],['nach Neuseeland','m'],['.','p']],
+     pr:[['Nina','s'],['reiste','v1'],['nach Neuseeland','m'],['.','p']],
+     pf:[['Nina','s'],['ist','v1'],['nach Neuseeland','m'],['gereist','v2'],['.','p']],
+     pq:[['Nina','s'],['war','v1'],['nach Neuseeland','m'],['gereist','v2'],['.','p']]},
+    {ps:[['…, weil','k'],['Jonas','s'],['jeden Tag','m'],['trainiert','v1'],['.','p']],
+     pr:[['…, weil','k'],['Jonas','s'],['jeden Tag','m'],['trainierte','v1'],['.','p']],
+     pf:[['…, weil','k'],['Jonas','s'],['jeden Tag','m'],['trainiert','v2'],['hat','v1'],['.','p']],
+     pq:[['…, weil','k'],['Jonas','s'],['jeden Tag','m'],['trainiert','v2'],['hatte','v1'],['.','p']]}
+  ];
+  const col={ps:'#5b6b78',pr:'#e67e22',pf:'#0e9f9a',pq:'#7b4fa0'};
+  const rules={
+    ps:'<b>Präsens:</b> nur ein Verbteil – auf Position 2.',
+    pr:'<b>Präteritum:</b> nur <b>ein</b> Verbteil – auf Position 2. Keine Satzklammer!',
+    pf:'<b>Perfekt:</b> <i>haben/sein</i> auf Position 2, <b>Partizip II am Ende</b> → Satzklammer.',
+    pq:'<b>Plusquamperfekt:</b> <i>hatte/war</i> auf Position 2, <b>Partizip II am Ende</b> → Satzklammer wie im Perfekt.'
+  };
+  const nsRule='<br><b>Im Nebensatz</b> (weil, dass, nachdem …) steht das konjugierte Verb ganz am Ende: … trainiert <b>hat</b> / trainiert <b>hatte</b>.';
+  let skT='pf',skS=0;
+  const sk=document.getElementById('sk');
+  function drawSK(){
+    const toks=S[skS][skT]; sk.innerHTML='';
+    let v1=null,v2=null;
+    toks.forEach(([w,r])=>{
+      if(r==='p'){const sp=document.createElement('span');sp.textContent=w;sp.style.fontSize='1.3rem';sk.lastChild.after(sp);return;}
+      const d=document.createElement('div');d.className='tok'+(r.startsWith('v')?' v':'')+(r==='m'?' mid':'');
+      const lab={s:'Subjekt',m:'Mittelfeld',v1:r==='v1'&&(skT==='pf'||skT==='pq')?'Hilfsverb':'Verb',v2:'Partizip II',k:'Konnektor'}[r];
+      d.innerHTML='<span class="lab">'+lab+'</span>'+w;
+      if(r.startsWith('v')){d.style.background=col[skT];d.style.borderColor=col[skT];}
+      sk.appendChild(d); if(r==='v1')v1=d; if(r==='v2')v2=d;
+    });
+    if(v1&&v2){
+      const a=v1.getBoundingClientRect(),b=v2.getBoundingClientRect(),c=sk.getBoundingClientRect();
+      const L=Math.min(a.left,b.left)-c.left+10,R=Math.max(a.right,b.right)-c.left-10;
+      if(Math.abs(a.top-b.top)<30){
+        const br=document.createElement('div');br.className='bracket';br.style.left=L+'px';br.style.width=(R-L)+'px';br.style.borderColor=col[skT];
+        br.innerHTML='<span style="color:'+col[skT]+'">Satzklammer</span>';sk.appendChild(br);
+      }
+    }
+    document.getElementById('skRule').innerHTML=rules[skT]+(skS===2?nsRule:'');
+  }
+  document.querySelectorAll('#skT button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#skT button').forEach(x=>x.classList.remove('on'));b.classList.add('on');skT=b.dataset.t;drawSK();});
+  document.querySelectorAll('#skS button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#skS button').forEach(x=>x.classList.remove('on'));b.classList.add('on');skS=+b.dataset.s;drawSK();});
+  window.addEventListener('resize',drawSK); drawSK();
+
+  // ---------- Verb-Labor ----------
+  // typ: r=regelmäßig, s=unregelmäßig, m=gemischt/modal ; pp parts: [type,text] sep|insep|ge|w|e|none
+  const V=[
+    {i:'machen',bg:'правя',t:'r',p:'mach',a:'h',pp:[['ge','ge'],['w','mach'],['e','t']],k:'reg'},
+    {i:'träumen',bg:'мечтая',t:'r',p:'träum',a:'h',pp:[['ge','ge'],['w','träum'],['e','t']],k:'reg'},
+    {i:'arbeiten',bg:'работя',t:'r',p:'arbeit',e:1,a:'h',pp:[['ge','ge'],['w','arbeit'],['e','et']],k:'reg'},
+    {i:'reisen',bg:'пътувам',t:'r',p:'reis',a:'s',pp:[['ge','ge'],['w','reis'],['e','t']],k:'reg',why:'Bewegung von A nach B'},
+    {i:'studieren',bg:'следвам',t:'r',p:'studier',a:'h',pp:[['none','—'],['w','studier'],['e','t']],k:'ieren'},
+    {i:'besuchen',bg:'посещавам',t:'r',p:'besuch',a:'h',pp:[['insep','be'],['none','—'],['w','such'],['e','t']],k:'insep'},
+    {i:'einkaufen',bg:'пазарувам',t:'r',p:'kauf',sep:'ein',a:'h',pp:[['sep','ein'],['ge','ge'],['w','kauf'],['e','t']],k:'sep'},
+    {i:'gehen',bg:'отивам, вървя',t:'s',p:'ging',a:'s',pp:[['ge','ge'],['w','gang'],['e','en']],k:'unreg',why:'Bewegung von A nach B'},
+    {i:'fahren',bg:'пътувам (с превозно средство)',t:'s',p:'fuhr',a:'s',pp:[['ge','ge'],['w','fahr'],['e','en']],k:'unreg',why:'Bewegung von A nach B'},
+    {i:'kommen',bg:'идвам',t:'s',p:'kam',a:'s',pp:[['ge','ge'],['w','komm'],['e','en']],k:'unreg',why:'Bewegung von A nach B'},
+    {i:'bleiben',bg:'оставам',t:'s',p:'blieb',a:'s',pp:[['ge','ge'],['w','blieb'],['e','en']],k:'unreg',why:'Ausnahme: bleiben → sein'},
+    {i:'sehen',bg:'виждам',t:'s',p:'sah',a:'h',pp:[['ge','ge'],['w','seh'],['e','en']],k:'unreg'},
+    {i:'nehmen',bg:'вземам',t:'s',p:'nahm',a:'h',pp:[['ge','ge'],['w','nomm'],['e','en']],k:'unreg'},
+    {i:'finden',bg:'намирам',t:'s',p:'fand',a:'h',pp:[['ge','ge'],['w','fund'],['e','en']],k:'unreg'},
+    {i:'schreiben',bg:'пиша',t:'s',p:'schrieb',a:'h',pp:[['ge','ge'],['w','schrieb'],['e','en']],k:'unreg'},
+    {i:'sprechen',bg:'говоря',t:'s',p:'sprach',a:'h',pp:[['ge','ge'],['w','sproch'],['e','en']],k:'unreg'},
+    {i:'verstehen',bg:'разбирам',t:'s',p:'verstand',a:'h',pp:[['insep','ver'],['none','—'],['w','stand'],['e','en']],k:'insep'},
+    {i:'anrufen',bg:'обаждам се',t:'s',p:'rief',sep:'an',a:'h',pp:[['sep','an'],['ge','ge'],['w','ruf'],['e','en']],k:'sep'},
+    {i:'aufstehen',bg:'ставам (от сън)',t:'s',p:'stand',sep:'auf',a:'s',pp:[['sep','auf'],['ge','ge'],['w','stand'],['e','en']],k:'sep',why:'Zustandsänderung (liegen → stehen)'},
+    {i:'aufwachsen',bg:'израствам',t:'s',p:'wuchs',sep:'auf',a:'s',pp:[['sep','auf'],['ge','ge'],['w','wachs'],['e','en']],k:'sep',why:'Zustandsänderung (klein → groß)'},
+    {i:'sein',bg:'съм',t:'s',p:'war',a:'s',pp:[['ge','ge'],['w','wes'],['e','en']],k:'unreg',why:'Ausnahme: sein → sein'},
+    {i:'werden',bg:'ставам (нещо)',t:'w',p:'wurd',a:'s',pp:[['ge','ge'],['w','word'],['e','en']],k:'unreg',why:'Zustandsänderung / Ausnahme: werden → sein'},
+    {i:'haben',bg:'имам',t:'m',p:'hat',a:'h',pp:[['ge','ge'],['w','hab'],['e','t']],k:'misch'},
+    {i:'bringen',bg:'нося, донасям',t:'m',p:'brach',a:'h',pp:[['ge','ge'],['w','brach'],['e','t']],k:'misch'},
+    {i:'denken',bg:'мисля',t:'m',p:'dach',a:'h',pp:[['ge','ge'],['w','dach'],['e','t']],k:'misch'},
+    {i:'wissen',bg:'зная',t:'m',p:'wuss',a:'h',pp:[['ge','ge'],['w','wuss'],['e','t']],k:'misch'},
+    {i:'können',bg:'мога',t:'m',p:'konn',a:'h',pp:[['ge','ge'],['w','konn'],['e','t']],k:'modal'},
+    {i:'müssen',bg:'трябва',t:'m',p:'muss',a:'h',pp:[['ge','ge'],['w','muss'],['e','t']],k:'modal'},
+    {i:'wollen',bg:'искам',t:'m',p:'woll',a:'h',pp:[['ge','ge'],['w','woll'],['e','t']],k:'modal'}
+  ];
+  const kcol={reg:'#1a86c7',unreg:'#e67e22',misch:'#7b4fa0',modal:'#7b4fa0',sep:'#c2185b',insep:'#8d6e63',ieren:'#8d6e63'};
+  const kRule={
+    reg:'<b>regelmäßig:</b> <span style="color:#e53935">ge</span> + Stamm + <b style="color:#43a047">-t</b>',
+    unreg:'<b>unregelmäßig:</b> <span style="color:#e53935">ge</span> + Stamm (oft mit Vokalwechsel) + <b style="color:#43a047">-en</b> → lernen!',
+    misch:'<b>gemischt:</b> Vokalwechsel <b>und</b> <span style="color:#e53935">ge</span>…<b style="color:#43a047">-t</b>',
+    modal:'<b>Modalverb:</b> <span style="color:#e53935">ge</span>…<b style="color:#43a047">-t</b>, ohne Umlaut. Im Satz mit Infinitiv meist Präteritum: <i>ich konnte kommen</i>',
+    sep:'<b>trennbar:</b> Präfix + <span style="color:#e53935">ge</span> + Stamm + Endung. Im Präteritum steht das Präfix am Satzende.',
+    insep:'<b>untrennbares Präfix</b> (be-, ver-, er-, ent- …): <b>kein ge-</b>!',
+    ieren:'<b>Verben auf -ieren:</b> <b>kein ge-</b>, Endung -t'
+  };
+  const lab={sep:'trennbares Präfix',insep:'untrennbares Präfix',ge:'ge-',w:'Stamm',e:'Endung',none:'kein ge-'};
+  const P=['ich','du','er/sie/es','wir','ihr','sie/Sie'];
+  const AUX={h:{pf:['habe','hast','hat','haben','habt','haben'],pq:['hatte','hattest','hatte','hatten','hattet','hatten']},
+             s:{pf:['bin','bist','ist','sind','seid','sind'],pq:['war','warst','war','waren','wart','waren']}};
+  const pp=v=>v.pp.filter(x=>x[0]!=='none').map(x=>x[1]).join('');
+  function praet(v,n){
+    let st=v.p,te='',en='';
+    if(v.t==='r'||v.t==='m'){te=v.e?'ete':'te';en=['','st','','n','t','n'][n];}
+    else if(v.t==='w'){te='e';en=['','st','','n','t','n'][n];}
+    else{const dt=/[dt]$/.test(st),ss=/[sßz]$/.test(st);en=['',(dt||ss)?'est':'st','','en',dt?'et':'t','en'][n];}
+    return '<span class="st">'+st+'</span>'+(te?'<span class="te">'+te+'</span>':'')+(en?'<span class="en">'+en+'</span>':'')+(v.sep?' <span class="pp"><span class="s2">'+v.sep+'</span></span>':'');
+  }
+  function ppHTML(v){
+    return '<span class="pp">'+v.pp.filter(x=>x[0]!=='none').map(([t,x])=>t==='ge'?'<span class="g">'+x+'</span>':t==='sep'?'<span class="s2">'+x+'</span>':t==='insep'?'<span class="ie">'+x+'</span>':x).join('')+'</span>';
+  }
+  const vlist=document.getElementById('vlist');
+  V.forEach((v,ix)=>{const b=document.createElement('button');b.innerHTML='<span class="k" style="background:'+kcol[v.k]+'"></span>'+v.i;b.onclick=()=>showV(ix);vlist.appendChild(b);});
+  function showV(ix){
+    const v=V[ix];
+    vlist.querySelectorAll('button').forEach((b,j)=>b.classList.toggle('on',j===ix));
+    document.getElementById('blocks').innerHTML=v.pp.map(([t,x],j)=>'<div class="blk b-'+t+'" style="animation-delay:'+(j*0.12)+'s"><b>'+x+'</b><small>'+lab[t]+'</small></div>').join('')+
+      '<div class="blk" style="animation-delay:.5s"><b style="background:none;color:var(--ink);font-size:1.4rem">= '+pp(v)+'</b><small>&nbsp;</small></div>';
+    document.getElementById('ppRule').innerHTML=kRule[v.k];
+    document.getElementById('auxRule').innerHTML='Perfekt mit <span class="auxb '+v.a+'">'+(v.a==='h'?'haben':'sein')+'</span> '+(v.why?'<span class="hint">– '+v.why+'</span>':'');
+    const bg=document.getElementById('vbg');bg.classList.remove('open');bg.querySelector('span').textContent=v.bg;
+    const rows=k=>P.map((p,n)=>'<tr><td>'+p+'</td><td>'+k(n)+'</td></tr>').join('');
+    document.getElementById('conj').innerHTML=
+      '<table class="c-pr"><tr><th colspan="2">Präteritum</th></tr>'+rows(n=>praet(v,n))+'</table>'+
+      '<table class="c-pf"><tr><th colspan="2">Perfekt</th></tr>'+rows(n=>'<span class="ax">'+AUX[v.a].pf[n]+'</span> '+ppHTML(v))+'</table>'+
+      '<table class="c-pq"><tr><th colspan="2">Plusquamperfekt</th></tr>'+rows(n=>'<span class="ax">'+AUX[v.a].pq[n]+'</span> '+ppHTML(v))+'</table>';
+  }
+  showV(0);
+
+  // ---------- Entscheidungsbaum ----------
+  const nodes=[...document.querySelectorAll('#tree .node')],res=document.getElementById('treeRes');
+  const sRes=['<b>sein</b> ✔ Bewegung von A nach B → ich <b>bin</b> gefahren','<b>sein</b> ✔ Zustandsänderung → ich <b>bin</b> aufgestanden','<b>sein</b> ✔ Ausnahme → ich <b>bin</b> geblieben / gewesen / geworden'];
+  function treeReset(){nodes.forEach((n,i)=>{n.className='node'+(i===0?' act':'');});res.className='res';res.innerHTML='';}
+  nodes.forEach((n,i)=>{
+    n.querySelector('.ja').onclick=()=>{if(!n.classList.contains('act'))return;n.className='node done';res.className='res s';res.innerHTML='➜ '+sRes[i];};
+    n.querySelector('.nein').onclick=()=>{if(!n.classList.contains('act'))return;n.className='node done';
+      if(i<nodes.length-1){nodes[i+1].className='node act';}else{res.className='res h';res.innerHTML='➜ <b>haben</b> ✔ alle anderen Verben → ich <b>habe</b> gekauft / gelesen / geschlafen';}};
+  });
+  document.getElementById('treeReset').onclick=treeReset;
+
+  // ---------- Flip-Karten Perfekt → Plusquamperfekt ----------
+  document.querySelectorAll('.flipc').forEach(c=>{c.style.cursor='pointer';c.onclick=()=>{
+    const on=c.classList.toggle('pq');c.classList.toggle('pf',!on);
+    c.querySelector('h3').textContent=on?'Plusquamperfekt ✔':'Perfekt → ?';
+    c.querySelector('.ftxt').innerHTML=on?c.dataset.a:c.dataset.b;
+  };});
+})();
+
+</script>
+</body>
+</html>
