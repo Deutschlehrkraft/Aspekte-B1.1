@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test Vergangenheit – Variante B</title>
+<style>
+@page{size:A4;margin:14mm 15mm}
+*{box-sizing:border-box}
+body{margin:0;background:#e9e9e9;color:#000;font:11pt/1.5 "Calibri","Segoe UI",Arial,sans-serif}
+.page{width:210mm;min-height:297mm;margin:10mm auto;background:#fff;padding:14mm 15mm;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:14px}
+.top h1{margin:0;font-size:17pt}
+.top .sub{font-size:10pt}
+.top.small{align-items:center}
+.top.small .var{width:12mm;height:12mm;font-size:13pt}
+.var{border:2.5px solid #000;border-radius:50%;width:15mm;height:15mm;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:16pt;line-height:1}
+.var small{font-size:6.5pt;font-weight:600}
+.head{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr 1fr;border:1.5px solid #000;margin-bottom:10px}
+.head div{padding:5px 7px;border-right:1px solid #000;font-size:10pt;min-height:13mm}
+.head div:last-child{border-right:0}
+.head b{display:block;font-size:8pt}
+.task{margin:0 0 16px}
+.th{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid #000;margin-bottom:8px;padding-bottom:2px}
+.th h2{margin:0;font-size:12pt}
+.pts{font-weight:700;white-space:nowrap;font-size:10pt}
+.ins{margin:2px 0 4px;font-style:italic}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #000;padding:2px 5px;text-align:left;vertical-align:middle}
+th{background:#fff;font-size:9.5pt;border-bottom:2px solid #000}
+td{height:13mm}
+tr.ex td{font-style:italic;color:#444;height:8mm}
+td.n{width:6mm;text-align:center}
+td.inf{width:24mm;font-weight:700}
+td.per{width:19mm}
+ol{margin:0;padding-left:5mm}
+ol li{margin:0 0 13px}
+.blank{display:inline-block;border-bottom:1px solid #000;min-width:22mm;height:1em}
+.blank.w{min-width:34mm}
+.text{line-height:2.6;text-align:justify}
+.ab{display:grid;grid-template-columns:5mm 1fr;gap:1px 4px;margin-bottom:3px}
+.ab .lab{grid-column:1/-1;font-style:italic}
+.opt{display:flex;gap:8px;align-items:flex-start;margin-top:5px}
+.box{display:inline-block;width:3.5mm;height:3.5mm;border:1px solid #000;margin-top:2px;flex:0 0 3.5mm}
+.q4{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+.q4>div{border:1px solid #000;padding:6px 8px}
+.q4 .lab{font-style:italic;font-weight:700;font-size:9.5pt}
+.line{border-bottom:1px solid #000;height:10mm}
+.scale{margin-top:22px;border:1.5px solid #000;display:grid;grid-template-columns:auto repeat(5,1fr)}
+.scale div{border-right:1px solid #000;padding:3px 5px;text-align:center;font-size:9pt}
+.scale div:last-child{border-right:0}
+.scale .h{font-weight:700;text-align:left}
+.sum{display:flex;justify-content:flex-end;gap:16px;margin-top:6px;font-weight:700}
+.sum span{border:1.5px solid #000;padding:3px 10px}
+.key h1{font-size:14pt;margin:0 0 6px}
+.key h2{font-size:11pt;margin:10px 0 4px;border-bottom:1px solid #000}
+.key td{height:auto;padding:4px 6px}
+.key{font-size:10.5pt}
+.toolbar{max-width:210mm;margin:10px auto 0;display:flex;gap:8px;font-family:Arial,sans-serif}
+.toolbar button{border:1px solid #000;background:#fff;padding:6px 12px;cursor:pointer;font-weight:600}
+@media print{
+  body{background:#fff}
+  .page{margin:0;box-shadow:none;width:auto;min-height:0;padding:0}
+  .page+.page{break-before:page}
+  .toolbar{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar"><button onclick="window.print()">🖨 Drucken</button><button onclick="document.getElementById('key').scrollIntoView({behavior:'smooth'})">Lösungsschlüssel ↓</button></div>
+
+<!-- =================== TEST =================== -->
+<div class="page">
+  <div class="top">
+    <div>
+      <h1>Test: Perfekt · Präteritum · Plusquamperfekt</h1>
+      <div class="sub">Deutsch · Klasse 9b · Aspekte junior B1+, Kapitel 1 · Zeit: 40 Minuten</div>
+    </div>
+    <div class="var">B<small>Variante</small></div>
+  </div>
+
+  <div class="head">
+    <div><b>Name:</b></div>
+    <div><b>Klasse:</b></div>
+    <div><b>Datum:</b></div>
+    <div><b>Punkte:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ 50</div>
+    <div><b>Note:</b></div>
+  </div>
+
+  <!-- 1 -->
+  <div class="task">
+    <div class="th"><h2>1. Konjugiere die Verben in der angegebenen Person.</h2><span class="pts">___ / 24 P.</span></div>
+    <table>
+      <tr><th></th><th>Infinitiv</th><th>Person</th><th>Präteritum</th><th>Perfekt</th><th>Plusquamperfekt</th></tr>
+      <tr class="ex"><td class="n">0</td><td class="inf">haben</td><td>er</td><td>hatte</td><td>hat gehabt</td><td>hatte gehabt</td></tr>
+      <tr><td class="n">1</td><td class="inf">arbeiten</td><td class="per">ich</td><td></td><td></td><td></td></tr>
+      <tr><td class="n">2</td><td class="inf">besuchen</td><td class="per">du</td><td></td><td></td><td></td></tr>
+      <tr><td class="n">3</td><td class="inf">aufstehen</td><td class="per">er</td><td></td><td></td><td></td></tr>
+      <tr><td class="n">4</td><td class="inf">fahren</td><td class="per">wir</td><td></td><td></td><td></td></tr>
+      <tr><td class="n">5</td><td class="inf">sehen</td><td class="per">ihr</td><td></td><td></td><td></td></tr>
+      <tr><td class="n">6</td><td class="inf">finden</td><td class="per">sie (Pl.)</td><td></td><td></td><td></td></tr>
+      <tr><td class="n">7</td><td class="inf">werden</td><td class="per">du</td><td></td><td></td><td></td></tr>
+      <tr><td class="n">8</td><td class="inf">denken</td><td class="per">sie (Sg.)</td><td></td><td></td><td></td></tr>
+    </table>
+  </div>
+
+  <!-- 2 -->
+  <div class="task">
+    <div class="th"><h2>2. <i>haben</i> oder <i>sein</i>? Ergänze die richtige Form.</h2><span class="pts">___ / 6 P.</span></div>
+    <ol>
+      <li>Nina <span class="blank"></span> letzten Sommer nach Spanien geflogen.</li>
+      <li>Wir <span class="blank"></span> den ganzen Abend Karten gespielt.</li>
+      <li>Was <span class="blank"></span> gestern in der Schule passiert?</li>
+      <li><span class="blank"></span> ihr schon die Hausaufgaben gemacht?</li>
+      <li>Ich <span class="blank"></span> zwei Wochen bei meiner Tante geblieben.</li>
+      <li>Jonas <span class="blank"></span> seinem Freund beim Umzug geholfen.</li>
+    </ol>
+  </div>
+
+</div>
+
+<div class="page">
+  <div class="top small">
+    <div class="sub"><b>Test: Perfekt · Präteritum · Plusquamperfekt</b> · Seite 2</div>
+    <div class="sub">Name: ______________________________</div>
+    <div class="var">B<small>Variante</small></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="task">
+    <div class="th"><h2>3. Ergänze die Verben im Präteritum.</h2><span class="pts">___ / 8 P.</span></div>
+    <div class="text">
+      Der Fußballer Max Keller (1) <span class="blank w"></span> (beginnen) schon mit fünf Jahren mit dem Fußball. Er (2) <span class="blank w"></span> (trainieren) jeden Tag nach der Schule. Mit 14 (3) <span class="blank w"></span> (wechseln) er zu einem großen Verein in Köln. Dort (4) <span class="blank w"></span> (spielen) er in der Jugendmannschaft. Mit 18 (5) <span class="blank w"></span> (bekommen) er seinen ersten Profivertrag. Leider (6) <span class="blank w"></span> (verletzen) er sich ein Jahr später am Knie. Er (7) <span class="blank w"></span> (müssen) lange pausieren, aber er (8) <span class="blank w"></span> (geben) nicht auf.
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="task">
+    <div class="th"><h2>4. Welche Version passt besser zur Situation? Kreuze an.</h2><span class="pts">___ / 4 P.</span></div>
+    <div class="q4">
+      <div><div class="lab">a) Im Chat mit einer Freundin:</div>
+        <div class="opt"><span class="box"></span>A: Gestern sah ich einen tollen Film.</div>
+        <div class="opt"><span class="box"></span>B: Gestern habe ich einen tollen Film gesehen.</div></div>
+      <div><div class="lab">b) In einer Biografie:</div>
+        <div class="opt"><span class="box"></span>A: Goethe wurde 1749 in Frankfurt geboren.</div>
+        <div class="opt"><span class="box"></span>B: Goethe ist 1749 in Frankfurt geboren worden.</div></div>
+      <div><div class="lab">c) Am Telefon:</div>
+        <div class="opt"><span class="box"></span>A: Ich bin gestern krank gewesen.</div>
+        <div class="opt"><span class="box"></span>B: Ich war gestern krank.</div></div>
+      <div><div class="lab">d) In einem Märchen:</div>
+        <div class="opt"><span class="box"></span>A: Der Prinz hat das Schloss gesucht und hat die Prinzessin gefunden.</div>
+        <div class="opt"><span class="box"></span>B: Der Prinz suchte das Schloss und fand die Prinzessin.</div></div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="task">
+    <div class="th"><h2>5. Verbinde die Sätze mit <i>nachdem</i>. (Plusquamperfekt + Präteritum)</h2><span class="pts">___ / 8 P.</span></div>
+    <div class="ins">Beispiel: Sie frühstückt. Dann geht sie zur Schule. → Nachdem sie gefrühstückt hatte, ging sie zur Schule.</div>
+    <div>1. Lisa liest das Buch. Dann schreibt sie eine Buchkritik.</div>
+    <div class="line"></div><div class="line"></div>
+    <div style="margin-top:12px">2. Die Gäste gehen nach Hause. Dann räumen wir auf.</div>
+    <div class="line"></div><div class="line"></div>
+  </div>
+
+  <div class="scale">
+    <div class="h">Bewertung</div>
+    <div>0–24 P.<br><b>2 – ungenügend</b></div>
+    <div>25–32 P.<br><b>3 – befriedigend</b></div>
+    <div>33–39 P.<br><b>4 – gut</b></div>
+    <div>40–45 P.<br><b>5 – sehr gut</b></div>
+    <div>46–50 P.<br><b>6 – ausgezeichnet</b></div>
+  </div>
+</div>
+
+<!-- =================== LÖSUNGEN =================== -->
+<div class="page key" id="key">
+  <div class="top">
+    <div><h1>Lösungsschlüssel – Variante B</h1><div class="sub">nur für die Lehrkraft</div></div>
+    <div class="var">B<small>Variante</small></div>
+  </div>
+
+  <h2>1. Konjugationstabelle (24 P.)</h2>
+  <table>
+    <tr><th></th><th>Infinitiv</th><th>Person</th><th>Präteritum</th><th>Perfekt</th><th>Plusquamperfekt</th></tr>
+    <tr><td>1</td><td>arbeiten</td><td>ich</td><td>arbeitete</td><td>habe gearbeitet</td><td>hatte gearbeitet</td></tr>
+    <tr><td>2</td><td>besuchen</td><td>du</td><td>besuchtest</td><td>hast besucht</td><td>hattest besucht</td></tr>
+    <tr><td>3</td><td>aufstehen</td><td>er</td><td>stand … auf</td><td>ist aufgestanden</td><td>war aufgestanden</td></tr>
+    <tr><td>4</td><td>fahren</td><td>wir</td><td>fuhren</td><td>sind gefahren</td><td>waren gefahren</td></tr>
+    <tr><td>5</td><td>sehen</td><td>ihr</td><td>saht</td><td>habt gesehen</td><td>hattet gesehen</td></tr>
+    <tr><td>6</td><td>finden</td><td>sie (Pl.)</td><td>fanden</td><td>haben gefunden</td><td>hatten gefunden</td></tr>
+    <tr><td>7</td><td>werden</td><td>du</td><td>wurdest</td><td>bist geworden</td><td>warst geworden</td></tr>
+    <tr><td>8</td><td>denken</td><td>sie (Sg.)</td><td>dachte</td><td>hat gedacht</td><td>hatte gedacht</td></tr>
+  </table>
+  <p style="margin:4px 0 0;font-size:9.5pt">Je Form 1 P.; Perfekt/Plusquamperfekt: 0,5 P. Hilfsverb + 0,5 P. Partizip II. Bei <i>aufstehen</i> auch „stand auf“ ohne „…“ akzeptieren.</p>
+
+  <h2>2. haben oder sein? (6 P.)</h2>
+  <p style="margin:0">1. ist · 2. haben · 3. ist · 4. Habt · 5. bin · 6. hat</p>
+
+  <h2>3. Präteritum im Text (8 P.)</h2>
+  <p style="margin:0">(1) begann · (2) trainierte · (3) wechselte · (4) spielte · (5) bekam · (6) verletzte · (7) musste · (8) gab</p>
+
+  <h2>4. Welche Version passt? (4 P.)</h2>
+  <p style="margin:0">a) B (Chat → Perfekt) · b) A (Biografie → Präteritum) · c) B (sein → Präteritum) · d) B (Märchen → Präteritum)</p>
+
+  <h2>5. Nachdem-Sätze (8 P.)</h2>
+  <p style="margin:0">1. Nachdem Lisa das Buch <b>gelesen hatte</b>, <b>schrieb</b> sie eine Buchkritik.<br>
+  2. Nachdem die Gäste nach Hause <b>gegangen waren</b>, <b>räumten</b> wir <b>auf</b>.</p>
+  <p style="margin:4px 0 0;font-size:9.5pt">Je Satz: 2 P. Plusquamperfekt (hatte/war + Partizip II), 1 P. Präteritum im Hauptsatz, 1 P. Wortstellung (Verb am Ende des Nebensatzes, Hauptsatz beginnt mit dem Verb).</p>
+
+  <h2>Bewertung</h2>
+  <p style="margin:0">0–24 P. = 2 (ungenügend) · 25–32 P. = 3 (befriedigend) · 33–39 P. = 4 (gut) · 40–45 P. = 5 (sehr gut) · 46–50 P. = 6 (ausgezeichnet)</p>
+</div>
+
+<style id="reveal-css">
+.eye{cursor:pointer;color:#999;font-size:9pt;user-select:none}
+.blank .eye{display:inline-block;width:100%;text-align:center}
+td.cell{cursor:pointer;text-align:center}
+td.cell .eye{opacity:.45}
+td.cell:hover .eye,.blank:hover .eye{opacity:1;color:#000}
+.ans{font-family:"Segoe Print","Comic Sans MS",cursive;font-weight:700;color:#000;background:#f1f1f1;border-radius:3px;padding:0 3px}
+.blank.open{text-align:center}
+td.rv{width:9mm;text-align:center;border:0}
+th.rv{border:0}
+.rbtn{border:1px solid #000;background:#fff;border-radius:4px;cursor:pointer;font-size:9pt;padding:1px 5px}
+.box.right{position:relative}
+.box.right::after{content:"✗";position:absolute;left:-1px;top:-6px;font-size:12pt;font-weight:900}
+.opt.right{font-weight:700;text-decoration:underline}
+.lab .rbtn{margin-left:6px}
+.line .ans{display:inline-block;margin-top:2mm}
+.toolbar .on{background:#000;color:#fff}
+@media print{.eye,.rbtn,.rv,.toolbar{display:none!important}.ans{display:none!important}.box.right::after{content:none}.opt.right{font-weight:400;text-decoration:none}}
+</style>
+<script id="reveal-js">
+(function(){
+  const key=document.getElementById('key');
+  const test=[...document.querySelectorAll('.page')].filter(p=>p!==key);
+  const ps=t=>[...key.querySelectorAll('h2')].find(h=>h.textContent.trim().startsWith(t)).nextElementSibling;
+  const items=(t,re)=>ps(t).textContent.split('·').map(x=>x.trim().replace(re,'').trim());
+  const mk=(txt)=>{const s=document.createElement('span');s.className='ans';s.innerHTML=txt;return s;};
+  const eye=()=>{const e=document.createElement('span');e.className='eye';e.textContent='👁';return e;};
+  const toggleBlank=(b,ans)=>{const a=b.querySelector('.ans');if(a){a.remove();b.appendChild(eye());b.classList.remove('open');}else{b.innerHTML='';b.appendChild(mk(ans));b.classList.add('open');}};
+  const reveals=[];
+  // --- Teil 1: table
+  const kRows=[...key.querySelector('table').querySelectorAll('tr')].slice(1).map(r=>[...r.children].slice(3).map(td=>td.textContent));
+  const tbl=test[0].querySelector('table');
+  const hr=tbl.querySelector('tr');const th=document.createElement('th');th.className='rv';hr.appendChild(th);
+  const ex=tbl.querySelector('tr.ex');ex.appendChild(Object.assign(document.createElement('td'),{className:'rv'}));
+  [...tbl.querySelectorAll('tr')].filter(r=>!r.classList.contains('ex')&&r!==hr).forEach((r,i)=>{
+    const cells=[...r.children].slice(3,6);
+    cells.forEach((c,j)=>{c.classList.add('cell');c.appendChild(eye());
+      const f=(show)=>{const a=c.querySelector('.ans');if(show===undefined)show=!a;c.innerHTML='';c.appendChild(show?mk(kRows[i][j]):eye());};
+      c.addEventListener('click',()=>f());reveals.push(f);});
+    const td=document.createElement('td');td.className='rv';const b=document.createElement('button');b.className='rbtn';b.textContent='👁';b.title='ganze Zeile zeigen';
+    b.onclick=()=>{const open=!cells.every(c=>c.querySelector('.ans'));cells.forEach((c,j)=>{c.innerHTML='';c.appendChild(open?mk(kRows[i][j]):eye());});};
+    td.appendChild(b);r.appendChild(td);
+  });
+  // --- Teil 2 + 3: blanks
+  const a2=items('2.',/^\d+\.\s*/), a3=items('3.',/^\(\d+\)\s*/);
+  const bind=(blanks,ans)=>blanks.forEach((b,i)=>{b.appendChild(eye());b.style.cursor='pointer';
+    b.addEventListener('click',()=>toggleBlank(b,ans[i]));
+    reveals.push(show=>{const has=!!b.querySelector('.ans');if(show===undefined)show=!has;if(show!==has)toggleBlank(b,ans[i]);});});
+  const tasks=[...document.querySelectorAll('.task')];
+  bind([...tasks[1].querySelectorAll('.blank')],a2);
+  bind([...tasks[2].querySelectorAll('.blank')],a3);
+  // --- Teil 4
+  const a4=items('4.',/^[a-d]\)\s*/).map(x=>x[0]);
+  [...tasks[3].querySelectorAll('.q4>div')].forEach((q,i)=>{
+    const opts=[...q.querySelectorAll('.opt')];const right=opts[a4[i]==='A'?0:1];
+    const f=(show)=>{if(show===undefined)show=!right.classList.contains('right');right.classList.toggle('right',show);right.querySelector('.box').classList.toggle('right',show);};
+    const b=document.createElement('button');b.className='rbtn';b.textContent='👁';b.onclick=()=>f();q.querySelector('.lab').appendChild(b);reveals.push(f);
+  });
+  // --- Teil 5
+  const a5=ps('5.').innerHTML.split(/<br\s*\/?>/).map(x=>x.trim().replace(/^\d+\.\s*/,''));
+  const t5=tasks[4];const lines=[...t5.querySelectorAll('.line')];
+  [0,1].forEach(i=>{const ln=lines[i*2];const label=ln.previousElementSibling;
+    const f=(show)=>{const a=ln.querySelector('.ans');if(show===undefined)show=!a;ln.innerHTML='';if(show)ln.appendChild(mk(a5[i]));};
+    const b=document.createElement('button');b.className='rbtn';b.textContent='👁';b.style.marginLeft='6px';b.onclick=()=>f();label.appendChild(b);reveals.push(f);});
+  // --- toolbar
+  const tb=document.querySelector('.toolbar');
+  const all=document.createElement('button');all.textContent='👁 Alle Lösungen zeigen';let on=false;
+  all.onclick=()=>{on=!on;reveals.forEach(f=>f(on));all.textContent=on?'🙈 Alle Lösungen verbergen':'👁 Alle Lösungen zeigen';all.classList.toggle('on',on);};
+  tb.insertBefore(all,tb.children[1]);
+  const hint=document.createElement('span');hint.style.cssText='align-self:center;font-size:9pt;color:#555';hint.textContent='Auf 👁 / ein Feld klicken = Lösung zeigen. Beim Drucken bleibt alles leer.';tb.appendChild(hint);
+})();
+</script>
+
+</body>
+</html>
