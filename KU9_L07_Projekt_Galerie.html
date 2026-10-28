@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Дигитално лице на галерията</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: 16:9 сцена като стена на галерия, мащабирана към екрана; табелка-етикет в ъгъла на всеки слайд */
+:root{
+  --wall:#F3F4F2;      /* стена на галерия */
+  --paper:#FFFFFF;
+  --ink:#1F2429;
+  --muted:#5E6770;
+  --line:#D5D9D8;
+  --danube:#2A5C78;    /* основен акцент */
+  --danube-soft:#E3ECF1;
+  --ochre:#B8862B;     /* рамка / злато */
+  --ochre-soft:#F5ECD9;
+  --teamA:#2A5C78;
+  --teamB:#7A4E2D;
+  --teamB-soft:#F1E7DF;
+  --ok:#3D7A4E;
+  --serif:"PT Serif", Georgia, "Times New Roman", serif;
+  --sans:"PT Sans", "Segoe UI", Arial, sans-serif;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--wall);color:var(--ink);font-family:var(--sans);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0;
+  overflow:hidden;display:flex;flex-direction:column}
+#viewport{flex:1;position:relative;min-height:0}
+#stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center center;
+  background:var(--paper);box-shadow:0 2px 24px rgba(31,36,41,.10);border:1px solid var(--line)}
+.slide{position:absolute;inset:0;padding:56px 72px 64px;display:flex;flex-direction:column;gap:24px}
+.slide[hidden]{display:none!important}
+.plate{position:absolute;right:40px;bottom:22px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  border-left:3px solid var(--ochre);padding-left:10px;line-height:1.35}
+.plate b{color:var(--ink);font-weight:700}
+.eyebrow{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--danube);font-weight:700}
+h1,h2{font-family:var(--serif);font-weight:700;margin:0;text-wrap:balance;line-height:1.12}
+h1{font-size:64px}
+h2{font-size:44px}
+p{margin:0}
+.lead{font-size:26px;line-height:1.45;color:var(--ink);max-width:30em}
+.small{font-size:18px;color:var(--muted);line-height:1.45}
+button{font-family:var(--sans);cursor:pointer}
+button:focus-visible,.card:focus-visible{outline:3px solid var(--ochre);outline-offset:3px}
+
+/* 1 · заглавие */
+.title-wrap{flex:1;display:grid;grid-template-columns:1.25fr 1fr;gap:56px;align-items:center}
+.title-wrap h1{font-size:68px}
+.title-wrap .sub{font-size:24px;color:var(--muted);margin-top:22px;line-height:1.5}
+.frame{aspect-ratio:4/3;max-width:100%;border:14px solid var(--ochre);outline:1px solid #9C7123;outline-offset:-14px;
+  background:var(--paper);padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+.mini-wall{width:100%;height:100%;background:var(--wall);position:relative;overflow:hidden}
+.mini-wall span{position:absolute;display:block}
+.pill-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.pill{font-size:17px;padding:7px 14px;border-radius:999px;background:var(--danube-soft);color:var(--danube);font-weight:700}
+
+/* 2 · въпрос */
+.question{flex:1;display:flex;flex-direction:column;justify-content:center;gap:34px}
+.question blockquote{margin:0;font-family:var(--serif);font-size:46px;line-height:1.3;border-left:6px solid var(--ochre);padding-left:32px;text-wrap:balance}
+.timer-row{display:flex;align-items:center;gap:20px}
+.btn{font-size:20px;padding:12px 22px;border-radius:8px;border:2px solid var(--danube);background:var(--paper);color:var(--danube);font-weight:700}
+.btn.primary{background:var(--danube);color:#fff}
+.timer{font-size:44px;font-variant-numeric:tabular-nums;font-weight:700;color:var(--danube);min-width:3.2em}
+
+/* reveal списъци */
+.reveal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.reveal{border:2px dashed var(--line);border-radius:10px;padding:20px 24px;background:var(--paper);text-align:left;
+  font-size:22px;color:var(--muted);min-height:96px;display:flex;align-items:center;gap:16px}
+.reveal .q{font-size:30px;color:var(--ochre);font-weight:700;width:1.2em;text-align:center;flex:none}
+.reveal.open{border-style:solid;border-color:var(--danube);color:var(--ink);background:var(--danube-soft)}
+.reveal.open .q{color:var(--danube)}
+
+/* продукти */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px;flex:1}
+.product{border-radius:12px;padding:30px 32px;display:flex;flex-direction:column;gap:14px}
+.product.a{background:var(--danube-soft)}
+.product.b{background:var(--teamB-soft)}
+.product .tag{font-size:16px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.product.a .tag{color:var(--teamA)} .product.b .tag{color:var(--teamB)}
+.product h3{font-family:var(--serif);font-size:34px;margin:0}
+.product ul{margin:4px 0 0;padding-left:22px;font-size:21px;line-height:1.55}
+
+/* роли */
+.roles{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;flex:1}
+.card{border:2px solid var(--line);border-radius:12px;padding:22px 20px;background:var(--paper);text-align:left;display:flex;flex-direction:column;gap:12px;color:var(--ink)}
+.card .num{font-family:var(--serif);font-size:40px;line-height:1;font-weight:700}
+.card .name{font-size:23px;font-weight:700;line-height:1.25}
+.card .hint{font-size:15px;color:var(--muted);margin-top:auto}
+.card ul{margin:0;padding-left:20px;font-size:18px;line-height:1.45}
+.card.A .num{color:var(--teamA)} .card.B .num{color:var(--teamB)}
+.card.open.A{border-color:var(--teamA);background:var(--danube-soft)}
+.card.open.B{border-color:var(--teamB);background:var(--teamB-soft)}
+
+/* експонат */
+.exhibit{flex:1;display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:stretch}
+.wall{background:var(--wall);border-radius:6px;position:relative;display:flex;align-items:center;justify-content:center;gap:28px;padding:30px}
+.wall .frame{width:58%;aspect-ratio:4/5;border-width:12px;padding:10px}
+.wall .art{width:100%;height:100%;position:relative;background:#E9E2D2;overflow:hidden}
+.wall .art span{position:absolute;display:block}
+.label-card{width:30%;background:var(--paper);border:1px solid var(--line);padding:12px;font-size:12px;line-height:1.45;align-self:flex-end;margin-bottom:40px}
+.hot{position:absolute;width:40px;height:40px;border-radius:50%;border:3px solid #fff;background:var(--danube);color:#fff;font-weight:700;font-size:20px;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center}
+.hot.active{background:var(--ochre)}
+.explain{display:flex;flex-direction:column;gap:16px;justify-content:center}
+.explain .box{border-left:5px solid var(--ochre);padding:6px 0 6px 22px}
+.explain h3{font-family:var(--serif);font-size:32px;margin:0 0 10px}
+.explain .who{font-size:17px;font-weight:700;color:var(--danube);text-transform:uppercase;letter-spacing:.08em;margin-top:14px}
+.explain .txt{font-size:21px;line-height:1.5}
+.de{font-family:var(--serif);font-style:italic;color:var(--teamB)}
+
+/* времева линия */
+.weeks{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.week{border:2px solid var(--line);border-radius:12px;padding:18px 18px;background:var(--paper);text-align:left;display:flex;flex-direction:column;gap:6px;color:var(--ink)}
+.week .w{font-size:15px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700}
+.week .d{font-family:var(--serif);font-size:28px;font-weight:700}
+.week .t{font-size:19px;font-weight:700;color:var(--danube)}
+.week.open{border-color:var(--danube);background:var(--danube-soft)}
+.week-detail{flex:1;border-top:2px solid var(--line);padding-top:20px;font-size:22px;line-height:1.55}
+.week-detail ul{margin:8px 0 0;padding-left:24px}
+
+/* оценяване */
+.bars{display:flex;flex-direction:column;gap:12px;flex:1}
+.bar{display:grid;grid-template-columns:330px 1fr 70px;align-items:center;gap:18px;background:none;border:none;text-align:left;padding:6px 0;color:var(--ink)}
+.bar .lbl{font-size:21px;font-weight:700}
+.bar .track{display:block;height:30px;background:var(--wall);border-radius:6px;overflow:hidden}
+.bar .fill{display:block;height:100%;background:var(--danube);border-radius:6px}
+.bar.lang .fill{background:var(--ochre)}
+.bar .pts{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.bar-detail{font-size:20px;line-height:1.5;color:var(--muted);padding:2px 0 4px 348px;margin-top:-6px}
+
+/* предмети */
+.subjects{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;flex:1}
+.subj{background:var(--wall);border-radius:12px;padding:24px 22px;display:flex;flex-direction:column;gap:10px}
+.subj h3{font-family:var(--serif);font-size:27px;margin:0}
+.subj ul{margin:0;padding-left:20px;font-size:18px;line-height:1.5}
+
+/* табло роли */
+.board{display:grid;grid-template-columns:1fr 1fr;gap:28px;flex:1}
+.board .col h3{font-family:var(--serif);font-size:28px;margin:0 0 12px}
+.board .col.A h3{color:var(--teamA)} .board .col.B h3{color:var(--teamB)}
+.slot{display:grid;grid-template-columns:1fr auto 70px auto;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:21px}
+.slot button{width:44px;height:44px;border-radius:8px;border:2px solid var(--line);background:var(--paper);font-size:24px;font-weight:700;color:var(--ink)}
+.slot .count{text-align:center;font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
+.total{font-size:20px;color:var(--muted);margin-top:14px}
+
+/* чеклист */
+.check{display:grid;grid-template-columns:1fr 1fr;gap:12px 36px}
+.check label{display:flex;gap:14px;align-items:flex-start;font-size:22px;line-height:1.4;padding:10px 12px;border-radius:8px;cursor:pointer}
+.check input{width:26px;height:26px;margin-top:3px;accent-color:var(--ok);flex:none}
+.check label:has(input:checked){background:#E6F0E8;color:var(--ok)}
+.note{background:var(--ochre-soft);border-radius:10px;padding:18px 22px;font-size:20px;line-height:1.5}
+
+/* навигация */
+#nav{display:flex;align-items:center;justify-content:center;gap:14px;padding:10px 0 max(10px,env(safe-area-inset-bottom,0px));flex-wrap:wrap}
+#nav button{font-size:16px;padding:8px 14px;border-radius:6px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+#dots{display:flex;gap:6px}
+#dots button{width:12px;height:12px;padding:0;border-radius:50%;border:none;background:var(--line)}
+#dots button.on{background:var(--danube)}
+#count{font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:4em;text-align:center}
+@media (prefers-reduced-motion:no-preference){.reveal,.card,.week,.fill{transition:background .2s,border-color .2s,width .6s}}
+</style>
+</head>
+<body>
+
+<div id="viewport">
+<div id="stage">
+
+<!-- 1 -->
+<section class="slide" data-title="Начало">
+  <div class="eyebrow">Междупредметен проект · 9. клас</div>
+  <div class="title-wrap">
+    <div>
+      <h1>Дигитално лице на Художествената галерия – Силистра</h1>
+      <p class="sub">Уебсайт и 3D виртуална зала на два езика:<br>български и немски</p>
+      <div class="pill-row">
+        <span class="pill">4 седмици</span><span class="pill">2 екипа</span><span class="pill">8 роли</span><span class="pill">публична защита</span>
+      </div>
+    </div>
+    <div class="frame" aria-hidden="true"><div class="mini-wall">
+      <span style="left:12%;top:18%;width:26%;height:44%;background:#2A5C78"></span>
+      <span style="left:44%;top:26%;width:20%;height:28%;background:#B8862B"></span>
+      <span style="left:70%;top:14%;width:18%;height:50%;background:#7A4E2D"></span>
+      <span style="left:0;bottom:0;width:100%;height:22%;background:#DCDDD8"></span>
+      <span style="left:10%;bottom:22%;width:80%;height:2px;background:#C3C6C2"></span>
+    </div></div>
+  </div>
+  <div class="plate"><b>Изобразително изкуство · 9б</b><br>ЕГ „Пейо Яворов“ – Силистра</div>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-title="Въпросът">
+  <div class="eyebrow">Водещият въпрос на проекта</div>
+  <div class="question">
+    <blockquote>Как да направим картините от галерията в Силистра достъпни за хора от целия свят, които никога не са идвали тук?</blockquote>
+    <div class="timer-row">
+      <button class="btn primary" id="timerBtn">Една минута за размисъл</button>
+      <span class="timer" id="timer" aria-live="polite">1:00</span>
+      <span class="small">Обсъдете по двойки. После чуваме няколко идеи.</span>
+    </div>
+  </div>
+  <div class="plate"><b>Въпрос</b><br>мислим, преди да чуем плана</div>
+</section>
+
+<!-- 3 -->
+<section class="slide" data-title="Посетителят">
+  <div class="eyebrow">Представете си</div>
+  <h2>Турист от Германия планира да мине през Силистра. Отваря сайта на галерията. Какво му трябва?</h2>
+  <p class="small">Щракнете върху всяко поле, след като класът предложи отговор.</p>
+  <div class="reveal-grid">
+    <button class="reveal" data-text="Текст на език, който разбира: немски"><span class="q">?</span><span>Първа идея</span></button>
+    <button class="reveal" data-text="Да види картините, преди да дойде: виртуална разходка"><span class="q">?</span><span>Втора идея</span></button>
+    <button class="reveal" data-text="Да чуе разказ за всяка картина: аудиогид"><span class="q">?</span><span>Трета идея</span></button>
+    <button class="reveal" data-text="Как да стигне: адрес, работно време, вход"><span class="q">?</span><span>Четвърта идея</span></button>
+  </div>
+  <div class="plate"><b>Посетителят</b><br>за кого правим проекта</div>
+</section>
+
+<!-- 4 -->
+<section class="slide" data-title="Продуктите">
+  <div class="eyebrow">Какво ще създадем</div>
+  <h2>Два продукта, свързани в едно</h2>
+  <div class="two">
+    <div class="product a">
+      <span class="tag">Екип А</span>
+      <h3>Уебсайт на галерията</h3>
+      <ul>
+        <li>Начало с превключвател BG / DE</li>
+        <li>За галерията: история и експозиция</li>
+        <li>Интервю с уредника</li>
+        <li>Виртуална разходка: тук влиза залата на Екип Б</li>
+        <li>Посещение и контакти</li>
+      </ul>
+    </div>
+    <div class="product b">
+      <span class="tag">Екип Б</span>
+      <h3>3D виртуална зала</h3>
+      <ul>
+        <li>10–12 подбрани картини от галерията</li>
+        <li>Табелка до всяка картина на два езика</li>
+        <li>Кратък анализ: композиция, колорит, послание</li>
+        <li>Аудиогид на български и немски</li>
+        <li>Маршрут с екскурзовод из залата</li>
+      </ul>
+    </div>
+  </div>
+  <div class="plate"><b>Продуктите</b><br>сайт + 3D зала</div>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-title="Екип А">
+  <div class="eyebrow" style="color:var(--teamA)">Екип А · уебсайт</div>
+  <h2>Четири роли</h2>
+  <p class="small">Щракнете върху роля, за да видите задачите.</p>
+  <div class="roles">
+    <button class="card A" data-tasks="Подрежда разделите на сайта|Избира цветове, шрифт и меню|Следи сайтът да работи и на телефон"><span class="num">1</span><span class="name">Уеб архитект и дизайнер</span><span class="hint">Щракни за задачите</span></button>
+    <button class="card A" data-tasks="Пише текстовете за галерията|Подготвя и провежда интервюто с уредника|Редактира текстовете на български"><span class="num">2</span><span class="name">Журналист и редактор</span><span class="hint">Щракни за задачите</span></button>
+    <button class="card A" data-tasks="Превежда текстовете на сайта на немски|Пази едни и същи термини навсякъде|Дава преводите за проверка на учителя по немски"><span class="num">3</span><span class="name">Преводач</span><span class="hint">Щракни за задачите</span></button>
+    <button class="card A" data-tasks="Снима в галерията|Обработва снимките|Вгражда снимки, видео и 3D залата в сайта"><span class="num">4</span><span class="name">Фотограф и мултимедия</span><span class="hint">Щракни за задачите</span></button>
+  </div>
+  <div class="plate"><b>Екип А</b><br>дигиталното лице</div>
+</section>
+
+<!-- 6 -->
+<section class="slide" data-title="Екип Б">
+  <div class="eyebrow" style="color:var(--teamB)">Екип Б · 3D зала</div>
+  <h2>Четири роли</h2>
+  <p class="small">Щракнете върху роля, за да видите задачите.</p>
+  <div class="roles">
+    <button class="card B" data-tasks="Избира 10–12 картини и техния ред|Анализира всяка по 5-те стъпки|Пише краткия анализ за табелката"><span class="num">1</span><span class="name">Куратор и изкуствовед</span><span class="hint">Щракни за задачите</span></button>
+    <button class="card B" data-tasks="Превежда заглавията и табелките на немски|Превежда анализите|Дава преводите за проверка на учителя по немски"><span class="num">2</span><span class="name">Преводач</span><span class="hint">Щракни за задачите</span></button>
+    <button class="card B" data-tasks="Записва аудиогида на български|Записва аудиогида на немски|Упражнява произношението преди записа"><span class="num">3</span><span class="name">Глас на галерията</span><span class="hint">Щракни за задачите</span></button>
+    <button class="card B" data-tasks="Избира зала в Artsteps|Закача картините в реален размер|Добавя табелки, аудио и маршрут"><span class="num">4</span><span class="name">3D архитект</span><span class="hint">Щракни за задачите</span></button>
+  </div>
+  <div class="plate"><b>Екип Б</b><br>виртуалната разходка</div>
+</section>
+
+<!-- 7 -->
+<section class="slide" data-title="Една картина">
+  <div class="eyebrow">Как изглежда една картина в 3D залата</div>
+  <div class="exhibit">
+    <div class="wall">
+      <div class="frame"><div class="art" aria-label="Измислена картина за пример">
+        <span style="left:0;top:0;width:100%;height:58%;background:#BCD0DA"></span>
+        <span style="left:0;top:58%;width:100%;height:42%;background:#5C7F6B"></span>
+        <span style="left:16%;top:22%;width:22%;height:22%;border-radius:50%;background:#E3B54F"></span>
+        <span style="left:48%;top:44%;width:36%;height:22%;background:#7A4E2D;clip-path:polygon(0 100%,50% 0,100% 100%)"></span>
+        <span style="left:0;top:74%;width:100%;height:8%;background:#2A5C78"></span>
+      </div></div>
+      <div class="label-card"><b>Заглавие</b><br><i>Titel</i><br>Автор · <i>Künstler/in</i><br>Година · <i>Jahr</i><br>Масло върху платно<br><i>Öl auf Leinwand</i></div>
+      <button class="hot" style="left:24%;top:12%" data-i="0" aria-label="Картината">1</button>
+      <button class="hot" style="right:6%;top:40%" data-i="1" aria-label="Табелката">2</button>
+      <button class="hot" style="left:24%;bottom:10%" data-i="2" aria-label="Анализът">3</button>
+      <button class="hot" style="right:6%;bottom:10%" data-i="3" aria-label="Аудиогидът">4</button>
+    </div>
+    <div class="explain">
+      <p class="small">Пример с измислена картина. Щракнете върху точките 1–4.</p>
+      <div class="box" id="exBox">
+        <h3>Всяка картина е малък пакет</h3>
+        <p class="txt">Снимка, табелка, анализ и два аудиозаписа. Когато пакетът е готов, 3D архитектът просто го „закача“ на стената.</p>
+      </div>
+    </div>
+  </div>
+  <div class="plate"><b>Експонатът</b><br>пример, не истинска творба</div>
+</section>
+
+<!-- 8 -->
+<section class="slide" data-title="Етапи">
+  <div class="eyebrow">Етапи</div>
+  <h2>Четири седмици, една стъпка всяка</h2>
+  <div class="weeks">
+    <button class="week" data-i="0"><span class="w">Седмица 1</span><span class="d">02.11</span><span class="t">В галерията</span></button>
+    <button class="week" data-i="1"><span class="w">Седмица 2</span><span class="d">11.11</span><span class="t">Анализ и превод</span></button>
+    <button class="week" data-i="2"><span class="w">Седмица 3</span><span class="d">18.11</span><span class="t">Сглобяване</span></button>
+    <button class="week" data-i="3"><span class="w">Седмица 4</span><span class="d">25.11</span><span class="t">Тест и защита</span></button>
+  </div>
+  <div class="week-detail" id="weekDetail"><span class="small">Щракнете върху седмица, за да видите какво трябва да е готово.</span></div>
+  <div class="plate"><b>План-график</b><br>какво кога е готово</div>
+</section>
+
+<!-- 9 -->
+<section class="slide" data-title="Оценяване">
+  <div class="eyebrow">Как ще се оценява</div>
+  <h2>50 точки за целия проект</h2>
+  <p class="small">Критериите са ясни от днес. Щракнете върху ред за подробности.</p>
+  <div class="bars" id="bars"></div>
+  <div class="plate"><b>Оценяване</b><br>максимум 50 точки</div>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-title="Предмети">
+  <div class="eyebrow">Кой ви помага</div>
+  <h2>Четири предмета, един проект</h2>
+  <div class="subjects">
+    <div class="subj"><h3>Изобразително изкуство</h3><ul><li>посещение на галерията</li><li>подбор на картините</li><li>анализ по 5-те стъпки</li></ul></div>
+    <div class="subj"><h3>Български език и литература</h3><ul><li>репортаж за галерията</li><li>интервю с уредника</li><li>анотации и сценарий за аудиогида</li></ul></div>
+    <div class="subj"><h3>Немски език</h3><ul><li>превод на табелки и анотации</li><li>превод на сайта</li><li>немският аудиогид</li><li>речник на термините</li></ul></div>
+    <div class="subj"><h3>Информационни технологии</h3><ul><li>уебсайтът</li><li>3D залата в Artsteps</li><li>снимки, аудио, вграждане</li></ul></div>
+  </div>
+  <div class="plate"><b>Предметите</b><br>ИИ · БЕЛ · немски · ИТ</div>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-title="Роли">
+  <div class="eyebrow">Разпределяме ролите</div>
+  <h2>Коя роля избирате?</h2>
+  <div class="board">
+    <div class="col A"><h3>Екип А · уебсайт · 10</h3><div id="boardA"></div></div>
+    <div class="col B"><h3>Екип Б · 3D зала · 11</h3><div id="boardB"></div></div>
+  </div>
+  <p class="total" id="total">Записани: 0 от 21</p>
+  <div class="plate"><b>Роли · 21 ученици</b><br>Екип А: 10 · Екип Б: 11</div>
+</section>
+
+<!-- 12 -->
+<section class="slide" data-title="В галерията">
+  <div class="eyebrow">Първата стъпка · в галерията</div>
+  <h2>За всяка картина, която харесате, запишете:</h2>
+  <div class="check">
+    <label><input type="checkbox" id="c1"> Заглавие и автор</label>
+    <label><input type="checkbox" id="c2"> Година и техника <span class="small">(напр. масло върху платно)</span></label>
+    <label><input type="checkbox" id="c3"> Размери от табелката</label>
+    <label><input type="checkbox" id="c4"> Снимка отпред, без светкавица</label>
+    <label><input type="checkbox" id="c5"> Първото ви впечатление с 3 думи</label>
+    <label><input type="checkbox" id="c6"> Защо да влезе в нашата зала</label>
+  </div>
+  <div class="note"><b>Важно:</b> снимаме и публикуваме картините само с разрешение на галерията. Авторите на много от тях са живи или наскоро починали и правата им са защитени.</div>
+  <div class="plate"><b>Задача</b><br>седмица 1</div>
+</section>
+
+</div>
+</div>
+<nav id="nav" aria-label="Слайдове">
+  <button id="prev" aria-label="Предишен слайд">← Назад</button>
+  <div id="dots"></div>
+  <span id="count"></span>
+  <button id="next" aria-label="Следващ слайд">Напред →</button>
+  <button id="fs" aria-label="Цял екран">Цял екран</button>
+</nav>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var cur=0, stage=document.getElementById('stage'), vp=document.getElementById('viewport');
+  var dots=document.getElementById('dots'), count=document.getElementById('count');
+
+  function fit(){
+    var s=Math.min(vp.clientWidth/1280, vp.clientHeight/720);
+    stage.style.transform='translate(-50%,-50%) scale('+s+')';
+  }
+  slides.forEach(function(sl,i){
+    var d=document.createElement('button');
+    d.setAttribute('aria-label','Слайд '+(i+1)+': '+sl.dataset.title);
+    d.addEventListener('click',function(){go(i)});
+    dots.appendChild(d);
+  });
+  function go(i){
+    cur=Math.max(0,Math.min(slides.length-1,i));
+    slides.forEach(function(sl,j){sl.hidden=(j!==cur)});
+    [].forEach.call(dots.children,function(d,j){d.classList.toggle('on',j===cur)});
+    count.textContent=(cur+1)+' / '+slides.length;
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1)};
+  document.getElementById('next').onclick=function(){go(cur+1)};
+  document.getElementById('fs').onclick=function(){
+    try{ if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(function(){})} else {document.exitFullscreen()} }catch(e){}
+  };
+  document.addEventListener('keydown',function(e){
+    var t=e.target.tagName;
+    if(['ArrowRight','PageDown'].indexOf(e.key)>-1){go(cur+1);e.preventDefault()}
+    else if(['ArrowLeft','PageUp'].indexOf(e.key)>-1){go(cur-1);e.preventDefault()}
+    else if(e.key===' ' && t!=='BUTTON' && t!=='INPUT'){go(cur+1);e.preventDefault()}
+    else if(e.key==='Home'){go(0)} else if(e.key==='End'){go(slides.length-1)}
+  });
+  window.addEventListener('resize',fit);
+
+  /* таймер */
+  var tBtn=document.getElementById('timerBtn'), tEl=document.getElementById('timer'), tId=null;
+  tBtn.onclick=function(){
+    clearInterval(tId); var left=60; tEl.textContent='1:00'; tBtn.textContent='Отначало';
+    tId=setInterval(function(){left--; tEl.textContent='0:'+(left<10?'0':'')+left;
+      if(left<=0){clearInterval(tId); tEl.textContent='Готово'; tBtn.textContent='Една минута за размисъл';}},1000);
+  };
+
+  /* reveal */
+  [].forEach.call(document.querySelectorAll('.reveal'),function(b){
+    b.onclick=function(){ if(b.classList.contains('open'))return; b.classList.add('open');
+      b.children[0].textContent='✓'; b.children[1].textContent=b.dataset.text; };
+  });
+
+  /* роли */
+  [].forEach.call(document.querySelectorAll('.card'),function(c){
+    var hint=c.querySelector('.hint');
+    c.onclick=function(){
+      var ex=c.querySelector('ul');
+      if(ex){ex.remove(); hint.hidden=false; c.classList.remove('open'); return;}
+      var ul=document.createElement('ul');
+      c.dataset.tasks.split('|').forEach(function(t){var li=document.createElement('li');li.textContent=t;ul.appendChild(li)});
+      c.insertBefore(ul,hint); hint.hidden=true; c.classList.add('open');
+    };
+  });
+
+  /* експонат */
+  var ex=[
+    ['Картината','Снимка отпред, без отблясъци, с истинските размери. Така в 3D залата картината изглежда толкова голяма, колкото е в галерията.','Фотограф · 3D архитект'],
+    ['Табелката','Заглавие, автор, година, техника. На два езика, например: масло върху платно · <span class="de">Öl auf Leinwand</span>.','Куратор · преводач'],
+    ['Анализът','60–80 думи: какво виждаме, как е подредено, какво внушава. Първо на български, после на немски.','Куратор · редактор · преводач'],
+    ['Аудиогидът','Около една минута на всеки език. Посетителят щраква до картината и слуша.','Глас на галерията']
+  ];
+  var box=document.getElementById('exBox'), hots=[].slice.call(document.querySelectorAll('.hot'));
+  hots.forEach(function(h){h.onclick=function(){
+    var d=ex[+h.dataset.i];
+    hots.forEach(function(x){x.classList.toggle('active',x===h)});
+    box.innerHTML='<h3>'+h.textContent+' · '+d[0]+'</h3><p class="txt">'+d[1]+'</p><p class="who">Кой го прави: '+d[2]+'</p>';
+  }});
+
+  /* седмици */
+  var wk=[
+    ['Понеделник, 02.11: посещение в галерията','Снимки и записки за картините','Подбор на 10–12 картини','Интервю с уредника','Разпределяне на ролите'],
+    ['Анализ на картините по 5-те стъпки','Текстове за сайта и анотациите на български','Превод на немски и проверка','Запис на аудиогида','Пробна зала с една картина'],
+    ['Сайтът се сглобява','3D залата се сглобява','Табелки и аудио при всяка картина'],
+    ['3D залата влиза в сайта','Последни проби','25.11: представяне пред училището и родителите']
+  ];
+  var wd=document.getElementById('weekDetail'), weeks=[].slice.call(document.querySelectorAll('.week'));
+  weeks.forEach(function(w){w.onclick=function(){
+    var i=+w.dataset.i; weeks.forEach(function(x){x.classList.toggle('open',x===w)});
+    wd.innerHTML='<b>'+w.querySelector('.t').textContent+'</b> · какво трябва да е готово:<ul>'+wk[i].map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul>';
+  }});
+
+  /* оценяване */
+  var crit=[
+    ['Дигитален продукт и дизайн',15,'Сайтът и залата работят, изглеждат добре, навигацията е лесна, връзките работят.'],
+    ['Анализ и съдържание',10,'Точни данни за картините; анализ на композицията, колорита и контекста.'],
+    ['Двуезичие и превод',10,'Точен и добре звучащ немски превод на заглавията, анотациите и сайта.'],
+    ['Езикова култура и аудиогид',8,'Грамотни текстове на български; ясен и изразителен запис.'],
+    ['Екипност и защита',7,'Работа заедно, спазени срокове, убедително представяне.']
+  ];
+  var bars=document.getElementById('bars');
+  crit.forEach(function(c,i){
+    var b=document.createElement('button'); b.className='bar'+(i===2?' lang':'');
+    b.innerHTML='<span class="lbl">'+c[0]+'</span><span class="track"><span class="fill" style="width:0"></span></span><span class="pts">'+c[1]+' т.</span>';
+    var d=document.createElement('div'); d.className='bar-detail'; d.textContent=c[2]; d.hidden=true;
+    b.onclick=function(){d.hidden=!d.hidden};
+    bars.appendChild(b); bars.appendChild(d);
+    setTimeout(function(){b.querySelector('.fill').style.width=(c[1]/15*100)+'%'},50);
+  });
+
+  /* табло роли */
+  var roles={A:[['Уеб архитект и дизайнер',2],['Журналист и редактор',3],['Преводач',3],['Фотограф и мултимедия',2]],B:[['Куратор и изкуствовед',3],['Преводач',3],['Глас на галерията',3],['3D архитект',2]]};
+  var totalEl=document.getElementById('total'), counts=[];
+  function upd(){var s=counts.reduce(function(a,c){return a+c.v},0); totalEl.textContent='Записани: '+s+' от 21'+(s===21?' · всички имат роля':'');}
+  ['A','B'].forEach(function(k){
+    var host=document.getElementById('board'+k);
+    roles[k].forEach(function(rr){var r=rr[0],goal=rr[1];
+      var row=document.createElement('div'); row.className='slot';
+      var o={v:0}; counts.push(o);
+      row.innerHTML='<span>'+r+'</span><button aria-label="По-малко">−</button><span class="count">0/'+goal+'</span><button aria-label="Още един">+</button>';
+      var bs=row.querySelectorAll('button'), ce=row.querySelector('.count');
+      function show(){ce.textContent=o.v+'/'+goal;ce.style.color=o.v===goal?'var(--ok)':(o.v>goal?'var(--teamB)':'')}
+      bs[0].onclick=function(){o.v=Math.max(0,o.v-1);show();upd()};
+      bs[1].onclick=function(){o.v++;show();upd()};
+      host.appendChild(row);
+    });
+  });
+
+  fit(); go(0);
+})();
+</script>
+</body>
+</html>
